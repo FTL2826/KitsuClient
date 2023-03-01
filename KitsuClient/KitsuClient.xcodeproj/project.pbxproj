@@ -9,21 +9,39 @@
 /* Begin PBXBuildFile section */
 		5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038354129ADD4B1004A6E10 /* AppDelegate.swift */; };
 		5038354429ADD4B1004A6E10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038354329ADD4B1004A6E10 /* SceneDelegate.swift */; };
-		5038354629ADD4B1004A6E10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038354529ADD4B1004A6E10 /* ViewController.swift */; };
-		5038354929ADD4B1004A6E10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5038354729ADD4B1004A6E10 /* Main.storyboard */; };
+		5038354629ADD4B1004A6E10 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038354529ADD4B1004A6E10 /* LoginViewController.swift */; };
 		5038354B29ADD4B4004A6E10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5038354A29ADD4B4004A6E10 /* Assets.xcassets */; };
 		5038354E29ADD4B4004A6E10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5038354C29ADD4B4004A6E10 /* LaunchScreen.storyboard */; };
+		5038355729AE1629004A6E10 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038355629AE1629004A6E10 /* API.swift */; };
+		5038355929AE1661004A6E10 /* APITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038355829AE1661004A6E10 /* APITypes.swift */; };
+		5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038355A29AE1C1D004A6E10 /* APIClient.swift */; };
+		5038355D29AE5088004A6E10 /* APIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038355C29AE5088004A6E10 /* APIClientProtocol.swift */; };
+		5038356329AE6CCF004A6E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356229AE6CCF004A6E10 /* User.swift */; };
+		5038356529AE6D5E004A6E10 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356429AE6D5E004A6E10 /* LoginViewModel.swift */; };
+		5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356729AE6DB2004A6E10 /* Dynamic.swift */; };
+		5038356A29AE6EC5004A6E10 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356929AE6EC5004A6E10 /* LoginView.swift */; };
+		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
+		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5038353E29ADD4B1004A6E10 /* KitsuClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KitsuClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5038354129ADD4B1004A6E10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5038354329ADD4B1004A6E10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5038354529ADD4B1004A6E10 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		5038354829ADD4B1004A6E10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5038354529ADD4B1004A6E10 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		5038354A29ADD4B4004A6E10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5038354D29ADD4B4004A6E10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5038354F29ADD4B4004A6E10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5038355629AE1629004A6E10 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		5038355829AE1661004A6E10 /* APITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITypes.swift; sourceTree = "<group>"; };
+		5038355A29AE1C1D004A6E10 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		5038355C29AE5088004A6E10 /* APIClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientProtocol.swift; sourceTree = "<group>"; };
+		5038356229AE6CCF004A6E10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5038356429AE6D5E004A6E10 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		5038356729AE6DB2004A6E10 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		5038356929AE6EC5004A6E10 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
+		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +74,72 @@
 		5038354029ADD4B1004A6E10 /* KitsuClient */ = {
 			isa = PBXGroup;
 			children = (
+				5038355E29AE5648004A6E10 /* Login page */,
+				5038355529AE15FC004A6E10 /* Network service */,
+				5038356129AE6CBF004A6E10 /* Model */,
 				5038354129ADD4B1004A6E10 /* AppDelegate.swift */,
 				5038354329ADD4B1004A6E10 /* SceneDelegate.swift */,
-				5038354529ADD4B1004A6E10 /* ViewController.swift */,
-				5038354729ADD4B1004A6E10 /* Main.storyboard */,
 				5038354A29ADD4B4004A6E10 /* Assets.xcassets */,
 				5038354C29ADD4B4004A6E10 /* LaunchScreen.storyboard */,
 				5038354F29ADD4B4004A6E10 /* Info.plist */,
 			);
 			path = KitsuClient;
+			sourceTree = "<group>";
+		};
+		5038355529AE15FC004A6E10 /* Network service */ = {
+			isa = PBXGroup;
+			children = (
+				5038355629AE1629004A6E10 /* API.swift */,
+				5038355829AE1661004A6E10 /* APITypes.swift */,
+				5038355A29AE1C1D004A6E10 /* APIClient.swift */,
+				5038355C29AE5088004A6E10 /* APIClientProtocol.swift */,
+			);
+			path = "Network service";
+			sourceTree = "<group>";
+		};
+		5038355E29AE5648004A6E10 /* Login page */ = {
+			isa = PBXGroup;
+			children = (
+				5038356029AE6C83004A6E10 /* ViewModel */,
+				5038355F29AE6C7B004A6E10 /* View */,
+			);
+			path = "Login page";
+			sourceTree = "<group>";
+		};
+		5038355F29AE6C7B004A6E10 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5038354529ADD4B1004A6E10 /* LoginViewController.swift */,
+				5038356929AE6EC5004A6E10 /* LoginView.swift */,
+				50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */,
+				50ECCAC929AF6F350075BAE3 /* InputTextField.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5038356029AE6C83004A6E10 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				5038356629AE6DA5004A6E10 /* Bindings */,
+				5038356429AE6D5E004A6E10 /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5038356129AE6CBF004A6E10 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5038356229AE6CCF004A6E10 /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5038356629AE6DA5004A6E10 /* Bindings */ = {
+			isa = PBXGroup;
+			children = (
+				5038356729AE6DB2004A6E10 /* Dynamic.swift */,
+			);
+			path = Bindings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,7 +202,6 @@
 			files = (
 				5038354E29ADD4B4004A6E10 /* LaunchScreen.storyboard in Resources */,
 				5038354B29ADD4B4004A6E10 /* Assets.xcassets in Resources */,
-				5038354929ADD4B1004A6E10 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +212,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5038354629ADD4B1004A6E10 /* ViewController.swift in Sources */,
+				5038354629ADD4B1004A6E10 /* LoginViewController.swift in Sources */,
+				50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */,
+				5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */,
 				5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */,
+				5038355729AE1629004A6E10 /* API.swift in Sources */,
 				5038354429ADD4B1004A6E10 /* SceneDelegate.swift in Sources */,
+				5038356329AE6CCF004A6E10 /* User.swift in Sources */,
+				5038355929AE1661004A6E10 /* APITypes.swift in Sources */,
+				5038355D29AE5088004A6E10 /* APIClientProtocol.swift in Sources */,
+				50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */,
+				5038356A29AE6EC5004A6E10 /* LoginView.swift in Sources */,
+				5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */,
+				5038356529AE6D5E004A6E10 /* LoginViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5038354729ADD4B1004A6E10 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5038354829ADD4B1004A6E10 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		5038354C29ADD4B4004A6E10 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -292,9 +368,9 @@
 				INFOPLIST_FILE = KitsuClient/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,9 +396,9 @@
 				INFOPLIST_FILE = KitsuClient/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

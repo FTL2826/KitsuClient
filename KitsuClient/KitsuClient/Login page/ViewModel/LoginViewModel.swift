@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+class LoginViewModel {
+    var loginStatus = Dynamic("")
+}
