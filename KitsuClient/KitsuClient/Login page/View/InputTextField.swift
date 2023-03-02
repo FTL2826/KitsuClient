@@ -33,6 +33,7 @@ class InputTextField: UITextField {
         switch fieldType {
         case .userName:
             placeholder = "Username"
+            keyboardType = .default
         case .email:
             placeholder = "Email address"
             keyboardType = .emailAddress
@@ -40,6 +41,7 @@ class InputTextField: UITextField {
         case .password:
             placeholder = "Password"
             textContentType = .oneTimeCode
+            keyboardType = .numbersAndPunctuation
             isSecureTextEntry = true
         }
         

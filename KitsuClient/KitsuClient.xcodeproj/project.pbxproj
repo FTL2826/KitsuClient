@@ -19,9 +19,10 @@
 		5038356329AE6CCF004A6E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356229AE6CCF004A6E10 /* User.swift */; };
 		5038356529AE6D5E004A6E10 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356429AE6D5E004A6E10 /* LoginViewModel.swift */; };
 		5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356729AE6DB2004A6E10 /* Dynamic.swift */; };
-		5038356A29AE6EC5004A6E10 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356929AE6EC5004A6E10 /* LoginView.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
+		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
+		50ECCACF29B075740075BAE3 /* UILabel+Shake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACE29B075730075BAE3 /* UILabel+Shake.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +40,10 @@
 		5038356229AE6CCF004A6E10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5038356429AE6D5E004A6E10 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		5038356729AE6DB2004A6E10 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
-		5038356929AE6EC5004A6E10 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
+		50ECCACE29B075730075BAE3 /* UILabel+Shake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Shake.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		5038354029ADD4B1004A6E10 /* KitsuClient */ = {
 			isa = PBXGroup;
 			children = (
+				50ECCACD29B075540075BAE3 /* Extensions */,
 				5038355E29AE5648004A6E10 /* Login page */,
 				5038355529AE15FC004A6E10 /* Network service */,
 				5038356129AE6CBF004A6E10 /* Model */,
@@ -110,9 +113,9 @@
 			isa = PBXGroup;
 			children = (
 				5038354529ADD4B1004A6E10 /* LoginViewController.swift */,
-				5038356929AE6EC5004A6E10 /* LoginView.swift */,
 				50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */,
 				50ECCAC929AF6F350075BAE3 /* InputTextField.swift */,
+				50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -140,6 +143,14 @@
 				5038356729AE6DB2004A6E10 /* Dynamic.swift */,
 			);
 			path = Bindings;
+			sourceTree = "<group>";
+		};
+		50ECCACD29B075540075BAE3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				50ECCACE29B075730075BAE3 /* UILabel+Shake.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,12 +228,13 @@
 				5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */,
 				5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */,
 				5038355729AE1629004A6E10 /* API.swift in Sources */,
+				50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */,
 				5038354429ADD4B1004A6E10 /* SceneDelegate.swift in Sources */,
+				50ECCACF29B075740075BAE3 /* UILabel+Shake.swift in Sources */,
 				5038356329AE6CCF004A6E10 /* User.swift in Sources */,
 				5038355929AE1661004A6E10 /* APITypes.swift in Sources */,
 				5038355D29AE5088004A6E10 /* APIClientProtocol.swift in Sources */,
 				50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */,
-				5038356A29AE6EC5004A6E10 /* LoginView.swift in Sources */,
 				5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */,
 				5038356529AE6D5E004A6E10 /* LoginViewModel.swift in Sources */,
 			);
