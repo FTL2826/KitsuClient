@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  SignInViewController.swift
 //  KitsuClient
 //
 //  Created by Александр Харин on /282/23.
@@ -7,9 +7,10 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class SignInViewController: UIViewController {
     
-    private var viewModel = LoginViewModel()
+    weak var viewModel: SignInViewModelProtocol?
+    weak var coordinator: RegistrationFlowCoordinatorProtocol?
     
     private var views: [UIView] = []
     private var loginHeaderView: LoginHeaderView!
@@ -29,6 +30,20 @@ class LoginViewController: UIViewController {
         return label
     }()
     
+    init(
+        viewModel: SignInViewModelProtocol,
+        coordinator: RegistrationFlowCoordinatorProtocol)
+    {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         createSubViews()
         
@@ -41,11 +56,13 @@ class LoginViewController: UIViewController {
         bindViewModel()
         
         setupUI()
-        addTargets()
+        
 
     }
     
     private func bindViewModel() {
+        guard let viewModel = viewModel else { return }
+        
         viewModel.loginStatus.bind {[weak self] statusText in
             DispatchQueue.main.async {
                 self?.loginStatusLabel.text = statusText
@@ -111,6 +128,7 @@ class LoginViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         initializeHideKeyboard()
+        addTargets()
         
         views.forEach {
             view.addSubview($0)
@@ -159,17 +177,17 @@ class LoginViewController: UIViewController {
     @objc private func didTapSignIn() {
         guard let login = loginTextField.text,
               let password = passwordTextField.text else { return }
-        viewModel.didSignInPressed(login: login, password: password)
+        viewModel?.didSignInPressed(login: login, password: password)
         loginStatusLabel.isHidden = false
         loginStatusLabel.shake()
     }
     
     @objc private func didTapCreateNewUser() {
-        print("DEBUG PRINT:", "newuser")
+        coordinator?.showCreateNewUser()
     }
     
     @objc private func didTapForgotPassword() {
-        print("DEBUG PRINT:", "forgot")
+        coordinator?.showForgotPassword()
     }
     
     @objc private func dismissKeyboard() {
@@ -179,7 +197,7 @@ class LoginViewController: UIViewController {
     
 }
 
-extension LoginViewController: UITextFieldDelegate {
+extension SignInViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let nextField = view.viewWithTag(textField.tag + 1) as? InputTextField {
@@ -192,7 +210,7 @@ extension LoginViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel.validateTextFields(login: loginTextField.text, password: passwordTextField.text)
+        viewModel?.validateTextFields(login: loginTextField.text, password: passwordTextField.text)
     }
     
 }
