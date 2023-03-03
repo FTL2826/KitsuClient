@@ -62,8 +62,8 @@
             filePath = "KitsuClient/Login page/View/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "textFieldShouldReturn(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "KitsuClient/Login page/View/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "bindViewModel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,10 +94,10 @@
             filePath = "KitsuClient/Login page/ViewModel/LoginViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "validateTextFields(login:password:)"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

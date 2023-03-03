@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  SignInViewController.swift
 //  KitsuClient
 //
 //  Created by Александр Харин on /282/23.
@@ -7,9 +7,10 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class SignInViewController: UIViewController {
     
-    private var viewModel = LoginViewModel()
+    var viewModel: SignInViewModelProtocol?
+    weak var coordinator: RegistrationFlowCoordinatorProtocol?
     
     private var views: [UIView] = []
     private var loginHeaderView: LoginHeaderView!
@@ -25,9 +26,22 @@ class LoginViewController: UIViewController {
         label.text = "loginStatusLabel"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
-        label.isHidden = true
         return label
     }()
+    
+    init(
+        viewModel: SignInViewModelProtocol,
+        coordinator: RegistrationFlowCoordinatorProtocol)
+    {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         createSubViews()
@@ -41,11 +55,18 @@ class LoginViewController: UIViewController {
         bindViewModel()
         
         setupUI()
-        addTargets()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
+        loginStatusLabel.isHidden = true
     }
     
     private func bindViewModel() {
+        guard let viewModel = viewModel else { return }
+        
         viewModel.loginStatus.bind {[weak self] statusText in
             DispatchQueue.main.async {
                 self?.loginStatusLabel.text = statusText
@@ -84,7 +105,7 @@ class LoginViewController: UIViewController {
     
     
     private func createSubViews() {
-        loginHeaderView = LoginHeaderView(title: "Sigh In", subtitle: "Sign in to your account")
+        loginHeaderView = LoginHeaderView(title: "Sign In", subtitle: "Sign in to your account")
         
         loginTextField = InputTextField(fieldType: .userName)
         loginTextField.delegate = self
@@ -111,6 +132,7 @@ class LoginViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         initializeHideKeyboard()
+        addTargets()
         
         views.forEach {
             view.addSubview($0)
@@ -126,22 +148,22 @@ class LoginViewController: UIViewController {
             loginTextField.topAnchor.constraint(equalTo: loginHeaderView.bottomAnchor, constant: 20),
             loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             loginTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginTextField.heightAnchor.constraint(equalToConstant: 45),
+            loginTextField.heightAnchor.constraint(equalToConstant: 44),
             
             passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 20),
             passwordTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 45),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             
             signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
             signInButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             signInButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            signInButton.heightAnchor.constraint(equalToConstant: 50),
+            signInButton.heightAnchor.constraint(equalToConstant: 44),
             
             newUserButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 10),
             newUserButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             newUserButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            newUserButton.heightAnchor.constraint(equalToConstant: 40),
+            newUserButton.heightAnchor.constraint(equalToConstant: 44),
             
             forgotPasswordButton.topAnchor.constraint(equalTo: newUserButton.bottomAnchor, constant: 6),
             forgotPasswordButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -159,17 +181,17 @@ class LoginViewController: UIViewController {
     @objc private func didTapSignIn() {
         guard let login = loginTextField.text,
               let password = passwordTextField.text else { return }
-        viewModel.didSignInPressed(login: login, password: password)
+        viewModel?.didSignInPressed(login: login, password: password)
         loginStatusLabel.isHidden = false
         loginStatusLabel.shake()
     }
     
     @objc private func didTapCreateNewUser() {
-        print("DEBUG PRINT:", "newuser")
+        coordinator?.showCreateNewUser()
     }
     
     @objc private func didTapForgotPassword() {
-        print("DEBUG PRINT:", "forgot")
+        coordinator?.showForgotPassword()
     }
     
     @objc private func dismissKeyboard() {
@@ -179,7 +201,7 @@ class LoginViewController: UIViewController {
     
 }
 
-extension LoginViewController: UITextFieldDelegate {
+extension SignInViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let nextField = view.viewWithTag(textField.tag + 1) as? InputTextField {
@@ -192,7 +214,7 @@ extension LoginViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel.validateTextFields(login: loginTextField.text, password: passwordTextField.text)
+        viewModel?.validateTextFields(login: loginTextField.text, password: passwordTextField.text)
     }
     
 }
