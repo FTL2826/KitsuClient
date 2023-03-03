@@ -7,9 +7,14 @@
 
 import UIKit
 
+fileprivate enum TextViewURLs: String {
+    case terms = "https://policies.google.com/terms?hl=en-US"
+    case privacy = "https://policies.google.com/privacy?hl=en-US"
+}
+
 class SignUpViewController: UIViewController {
     
-    weak var viewModel: SignUpViewModelProtocol?
+    var viewModel: SignUpViewModelProtocol?
     weak var coordinator: RegistrationFlowCoordinatorProtocol?
     
     private var views: [UIView] = []
@@ -19,6 +24,24 @@ class SignUpViewController: UIViewController {
     private var passwordTextField: InputTextField!
     private var signUpButton: LoginButtons!
     private var signInButton: LoginButtons!
+    
+    private lazy var termsTextView: UITextView = {
+        let attributedString = NSMutableAttributedString(string: "By creating an account you agree to our Terms & Conditions and you aknowledge that you have read our Privacy Policy.")
+        
+        attributedString.addAttribute(.link, value: TextViewURLs.terms.rawValue, range: (attributedString.string as NSString).range(of: "Terms & Conditions"))
+        attributedString.addAttribute(.link, value: TextViewURLs.privacy.rawValue, range: (attributedString.string as NSString).range(of: "Privacy Policy"))
+        
+        let tv = UITextView()
+        tv.linkTextAttributes = [.foregroundColor: UIColor.systemBlue]
+        tv.attributedText = attributedString
+        tv.backgroundColor = .clear
+        tv.textColor = .label
+        tv.isSelectable = true
+        tv.isEditable = false
+        tv.delaysContentTouches = false
+        tv.isScrollEnabled = false
+        return tv
+    }()
     
     
     init(viewModel: SignUpViewModelProtocol,
@@ -49,7 +72,18 @@ class SignUpViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        guard let viewModel = viewModel else { return }
         
+        viewModel.signUpButtonValidation.bind {[weak self] inUse in
+            DispatchQueue.main.async {
+                self?.signUpButton.isEnabled = inUse
+                if !inUse {
+                    self?.signUpButton.backgroundColor = .systemGray
+                } else {
+                    self?.signUpButton.backgroundColor = .systemBlue
+                }
+            }
+        }
     }
     
     private func createSubViews() {
@@ -65,8 +99,10 @@ class SignUpViewController: UIViewController {
         passwordTextField.delegate = self
         passwordTextField.tag = 103
         
-        signUpButton = LoginButtons(title: "Sign Up", background: .systemBlue, titleColor: .white, fontSize: .big)
+        signUpButton = LoginButtons(title: "Sign Up", background: .systemGray, titleColor: .white, fontSize: .big)
         signInButton = LoginButtons(title: "Already have an account? Sign in.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
+        
+        termsTextView.delegate = self
         
         views = [headerView,
                  loginTextField,
@@ -74,6 +110,7 @@ class SignUpViewController: UIViewController {
                  passwordTextField,
                  signUpButton,
                  signInButton,
+                 termsTextView,
         ]
     }
     
@@ -84,6 +121,7 @@ class SignUpViewController: UIViewController {
     
     private func addTargets() {
         signInButton.addTarget(self, action: #selector(didTapSignInButton), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(didTapSignUpButton), for: .touchUpInside)
     }
     
     private func setupUI() {
@@ -106,27 +144,32 @@ class SignUpViewController: UIViewController {
             loginTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
             loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             loginTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginTextField.heightAnchor.constraint(equalToConstant: 45),
+            loginTextField.heightAnchor.constraint(equalToConstant: 44),
             
             emailTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 10),
             emailTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emailTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            emailTextField.heightAnchor.constraint(equalToConstant: 45),
+            emailTextField.heightAnchor.constraint(equalToConstant: 44),
             
             passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 10),
             passwordTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 45),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             
             signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30),
             signUpButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             signUpButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            signUpButton.heightAnchor.constraint(equalToConstant: 50),
+            signUpButton.heightAnchor.constraint(equalToConstant: 44),
             
             signInButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 6),
             signInButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             signInButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            signInButton.heightAnchor.constraint(equalToConstant: 50),
+            signInButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            termsTextView.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 6),
+            termsTextView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            termsTextView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.9),
+            
         ])
         
     }
@@ -137,7 +180,11 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func didTapSignInButton() {
-        self.dismiss(animated: true)
+        coordinator?.showSignIn()
+    }
+    
+    @objc private func didTapSignUpButton() {
+        print("DEBUG PRINT:", "sign up")
     }
 
 }
@@ -153,6 +200,26 @@ extension SignUpViewController: UITextFieldDelegate {
         }
         
         return false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        viewModel?.validateTextFields(login: loginTextField.text, email: emailTextField.text, password: passwordTextField.text)
+    }
+    
+}
+
+
+extension SignUpViewController: UITextViewDelegate {
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        
+        coordinator?.showWebViewer(url: URL)
+        
+        return false
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        textView.selectedTextRange = nil
     }
     
 }

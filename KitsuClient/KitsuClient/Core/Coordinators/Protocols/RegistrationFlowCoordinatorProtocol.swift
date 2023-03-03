@@ -18,5 +18,6 @@ protocol RegistrationFlowCoordinatorProtocol: AnyObject {
     func showSignIn()
     func showCreateNewUser()
     func showForgotPassword()
+    func showWebViewer(url: URL)
     
 }

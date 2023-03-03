@@ -9,7 +9,7 @@ import UIKit
 
 class SignInViewController: UIViewController {
     
-    weak var viewModel: SignInViewModelProtocol?
+    var viewModel: SignInViewModelProtocol?
     weak var coordinator: RegistrationFlowCoordinatorProtocol?
     
     private var views: [UIView] = []
@@ -26,7 +26,6 @@ class SignInViewController: UIViewController {
         label.text = "loginStatusLabel"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
-        label.isHidden = true
         return label
     }()
     
@@ -57,7 +56,12 @@ class SignInViewController: UIViewController {
         
         setupUI()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
+        loginStatusLabel.isHidden = true
     }
     
     private func bindViewModel() {
@@ -101,7 +105,7 @@ class SignInViewController: UIViewController {
     
     
     private func createSubViews() {
-        loginHeaderView = LoginHeaderView(title: "Sigh In", subtitle: "Sign in to your account")
+        loginHeaderView = LoginHeaderView(title: "Sign In", subtitle: "Sign in to your account")
         
         loginTextField = InputTextField(fieldType: .userName)
         loginTextField.delegate = self
@@ -144,22 +148,22 @@ class SignInViewController: UIViewController {
             loginTextField.topAnchor.constraint(equalTo: loginHeaderView.bottomAnchor, constant: 20),
             loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             loginTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginTextField.heightAnchor.constraint(equalToConstant: 45),
+            loginTextField.heightAnchor.constraint(equalToConstant: 44),
             
             passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 20),
             passwordTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 45),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             
             signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
             signInButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             signInButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            signInButton.heightAnchor.constraint(equalToConstant: 50),
+            signInButton.heightAnchor.constraint(equalToConstant: 44),
             
             newUserButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 10),
             newUserButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             newUserButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            newUserButton.heightAnchor.constraint(equalToConstant: 40),
+            newUserButton.heightAnchor.constraint(equalToConstant: 44),
             
             forgotPasswordButton.topAnchor.constraint(equalTo: newUserButton.bottomAnchor, constant: 6),
             forgotPasswordButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),

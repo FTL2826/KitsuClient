@@ -23,8 +23,12 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
     }
     
     func showSignIn() {
-        let vc = moduleFactory.createSignInModule(coordinator: self)
-        navigationController.pushViewController(vc, animated: true)
+        if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
+            navigationController.viewControllers.last?.dismiss(animated: true)
+        } else {
+            let vc = moduleFactory.createSignInModule(coordinator: self)
+            navigationController.pushViewController(vc, animated: true)
+        }
     }
     
     func showCreateNewUser() {
@@ -34,9 +38,15 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
     }
     
     func showForgotPassword() {
-        let vc = ForgotViewController()
-        vc.coordinator = self
+        let vc = moduleFactory.createForgotPasswordModule(coordinator: self)
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showWebViewer(url: URL) {
+        if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
+            let vc = moduleFactory.createWebViewerModule(url: url)
+            lastVC.present(vc, animated: true)
+        }
     }
     
     
