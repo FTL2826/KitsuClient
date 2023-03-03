@@ -1,5 +1,5 @@
 //
-//  LoginViewModel.swift
+//  SignInViewModel.swift
 //  KitsuClient
 //
 //  Created by Александр Харин on /282/23.
@@ -7,11 +7,8 @@
 
 import Foundation
 
-class LoginViewModel {
+class SignInViewModel: SignInViewModelProtocol {
     
-    enum TextColor {
-        case red, green
-    }
     
     var loginStatus = Dynamic("")
     var textColor = Dynamic(TextColor.red)
