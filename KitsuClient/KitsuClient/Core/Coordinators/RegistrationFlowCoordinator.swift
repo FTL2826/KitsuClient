@@ -23,6 +23,15 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
     }
     
     func showSignIn() {
+        
+//        if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
+//            navigationController.viewControllers.last?.dismiss(animated: true)
+//            navigationController.viewControllers.removeLast()
+//        }
+//
+//        let vc = moduleFactory.createSignInModule(coordinator: self)
+//        navigationController.pushViewController(vc, animated: false)
+        
         if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
             navigationController.viewControllers.last?.dismiss(animated: true)
         } else {

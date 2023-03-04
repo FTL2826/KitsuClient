@@ -7,12 +7,9 @@
 
 import Foundation
 
-struct User {
+struct User: Codable {
     let login: String
     let email: String
-    let password: String
+    var password: String
 }
 
-extension User {
-    static var logins = [User(login: "guru", email: "example@mai.com", password: "123")]
-}

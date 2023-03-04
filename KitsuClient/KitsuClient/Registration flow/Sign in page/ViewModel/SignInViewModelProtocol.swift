@@ -13,10 +13,11 @@ enum TextColor {
 
 protocol SignInViewModelProtocol: AnyObject {
     
+    var passwordVerification: PasswordVerificationProtocol? { get set }
     var loginStatus: Dynamic<String> { get set }
     var textColor: Dynamic<TextColor> { get set }
     var signInButtonValidation: Dynamic<Bool> { get set }
     
-    func didSignInPressed(login: String, password: String)
-    func validateTextFields(login: String?, password: String?)
+    func didSignInPressed(email: String, password: String)
+    func validateTextFields(email: String?, password: String?)
 }

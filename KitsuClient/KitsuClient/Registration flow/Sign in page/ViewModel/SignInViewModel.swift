@@ -10,27 +10,35 @@ import Foundation
 class SignInViewModel: SignInViewModelProtocol {
     
     
+    var passwordVerification: PasswordVerificationProtocol?
     var loginStatus = Dynamic("")
     var textColor = Dynamic(TextColor.red)
     var signInButtonValidation = Dynamic(false)
     
-    func didSignInPressed(login: String, password: String) {
-        if login != User.logins[0].login || password != User.logins[0].password {
-            loginStatus.value = "Invalid username or password. Try again"
-            textColor.value = .red
-        } else {
-            loginStatus.value = "You succesfully sign in"
-            textColor.value = .green
-        }
+    init(passwordVerification: PasswordVerificationProtocol)
+    {
+        self.passwordVerification = passwordVerification
     }
     
-    func validateTextFields(login: String?, password: String?) {
-        guard let login = login, let password = password else {
+    func didSignInPressed(email: String, password: String) {
+        guard let passwordVerification = passwordVerification,
+              passwordVerification.users.contains(where: {$0.email == email && $0.password == password})
+        else {
+            loginStatus.value = "Invalid username or password. Try again"
+            textColor.value = .red
+            return }
+
+            loginStatus.value = "You succesfully sign in"
+            textColor.value = .green
+    }
+    
+    func validateTextFields(email: String?, password: String?) {
+        guard let email = email, let password = password else {
             signInButtonValidation.value = false
             return
         }
         
-        if !login.isEmpty && !password.isEmpty {
+        if !email.isEmpty && !password.isEmpty {
             signInButtonValidation.value = true
         } else {
             signInButtonValidation.value = false
