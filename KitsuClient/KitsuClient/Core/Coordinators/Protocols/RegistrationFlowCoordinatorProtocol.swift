@@ -8,9 +8,10 @@
 import Foundation
 import UIKit.UINavigationController
 
-protocol RegistrationFlowCoordinatorProtocol: AnyObject {
+protocol RegistrationFlowCoordinatorProtocol: Coordinator {
     
     var navigationController: UINavigationController { get set }
+    var completionHandler: ((User) -> ())? { get set }
     
     
     func start()
@@ -19,5 +20,7 @@ protocol RegistrationFlowCoordinatorProtocol: AnyObject {
     func showCreateNewUser()
     func showForgotPassword()
     func showWebViewer(url: URL)
+    
+    func endFlow(user: User)
     
 }

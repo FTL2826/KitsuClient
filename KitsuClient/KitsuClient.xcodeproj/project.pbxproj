@@ -29,6 +29,11 @@
 		5038356329AE6CCF004A6E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356229AE6CCF004A6E10 /* User.swift */; };
 		5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356429AE6D5E004A6E10 /* SignInViewModel.swift */; };
 		5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356729AE6DB2004A6E10 /* Dynamic.swift */; };
+		504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C129B3966C003C600F /* AnimeFeedViewController.swift */; };
+		504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */; };
+		504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C529B3982A003C600F /* AppFlowCoordinator.swift */; };
+		504A07C829B3B70C003C600F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C729B3B70C003C600F /* Coordinator.swift */; };
+		504A07CA29B3CE1B003C600F /* MainFlowFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C929B3CE1B003C600F /* MainFlowFactory.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -66,6 +71,11 @@
 		5038356229AE6CCF004A6E10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5038356429AE6D5E004A6E10 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		5038356729AE6DB2004A6E10 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		504A07C129B3966C003C600F /* AnimeFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeFeedViewController.swift; sourceTree = "<group>"; };
+		504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinatorProtocol.swift; sourceTree = "<group>"; };
+		504A07C529B3982A003C600F /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
+		504A07C729B3B70C003C600F /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		504A07C929B3CE1B003C600F /* MainFlowFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlowFactory.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -213,6 +223,7 @@
 			children = (
 				50048CB329B3121200779196 /* Services */,
 				50048CB029B30FBA00779196 /* Registration flow */,
+				504A07BC29B395EA003C600F /* Main flow */,
 				50048CA629B1369900779196 /* Core */,
 				5038354129ADD4B1004A6E10 /* AppDelegate.swift */,
 				5038354329ADD4B1004A6E10 /* SceneDelegate.swift */,
@@ -276,6 +287,46 @@
 			path = Bindings;
 			sourceTree = "<group>";
 		};
+		504A07BC29B395EA003C600F /* Main flow */ = {
+			isa = PBXGroup;
+			children = (
+				504A07C029B39649003C600F /* Model */,
+				504A07BD29B39610003C600F /* Anime feed page */,
+			);
+			path = "Main flow";
+			sourceTree = "<group>";
+		};
+		504A07BD29B39610003C600F /* Anime feed page */ = {
+			isa = PBXGroup;
+			children = (
+				504A07BF29B39633003C600F /* ViewModel */,
+				504A07BE29B3962A003C600F /* View */,
+			);
+			path = "Anime feed page";
+			sourceTree = "<group>";
+		};
+		504A07BE29B3962A003C600F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				504A07C129B3966C003C600F /* AnimeFeedViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		504A07BF29B39633003C600F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		504A07C029B39649003C600F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		50ECCACD29B075540075BAE3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +340,7 @@
 			children = (
 				50ECCAD129B0D3DB0075BAE3 /* Protocols */,
 				50ECCAD429B0D4550075BAE3 /* RegistrationFlowCoordinator.swift */,
+				504A07C529B3982A003C600F /* AppFlowCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -297,6 +349,8 @@
 			isa = PBXGroup;
 			children = (
 				50ECCAD229B0D3ED0075BAE3 /* RegistrationFlowCoordinatorProtocol.swift */,
+				504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */,
+				504A07C729B3B70C003C600F /* Coordinator.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -325,6 +379,7 @@
 				50ECCADD29B108DF0075BAE3 /* RegistrationFactory.swift */,
 				50048C9E29B1209700779196 /* CoordinatorsFactory.swift */,
 				50048CBB29B31A0300779196 /* ServicesFactory.swift */,
+				504A07C929B3CE1B003C600F /* MainFlowFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -409,8 +464,12 @@
 				50ECCAD829B0DBC20075BAE3 /* SignUpViewController.swift in Sources */,
 				50048CAA29B1CAA400779196 /* WebViewerViewController.swift in Sources */,
 				50048CB829B3127700779196 /* UserDefaultsKeys.swift in Sources */,
+				504A07C829B3B70C003C600F /* Coordinator.swift in Sources */,
 				5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */,
 				50048CA129B1245400779196 /* SignUpViewModelProtocol.swift in Sources */,
+				504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */,
+				504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */,
+				504A07CA29B3CE1B003C600F /* MainFlowFactory.swift in Sources */,
 				5038355729AE1629004A6E10 /* API.swift in Sources */,
 				50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */,
 				5038354429ADD4B1004A6E10 /* SceneDelegate.swift in Sources */,
@@ -428,6 +487,7 @@
 				50048CBC29B31A0300779196 /* ServicesFactory.swift in Sources */,
 				5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */,
 				50ECCADE29B108DF0075BAE3 /* RegistrationFactory.swift in Sources */,
+				504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */,
 				50048CAF29B223E800779196 /* ForgotViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

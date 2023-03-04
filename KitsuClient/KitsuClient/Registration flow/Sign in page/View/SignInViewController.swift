@@ -20,12 +20,15 @@ class SignInViewController: UIViewController {
     private var newUserButton: LoginButtons!
     private var forgotPasswordButton: LoginButtons!
     
+    var completionHandler: (() -> ())?
+    
     private lazy var loginStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
         label.text = "loginStatusLabel"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
+        label.isHidden = true
         return label
     }()
     
@@ -61,12 +64,17 @@ class SignInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        loginStatusLabel.isHidden = true
         viewModel?.passwordVerification?.loadUsers()
     }
     
     private func bindViewModel() {
         guard let viewModel = viewModel else { return }
+        
+        viewModel.loginStatusLabelHidden.bind {[weak self] hidden in
+            DispatchQueue.main.async {
+                self?.loginStatusLabel.isHidden = hidden
+            }
+        }
         
         viewModel.loginStatus.bind {[weak self] statusText in
             DispatchQueue.main.async {
@@ -188,8 +196,10 @@ class SignInViewController: UIViewController {
     @objc private func didTapSignIn() {
         guard let email = emailTextField.text,
               let password = passwordTextField.text else { return }
+        viewModel?.completionHandler = {[weak self] user in
+            self?.coordinator?.endFlow(user: user)
+        }
         viewModel?.didSignInPressed(email: email, password: password)
-        loginStatusLabel.isHidden = false
         loginStatusLabel.shake()
     }
     

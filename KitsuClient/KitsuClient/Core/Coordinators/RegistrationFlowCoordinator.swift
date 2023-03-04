@@ -13,6 +13,7 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
     private let moduleFactory = RegistrationFactory()
     
     var navigationController: UINavigationController
+    var completionHandler: ((User) -> ())?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -24,20 +25,13 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
     
     func showSignIn() {
         
-//        if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
-//            navigationController.viewControllers.last?.dismiss(animated: true)
-//            navigationController.viewControllers.removeLast()
-//        }
-//
-//        let vc = moduleFactory.createSignInModule(coordinator: self)
-//        navigationController.pushViewController(vc, animated: false)
-        
         if let lastVC = navigationController.viewControllers.last?.presentedViewController, lastVC.isKind(of: SignUpViewController.self) {
             navigationController.viewControllers.last?.dismiss(animated: true)
         } else {
             let vc = moduleFactory.createSignInModule(coordinator: self)
             navigationController.pushViewController(vc, animated: true)
         }
+        
     }
     
     func showCreateNewUser() {
@@ -56,6 +50,10 @@ class RegistrationFlowCoordinator: RegistrationFlowCoordinatorProtocol {
             let vc = moduleFactory.createWebViewerModule(url: url)
             lastVC.present(vc, animated: true)
         }
+    }
+    
+    func endFlow(user: User) {
+        completionHandler?(user)
     }
     
     

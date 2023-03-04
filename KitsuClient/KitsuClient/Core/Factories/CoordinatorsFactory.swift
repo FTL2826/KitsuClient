@@ -14,5 +14,9 @@ class CoordinatorsFactory {
         RegistrationFlowCoordinator(navigationController: navigationController)
     }
     
+    func createAppFlowCoordinator(navigationController: UINavigationController) -> AppFlowCoordinator {
+        AppFlowCoordinator(navigationController: navigationController)
+    }
+    
     
 }

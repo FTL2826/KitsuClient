@@ -9,11 +9,12 @@ import Foundation
 
 class SignInViewModel: SignInViewModelProtocol {
     
-    
     var passwordVerification: PasswordVerificationProtocol?
     var loginStatus = Dynamic("")
+    var loginStatusLabelHidden = Dynamic(true)
     var textColor = Dynamic(TextColor.red)
     var signInButtonValidation = Dynamic(false)
+    var completionHandler: ((User) -> ())?
     
     init(passwordVerification: PasswordVerificationProtocol)
     {
@@ -26,10 +27,13 @@ class SignInViewModel: SignInViewModelProtocol {
         else {
             loginStatus.value = "Invalid username or password. Try again"
             textColor.value = .red
+            loginStatusLabelHidden.value = false
             return }
 
-            loginStatus.value = "You succesfully sign in"
-            textColor.value = .green
+        loginStatusLabelHidden.value = true
+        
+        let userIndex = passwordVerification.users.firstIndex(where: {$0.email == email})!
+        completionHandler?(passwordVerification.users[userIndex])
     }
     
     func validateTextFields(email: String?, password: String?) {
