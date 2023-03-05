@@ -9,20 +9,30 @@ import Foundation
 
 class RegistrationFactory {
     
+    let servicesFactory = ServicesFactory()
+    
     func createSignInModule(coordinator: RegistrationFlowCoordinatorProtocol) -> SignInViewController {
-        let vc = SignInViewController(viewModel: SignInViewModel(), coordinator: coordinator)
+        let vc = SignInViewController(
+            viewModel: SignInViewModel(
+                passwordVerification: servicesFactory.createPasswordVerification()),
+            coordinator: coordinator)
         
         return vc
     }
     
     func createSignUpModule(coordinator: RegistrationFlowCoordinatorProtocol) -> SignUpViewController {
-        let vc = SignUpViewController(viewModel: SignUpViewModel(), coordinator: coordinator)
+        let vc = SignUpViewController(
+            viewModel: SignUpViewModel(
+                passwordVerification: servicesFactory.createPasswordVerification()),
+            coordinator: coordinator)
         
         return vc
     }
     
     func createForgotPasswordModule(coordinator: RegistrationFlowCoordinatorProtocol) -> ForgotViewController {
-        let vc = ForgotViewController(viewModel: ForgotViewModel())
+        let vc = ForgotViewController(
+            viewModel: ForgotViewModel(
+                passwordVerification: servicesFactory.createPasswordVerification()))
         
         return vc
     }

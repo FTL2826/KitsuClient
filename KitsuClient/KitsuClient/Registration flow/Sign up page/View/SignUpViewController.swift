@@ -43,6 +43,18 @@ class SignUpViewController: UIViewController {
         return tv
     }()
     
+    private lazy var uniqEmailStatusLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .label
+        label.text = "That email was already used for another account"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.numberOfLines = 0
+        label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        return label
+    }()
+    
     
     init(viewModel: SignUpViewModelProtocol,
          coordinator: RegistrationFlowCoordinatorProtocol)
@@ -84,6 +96,18 @@ class SignUpViewController: UIViewController {
                 }
             }
         }
+        
+        viewModel.uniqEmail.bind {[weak self] uniqEmail in
+            DispatchQueue.main.async {
+                if !uniqEmail {
+                    self?.uniqEmailStatusLabel.isHidden = false
+                    self?.uniqEmailStatusLabel.shake()
+                } else {
+                    self?.uniqEmailStatusLabel.isHidden = true
+                }
+            }
+        }
+        
     }
     
     private func createSubViews() {
@@ -111,6 +135,7 @@ class SignUpViewController: UIViewController {
                  signUpButton,
                  signInButton,
                  termsTextView,
+                 uniqEmailStatusLabel,
         ]
     }
     
@@ -170,6 +195,10 @@ class SignUpViewController: UIViewController {
             termsTextView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             termsTextView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.9),
             
+            uniqEmailStatusLabel.topAnchor.constraint(equalTo: termsTextView.bottomAnchor, constant: 6),
+            uniqEmailStatusLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            uniqEmailStatusLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
+            
         ])
         
     }
@@ -184,7 +213,11 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func didTapSignUpButton() {
-        print("DEBUG PRINT:", "sign up")
+        viewModel?.didPressedSignUpButton(
+            login: loginTextField.text,
+            email: emailTextField.text,
+            password: passwordTextField.text)
+        coordinator?.showSignIn()
     }
 
 }

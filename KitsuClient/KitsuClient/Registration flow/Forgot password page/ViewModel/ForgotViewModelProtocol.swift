@@ -10,10 +10,11 @@ import Foundation
 
 protocol ForgotViewModelProtocol: AnyObject {
     
+    var passwordVerification: PasswordVerificationProtocol? { get set }
     var loginStatus: Dynamic<String> { get set }
     var textColor: Dynamic<TextColor> { get set }
     var forgotPasswordButtonValidation: Dynamic<Bool> { get set }
     
-    func didPressedResetPasswordButton(login: String?)
-    func validateTextFields(login: String?)
+    func didPressedResetPasswordButton(email: String?)
+    func validateTextFields(email: String?)
 }

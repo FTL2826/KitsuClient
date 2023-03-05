@@ -9,7 +9,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-    var registrationCoordinator = CoordinatorsFactory().createRegistrationFlowCoordinator(navigationController: UINavigationController())
+    var appCoordinator = CoordinatorsFactory().createAppFlowCoordinator(tabBarController: UITabBarController())
     var window: UIWindow?
 
 
@@ -17,9 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = registrationCoordinator.navigationController
+        window?.rootViewController = appCoordinator.tabBarController
         
-        registrationCoordinator.start()
+        appCoordinator.start()
         
         window?.makeKeyAndVisible()
     }

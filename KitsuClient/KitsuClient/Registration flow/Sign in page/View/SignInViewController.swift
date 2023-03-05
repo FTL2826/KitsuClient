@@ -14,11 +14,13 @@ class SignInViewController: UIViewController {
     
     private var views: [UIView] = []
     private var loginHeaderView: LoginHeaderView!
-    private var loginTextField: InputTextField!
+    private var emailTextField: InputTextField!
     private var passwordTextField: InputTextField!
     private var signInButton: LoginButtons!
     private var newUserButton: LoginButtons!
     private var forgotPasswordButton: LoginButtons!
+    
+    var completionHandler: (() -> ())?
     
     private lazy var loginStatusLabel: UILabel = {
         let label = UILabel()
@@ -26,6 +28,7 @@ class SignInViewController: UIViewController {
         label.text = "loginStatusLabel"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
+        label.isHidden = true
         return label
     }()
     
@@ -61,11 +64,17 @@ class SignInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        loginStatusLabel.isHidden = true
+        viewModel?.passwordVerification?.loadUsers()
     }
     
     private func bindViewModel() {
         guard let viewModel = viewModel else { return }
+        
+        viewModel.loginStatusLabelHidden.bind {[weak self] hidden in
+            DispatchQueue.main.async {
+                self?.loginStatusLabel.isHidden = hidden
+            }
+        }
         
         viewModel.loginStatus.bind {[weak self] statusText in
             DispatchQueue.main.async {
@@ -107,9 +116,9 @@ class SignInViewController: UIViewController {
     private func createSubViews() {
         loginHeaderView = LoginHeaderView(title: "Sign In", subtitle: "Sign in to your account")
         
-        loginTextField = InputTextField(fieldType: .userName)
-        loginTextField.delegate = self
-        loginTextField.tag = 101
+        emailTextField = InputTextField(fieldType: .email)
+        emailTextField.delegate = self
+        emailTextField.tag = 101
         passwordTextField = InputTextField(fieldType: .password)
         passwordTextField.delegate = self
         passwordTextField.tag = 102
@@ -119,7 +128,13 @@ class SignInViewController: UIViewController {
         newUserButton = LoginButtons(title: "New here? Create account.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
         forgotPasswordButton = LoginButtons(title: "Forgot password?", background: .clear, titleColor: .systemBlue, fontSize: .small)
         
-        views = [loginHeaderView, loginTextField, passwordTextField, signInButton, newUserButton, forgotPasswordButton, loginStatusLabel]
+        views = [loginHeaderView,
+                 emailTextField,
+                 passwordTextField,
+                 signInButton,
+                 newUserButton,
+                 forgotPasswordButton,
+                 loginStatusLabel]
     }
     
     private func initializeHideKeyboard() {
@@ -145,12 +160,12 @@ class SignInViewController: UIViewController {
             loginHeaderView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             loginHeaderView.heightAnchor.constraint(equalToConstant: 200),
             
-            loginTextField.topAnchor.constraint(equalTo: loginHeaderView.bottomAnchor, constant: 20),
-            loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginTextField.heightAnchor.constraint(equalToConstant: 44),
+            emailTextField.topAnchor.constraint(equalTo: loginHeaderView.bottomAnchor, constant: 20),
+            emailTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            emailTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
+            emailTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 20),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
             passwordTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
             passwordTextField.heightAnchor.constraint(equalToConstant: 44),
@@ -179,10 +194,12 @@ class SignInViewController: UIViewController {
     
     //MARK: - selectors
     @objc private func didTapSignIn() {
-        guard let login = loginTextField.text,
+        guard let email = emailTextField.text,
               let password = passwordTextField.text else { return }
-        viewModel?.didSignInPressed(login: login, password: password)
-        loginStatusLabel.isHidden = false
+        viewModel?.completionHandler = {[weak self] user in
+            self?.coordinator?.endFlow(user: user)
+        }
+        viewModel?.didSignInPressed(email: email, password: password)
         loginStatusLabel.shake()
     }
     
@@ -214,7 +231,7 @@ extension SignInViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.validateTextFields(login: loginTextField.text, password: passwordTextField.text)
+        viewModel?.validateTextFields(email: emailTextField.text, password: passwordTextField.text)
     }
     
 }

@@ -13,7 +13,7 @@ class ForgotViewController: UIViewController {
     
     private var views: [UIView] = []
     private var headerView: LoginHeaderView!
-    private var loginTextField: InputTextField!
+    private var emailTextField: InputTextField!
     private var resetPasswordButton: LoginButtons!
     
     private lazy var resetPasswordStatusLabel: UILabel = {
@@ -87,14 +87,14 @@ class ForgotViewController: UIViewController {
     private func createSubViews() {
         headerView = LoginHeaderView(title: "Forgot password?", subtitle: "Reset your password")
         
-        loginTextField = InputTextField(fieldType: .userName)
-        loginTextField.tag = 101
-        loginTextField.delegate = self
+        emailTextField = InputTextField(fieldType: .email)
+        emailTextField.tag = 101
+        emailTextField.delegate = self
         
         resetPasswordButton = LoginButtons(title: "Reset password", background: .systemGray, titleColor: .white, fontSize: .big)
         
         views = [headerView,
-                 loginTextField,
+                 emailTextField,
                  resetPasswordButton,
                  resetPasswordStatusLabel,
         ]
@@ -127,12 +127,12 @@ class ForgotViewController: UIViewController {
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 200),
             
-            loginTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
-            loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginTextField.heightAnchor.constraint(equalToConstant: 44),
+            emailTextField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+            emailTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            emailTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
+            emailTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            resetPasswordButton.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 30),
+            resetPasswordButton.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30),
             resetPasswordButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             resetPasswordButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
             resetPasswordButton.heightAnchor.constraint(equalToConstant: 44),
@@ -152,7 +152,7 @@ class ForgotViewController: UIViewController {
     }
     
     @objc private func didPressedResetPasswordButton() {
-        viewModel?.didPressedResetPasswordButton(login: loginTextField.text)
+        viewModel?.didPressedResetPasswordButton(email: emailTextField.text)
         resetPasswordStatusLabel.isHidden = false
     }
 
@@ -172,7 +172,7 @@ extension ForgotViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.validateTextFields(login: loginTextField.text)
+        viewModel?.validateTextFields(email: emailTextField.text)
     }
     
 }
