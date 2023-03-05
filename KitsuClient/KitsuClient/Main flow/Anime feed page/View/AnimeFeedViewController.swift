@@ -9,14 +9,17 @@ import UIKit
 
 class AnimeFeedViewController: UIViewController {
     
-    var user: User?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .cyan
+        view.backgroundColor = .systemBackground
         
-        print("User: ", user)
+        
+    }
+    
+    deinit {
+        print("Anime view controller was destroyed")
     }
 
 }

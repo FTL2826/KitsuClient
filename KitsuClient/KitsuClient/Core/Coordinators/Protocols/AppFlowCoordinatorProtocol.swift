@@ -6,10 +6,14 @@
 //
 
 import Foundation
-import UIKit.UINavigationController
+import UIKit.UITabBarController
 
-protocol AppFlowCoordinatorProtocol: Coordinator {
+protocol AppFlowCoordinatorProtocol: AnyObject {
     
+    var tabBarController: UITabBarController { get }
     
+    func start()
+    func showAnimeFeed(user: User)
+    func logout()
     
 }

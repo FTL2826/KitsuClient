@@ -34,6 +34,8 @@
 		504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C529B3982A003C600F /* AppFlowCoordinator.swift */; };
 		504A07C829B3B70C003C600F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C729B3B70C003C600F /* Coordinator.swift */; };
 		504A07CA29B3CE1B003C600F /* MainFlowFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C929B3CE1B003C600F /* MainFlowFactory.swift */; };
+		504A07CE29B4CF78003C600F /* MangaFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07CD29B4CF78003C600F /* MangaFeedViewController.swift */; };
+		504A07D029B4CFA1003C600F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07CF29B4CFA1003C600F /* ProfileViewController.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -76,6 +78,8 @@
 		504A07C529B3982A003C600F /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
 		504A07C729B3B70C003C600F /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		504A07C929B3CE1B003C600F /* MainFlowFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlowFactory.swift; sourceTree = "<group>"; };
+		504A07CD29B4CF78003C600F /* MangaFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaFeedViewController.swift; sourceTree = "<group>"; };
+		504A07CF29B4CFA1003C600F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -292,6 +296,8 @@
 			children = (
 				504A07C029B39649003C600F /* Model */,
 				504A07BD29B39610003C600F /* Anime feed page */,
+				504A07CB29B4CF23003C600F /* Manga feed page */,
+				504A07CC29B4CF49003C600F /* Profile page */,
 			);
 			path = "Main flow";
 			sourceTree = "<group>";
@@ -325,6 +331,30 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		504A07CB29B4CF23003C600F /* Manga feed page */ = {
+			isa = PBXGroup;
+			children = (
+				504A07CD29B4CF78003C600F /* MangaFeedViewController.swift */,
+			);
+			path = "Manga feed page";
+			sourceTree = "<group>";
+		};
+		504A07CC29B4CF49003C600F /* Profile page */ = {
+			isa = PBXGroup;
+			children = (
+				504A07D129B4F2F5003C600F /* View */,
+			);
+			path = "Profile page";
+			sourceTree = "<group>";
+		};
+		504A07D129B4F2F5003C600F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				504A07CF29B4CFA1003C600F /* ProfileViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		50ECCACD29B075540075BAE3 /* Extensions */ = {
@@ -485,8 +515,10 @@
 				50ECCAE029B118840075BAE3 /* SignInViewModelProtocol.swift in Sources */,
 				5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */,
 				50048CBC29B31A0300779196 /* ServicesFactory.swift in Sources */,
+				504A07CE29B4CF78003C600F /* MangaFeedViewController.swift in Sources */,
 				5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */,
 				50ECCADE29B108DF0075BAE3 /* RegistrationFactory.swift in Sources */,
+				504A07D029B4CFA1003C600F /* ProfileViewController.swift in Sources */,
 				504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */,
 				50048CAF29B223E800779196 /* ForgotViewModel.swift in Sources */,
 			);

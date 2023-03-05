@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit.UINavigationController
+import UIKit.UITabBarController
 
 class CoordinatorsFactory {
     
@@ -14,8 +15,8 @@ class CoordinatorsFactory {
         RegistrationFlowCoordinator(navigationController: navigationController)
     }
     
-    func createAppFlowCoordinator(navigationController: UINavigationController) -> AppFlowCoordinator {
-        AppFlowCoordinator(navigationController: navigationController)
+    func createAppFlowCoordinator(tabBarController: UITabBarController) -> AppFlowCoordinator {
+        AppFlowCoordinator(tabBarController: tabBarController)
     }
     
     

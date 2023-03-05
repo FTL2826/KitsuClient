@@ -10,19 +10,36 @@ import UIKit
 
 class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     
-    var navigationController = UINavigationController()
+    
+    var tabBarController: UITabBarController
+    var navigationController: UINavigationController!
+    
+    var isAuth: Bool {
+        get {
+            return true
+        }
+    }
+    
+    
     var childCoordinators = [Coordinator]()
     
     let factory = MainFlowFactory()
     
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(tabBarController: UITabBarController) {
+        self.tabBarController = tabBarController
+        self.navigationController = UINavigationController()
     }
     
     func start() {
-        // if not Auth
-        showRegistration()
+        tabBarController.tabBar.isHidden = true
+        tabBarController.addChild(navigationController)
+        
+        if isAuth {
+            showAnimeFeed(user: User(login: "test", email: "test", password: "test"))
+        } else {
+            showRegistration()
+        }
     }
     
     private func showRegistration() {
@@ -30,14 +47,31 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
         registrationFlowCoordinator.start()
         childCoordinators.append(registrationFlowCoordinator)
         registrationFlowCoordinator.completionHandler = {[weak self] user in
+            self?.navigationController = nil
             self?.showAnimeFeed(user: user)
         }
     }
     
     func showAnimeFeed(user: User) {
-        let vc = factory.createAnimeFeedModule()
-        vc.user = user
-        navigationController.pushViewController(vc, animated: true)
+        tabBarController
+            .setViewControllers([factory.createAnimeFeedModule(),
+                                 factory.createMangaFeedModule(),
+                                 factory.createProfileModule(coordinator: self, user: user)], animated: false)
+        tabBarController.selectedIndex = 2
+        tabBarController.tabBar.isHidden = false
+        
+        
+    }
+    
+    func logout() {
+        tabBarController.tabBar.isHidden = true
+        
+        navigationController = UINavigationController()
+        tabBarController.viewControllers?.removeAll()
+        tabBarController.addChild(navigationController)
+        tabBarController.selectedIndex = 0
+        
+        showRegistration()
     }
     
     
