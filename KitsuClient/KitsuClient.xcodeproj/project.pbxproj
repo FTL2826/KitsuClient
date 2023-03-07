@@ -36,6 +36,11 @@
 		504A07CA29B3CE1B003C600F /* MainFlowFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C929B3CE1B003C600F /* MainFlowFactory.swift */; };
 		504A07CE29B4CF78003C600F /* MangaFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07CD29B4CF78003C600F /* MangaFeedViewController.swift */; };
 		504A07D029B4CFA1003C600F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07CF29B4CFA1003C600F /* ProfileViewController.swift */; };
+		5092068129B74D4A00D16A33 /* Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092068029B74D4A00D16A33 /* Links.swift */; };
+		5092068329B74E3200D16A33 /* Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092068229B74E3200D16A33 /* Meta.swift */; };
+		5092068529B74E6C00D16A33 /* AnimeSearchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092068429B74E6C00D16A33 /* AnimeSearchData.swift */; };
+		5092068829B75F3300D16A33 /* AnimeTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092068729B75F3300D16A33 /* AnimeTitle.swift */; };
+		5092068A29B770EC00D16A33 /* Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092068929B770EC00D16A33 /* Attributes.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -46,6 +51,8 @@
 		50ECCADB29B0DFC70075BAE3 /* ForgotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADA29B0DFC70075BAE3 /* ForgotViewController.swift */; };
 		50ECCADE29B108DF0075BAE3 /* RegistrationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADD29B108DF0075BAE3 /* RegistrationFactory.swift */; };
 		50ECCAE029B118840075BAE3 /* SignInViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADF29B118840075BAE3 /* SignInViewModelProtocol.swift */; };
+		50F59CE029B70F40004C37BF /* AnimeFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F59CDF29B70F40004C37BF /* AnimeFeedViewModel.swift */; };
+		50F59CE229B70F59004C37BF /* AnimeFeedViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F59CE129B70F59004C37BF /* AnimeFeedViewModelProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +87,11 @@
 		504A07C929B3CE1B003C600F /* MainFlowFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlowFactory.swift; sourceTree = "<group>"; };
 		504A07CD29B4CF78003C600F /* MangaFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaFeedViewController.swift; sourceTree = "<group>"; };
 		504A07CF29B4CFA1003C600F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		5092068029B74D4A00D16A33 /* Links.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Links.swift; sourceTree = "<group>"; };
+		5092068229B74E3200D16A33 /* Meta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meta.swift; sourceTree = "<group>"; };
+		5092068429B74E6C00D16A33 /* AnimeSearchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeSearchData.swift; sourceTree = "<group>"; };
+		5092068729B75F3300D16A33 /* AnimeTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeTitle.swift; sourceTree = "<group>"; };
+		5092068929B770EC00D16A33 /* Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attributes.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -90,6 +102,8 @@
 		50ECCADA29B0DFC70075BAE3 /* ForgotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotViewController.swift; sourceTree = "<group>"; };
 		50ECCADD29B108DF0075BAE3 /* RegistrationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationFactory.swift; sourceTree = "<group>"; };
 		50ECCADF29B118840075BAE3 /* SignInViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModelProtocol.swift; sourceTree = "<group>"; };
+		50F59CDF29B70F40004C37BF /* AnimeFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeFeedViewModel.swift; sourceTree = "<group>"; };
+		50F59CE129B70F59004C37BF /* AnimeFeedViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeFeedViewModelProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +255,7 @@
 		5038355529AE15FC004A6E10 /* Network service */ = {
 			isa = PBXGroup;
 			children = (
+				5092067F29B74D1400D16A33 /* AnimeSearch json model */,
 				5038355629AE1629004A6E10 /* API.swift */,
 				5038355829AE1661004A6E10 /* APITypes.swift */,
 				5038355A29AE1C1D004A6E10 /* APIClient.swift */,
@@ -305,6 +320,7 @@
 		504A07BD29B39610003C600F /* Anime feed page */ = {
 			isa = PBXGroup;
 			children = (
+				5092068629B75F2300D16A33 /* Model */,
 				504A07BF29B39633003C600F /* ViewModel */,
 				504A07BE29B3962A003C600F /* View */,
 			);
@@ -322,6 +338,8 @@
 		504A07BF29B39633003C600F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				50F59CDF29B70F40004C37BF /* AnimeFeedViewModel.swift */,
+				50F59CE129B70F59004C37BF /* AnimeFeedViewModelProtocol.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -355,6 +373,25 @@
 				504A07CF29B4CFA1003C600F /* ProfileViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		5092067F29B74D1400D16A33 /* AnimeSearch json model */ = {
+			isa = PBXGroup;
+			children = (
+				5092068029B74D4A00D16A33 /* Links.swift */,
+				5092068229B74E3200D16A33 /* Meta.swift */,
+				5092068429B74E6C00D16A33 /* AnimeSearchData.swift */,
+				5092068929B770EC00D16A33 /* Attributes.swift */,
+			);
+			path = "AnimeSearch json model";
+			sourceTree = "<group>";
+		};
+		5092068629B75F2300D16A33 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5092068729B75F3300D16A33 /* AnimeTitle.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		50ECCACD29B075540075BAE3 /* Extensions */ = {
@@ -484,11 +521,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5092068329B74E3200D16A33 /* Meta.swift in Sources */,
 				50048C9F29B1209700779196 /* CoordinatorsFactory.swift in Sources */,
 				50048CBA29B3186700779196 /* PasswordVerificationProtocol.swift in Sources */,
 				5038354629ADD4B1004A6E10 /* SignInViewController.swift in Sources */,
 				50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */,
+				5092068129B74D4A00D16A33 /* Links.swift in Sources */,
 				50ECCAD329B0D3ED0075BAE3 /* RegistrationFlowCoordinatorProtocol.swift in Sources */,
+				5092068529B74E6C00D16A33 /* AnimeSearchData.swift in Sources */,
 				5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */,
 				50ECCAD529B0D4550075BAE3 /* RegistrationFlowCoordinator.swift in Sources */,
 				50ECCAD829B0DBC20075BAE3 /* SignUpViewController.swift in Sources */,
@@ -499,12 +539,15 @@
 				50048CA129B1245400779196 /* SignUpViewModelProtocol.swift in Sources */,
 				504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */,
 				504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */,
+				5092068A29B770EC00D16A33 /* Attributes.swift in Sources */,
+				50F59CE229B70F59004C37BF /* AnimeFeedViewModelProtocol.swift in Sources */,
 				504A07CA29B3CE1B003C600F /* MainFlowFactory.swift in Sources */,
 				5038355729AE1629004A6E10 /* API.swift in Sources */,
 				50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */,
 				5038354429ADD4B1004A6E10 /* SceneDelegate.swift in Sources */,
 				50ECCACF29B075740075BAE3 /* UILabel+Shake.swift in Sources */,
 				50048CB529B3123200779196 /* PasswordVerification.swift in Sources */,
+				5092068829B75F3300D16A33 /* AnimeTitle.swift in Sources */,
 				50048CA329B124E900779196 /* SignUpViewModel.swift in Sources */,
 				50ECCADB29B0DFC70075BAE3 /* ForgotViewController.swift in Sources */,
 				5038356329AE6CCF004A6E10 /* User.swift in Sources */,
@@ -521,6 +564,7 @@
 				504A07D029B4CFA1003C600F /* ProfileViewController.swift in Sources */,
 				504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */,
 				50048CAF29B223E800779196 /* ForgotViewModel.swift in Sources */,
+				50F59CE029B70F40004C37BF /* AnimeFeedViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

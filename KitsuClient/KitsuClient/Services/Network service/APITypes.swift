@@ -14,14 +14,9 @@ extension API {
         enum Response {
            
             struct AnimeSearch: Decodable {
+                let data: [AnimeSearchData]
+                let meta: Meta
                 let links: Links
-                
-                struct Links: Decodable {
-                    let first: String
-                    let next: String
-                    let last: String
-                }
-                
             }
             
         }

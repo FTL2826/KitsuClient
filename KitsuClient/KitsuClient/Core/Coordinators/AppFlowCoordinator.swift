@@ -54,7 +54,7 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     
     func showAnimeFeed(user: User) {
         tabBarController
-            .setViewControllers([factory.createAnimeFeedModule(),
+            .setViewControllers([factory.createAnimeFeedModule(coordinator: self),
                                  factory.createMangaFeedModule(),
                                  factory.createProfileModule(coordinator: self, user: user)], animated: false)
         tabBarController.selectedIndex = 2

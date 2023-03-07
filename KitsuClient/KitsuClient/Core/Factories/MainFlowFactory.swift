@@ -10,8 +10,13 @@ import UIKit
 
 class MainFlowFactory {
     
-    func createAnimeFeedModule() -> AnimeFeedViewController {
-        let vc = AnimeFeedViewController()
+    func createAnimeFeedModule(coordinator: AppFlowCoordinatorProtocol) -> AnimeFeedViewController {
+        let viewModel = AnimeFeedViewModel(
+            apiClient: API.Client.shared)
+        
+        let vc = AnimeFeedViewController(
+            viewModel: viewModel,
+            coordinator: coordinator)
         vc.tabBarItem = UITabBarItem(
             title: "Anime",
             image: UIImage(systemName: "desktopcomputer"),
