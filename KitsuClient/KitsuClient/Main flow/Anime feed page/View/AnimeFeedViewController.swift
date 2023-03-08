@@ -28,6 +28,7 @@ class AnimeFeedViewController: UIViewController {
         
         return tableView
     }()
+    private lazy var segmentedControl = UISegmentedControl(items: [Segments.trending.rawValue, Segments.alltime.rawValue])
     
     
     init(
@@ -46,7 +47,8 @@ class AnimeFeedViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        views = [tableView]
+        views = [segmentedControl,
+                 tableView]
     }
     
     override func viewDidLoad() {
@@ -54,6 +56,8 @@ class AnimeFeedViewController: UIViewController {
         
         bindViewModel()
         setupUI()
+        
+        setControls()
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -69,6 +73,9 @@ class AnimeFeedViewController: UIViewController {
             DispatchQueue.main.async {
                 if !loading {
                     self?.refreshControl.endRefreshing()
+                } else {
+                    self?.refreshControl.beginRefreshing()
+                    self?.refreshControl.isHidden = false
                 }
             }
         })
@@ -80,21 +87,31 @@ class AnimeFeedViewController: UIViewController {
         })
     }
     
+    private func setControls() {
+        refreshControl.addTarget(self, action: #selector(pullToFetch), for: .valueChanged)
+        
+        segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+    }
+    
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        
-        refreshControl.addTarget(self, action: #selector(pullToFetch), for: .valueChanged)
         
         views.forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        segmentedControl.selectedSegmentIndex = 1
+        tableView.reloadData()
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
     
@@ -102,6 +119,14 @@ class AnimeFeedViewController: UIViewController {
     //MARK: - selectors
     @objc private func pullToFetch() {
         viewModel?.fetchData()
+    }
+    
+    @objc private func segmentChanged() {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            viewModel?.segmentChanged(.trending)
+        } else if segmentedControl.selectedSegmentIndex == 1 {
+            viewModel?.segmentChanged(.alltime)
+        }
     }
     
 }

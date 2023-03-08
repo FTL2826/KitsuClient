@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum Segments: String {
+    case trending = "Trending"
+    case alltime = "All-time"
+}
+
 protocol AnimeFeedViewModelProtocol: AnyObject {
     
     var apiClient: APIClientProtocol { get }
@@ -14,9 +19,13 @@ protocol AnimeFeedViewModelProtocol: AnyObject {
     var isLoading: Dynamic<Bool> { get }
     var dataSource: Dynamic<[AnimeTitle]> { get }
     
+    
     func numbersOfSections() -> Int
     func rowsInSection(_ section: Int) -> Int
     func getAnimeTitle(_ indexPath: IndexPath) -> String
     
     func fetchData()
+    func fetchTrendingAnimeData()
+    
+    func segmentChanged(_ segment: Segments)
 }

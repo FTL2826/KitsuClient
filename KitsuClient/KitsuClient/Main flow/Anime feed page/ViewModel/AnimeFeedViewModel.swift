@@ -14,6 +14,8 @@ class AnimeFeedViewModel: AnimeFeedViewModelProtocol {
     var isLoading = Dynamic(false)
     
     var dataSource: Dynamic<[AnimeTitle]> = Dynamic([])
+    var trendingDataSource = [AnimeTitle]()
+    var alltimeDataSource = [AnimeTitle]()
     
     init(apiClient: APIClientProtocol) {
         self.apiClient = apiClient
@@ -54,12 +56,53 @@ class AnimeFeedViewModel: AnimeFeedViewModelProtocol {
                 canonicalTitle: result.attributes.canonicalTitle))
         }
         
-        self.dataSource.value = localResults
+        self.alltimeDataSource = localResults
     }
     
     func getAnimeTitle(_ indexPath: IndexPath) -> String {
         let anime = dataSource.value[indexPath.row]
         return anime.canonicalTitle
     }
+    
+    
+    func fetchTrendingAnimeData() {
+        if isLoading.value == true {
+            return
+        }
+        isLoading.value = true
+        
+        apiClient.get(.animeTrending) { [weak self] (result: Result<API.Types.Response.TrendingAnimeSearch, API.Types.Error>) in
+            switch result {
+            case .success(let success):
+                self?.isLoading.value = false
+                self?.mapTrendingResults(success)
+            case .failure(let failure):
+                self?.isLoading.value = false
+                print("Error:", failure)
+            }
+        }
+    }
+    
+    private func mapTrendingResults(_ results: API.Types.Response.TrendingAnimeSearch) {
+        var localResults = [AnimeTitle]()
+        
+        for result in results.data {
+            localResults.append(AnimeTitle(
+                id: result.id,
+                canonicalTitle: result.attributes.canonicalTitle))
+        }
+        
+        self.trendingDataSource = localResults
+    }
+    
+    func segmentChanged(_ segment: Segments) {
+        switch segment {
+        case .trending:
+            dataSource.value = trendingDataSource
+        case .alltime:
+            dataSource.value = alltimeDataSource
+        }
+    }
+    
     
 }

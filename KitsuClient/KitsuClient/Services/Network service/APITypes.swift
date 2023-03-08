@@ -19,6 +19,10 @@ extension API {
                 let links: Links
             }
             
+            struct TrendingAnimeSearch: Decodable {
+                let data: [TrendingAnimeSearchData]
+            }
+            
         }
         
         enum Request {
@@ -43,6 +47,7 @@ extension API {
         enum Endpoint {
             case anime(offset: String)
             case manga(offset: String)
+            case animeTrending
             
             var url: URL {
                 var components = URLComponents()
@@ -61,6 +66,8 @@ extension API {
                         URLQueryItem(name: "page[limit]", value: "10"),
                         URLQueryItem(name: "page[offset]", value: offset),
                     ]
+                case .animeTrending:
+                    components.path = "/api/edge/trending/anime"
                 }
 //                print("URL:", components.url!)
                 return components.url!
