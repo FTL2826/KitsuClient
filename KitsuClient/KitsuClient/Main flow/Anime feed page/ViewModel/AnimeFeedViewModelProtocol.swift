@@ -12,20 +12,12 @@ enum Segments: String {
     case alltime = "All-time"
 }
 
-protocol AnimeFeedViewModelProtocol: AnyObject {
+protocol AnimeFeedViewModelProtocol: BaseFeedViewModelProtocol {
     
     var apiClient: APIClientProtocol { get }
     
-    var isLoading: Dynamic<Bool> { get }
-    var dataSource: Dynamic<[AnimeTitle]> { get }
+    var trendingCount: Dynamic<Int> { get }
+    var alltimeCount: Dynamic<Int> { get }
     
-    
-    func numbersOfSections() -> Int
-    func rowsInSection(_ section: Int) -> Int
-    func getAnimeTitle(_ indexPath: IndexPath) -> String
-    
-    func fetchData()
-    func fetchTrendingAnimeData()
-    
-    func segmentChanged(_ segment: Segments)
+    func getAnimeTitle(index: Int, segment: Segments) -> String
 }

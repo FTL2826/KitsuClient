@@ -7,102 +7,110 @@
 
 import Foundation
 
-class AnimeFeedViewModel: AnimeFeedViewModelProtocol {
+class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
+    
+    
     
     var apiClient: APIClientProtocol
     
-    var isLoading = Dynamic(false)
-    
-    var dataSource: Dynamic<[AnimeTitle]> = Dynamic([])
     var trendingDataSource = [AnimeTitle]()
     var alltimeDataSource = [AnimeTitle]()
     
-    init(apiClient: APIClientProtocol) {
+    var trendingCount = Dynamic(0)
+    var alltimeCount = Dynamic(0)
+    
+    init(
+        apiClient: APIClientProtocol
+    ) {
         self.apiClient = apiClient
     }
     
-    func numbersOfSections() -> Int {
-        1
-    }
-    
-    func rowsInSection(_ section: Int) -> Int {
-        dataSource.value.count
-    }
-    
-    func fetchData() {
-        if isLoading.value == true {
-            return
-        }
-        isLoading.value = true
-        
-        apiClient.get(.anime(offset: "0")) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
-            switch result {
-            case .success(let success):
-                self?.isLoading.value = false
-                self?.mapResults(success)
-            case .failure(let failure):
-                self?.isLoading.value = false
-                print("Error:", failure)
+    //MARK: - table view delegates
+    override func numbersOfRowsInSection(section: Int, segment: Segments) -> Int {
+        if section == 0 {
+            switch segment {
+            case .trending:
+                return trendingCount.value
+            case .alltime:
+                return alltimeCount.value
             }
+        } else {
+            return 0
         }
     }
     
-    private func mapResults(_ results: API.Types.Response.AnimeSearch) {
-        var localResults = [AnimeTitle]()
-        
-        for result in results.data {
-            localResults.append(AnimeTitle(
-                id: result.id,
-                canonicalTitle: result.attributes.canonicalTitle))
-        }
-        
-        self.alltimeDataSource = localResults
-    }
-    
-    func getAnimeTitle(_ indexPath: IndexPath) -> String {
-        let anime = dataSource.value[indexPath.row]
-        return anime.canonicalTitle
-    }
-    
-    
-    func fetchTrendingAnimeData() {
-        if isLoading.value == true {
-            return
-        }
-        isLoading.value = true
-        
-        apiClient.get(.animeTrending) { [weak self] (result: Result<API.Types.Response.TrendingAnimeSearch, API.Types.Error>) in
-            switch result {
-            case .success(let success):
-                self?.isLoading.value = false
-                self?.mapTrendingResults(success)
-            case .failure(let failure):
-                self?.isLoading.value = false
-                print("Error:", failure)
-            }
-        }
-    }
-    
-    private func mapTrendingResults(_ results: API.Types.Response.TrendingAnimeSearch) {
-        var localResults = [AnimeTitle]()
-        
-        for result in results.data {
-            localResults.append(AnimeTitle(
-                id: result.id,
-                canonicalTitle: result.attributes.canonicalTitle))
-        }
-        
-        self.trendingDataSource = localResults
-    }
-    
-    func segmentChanged(_ segment: Segments) {
+    func getAnimeTitle(index: Int, segment: Segments) -> String {
         switch segment {
         case .trending:
-            dataSource.value = trendingDataSource
+            return trendingDataSource[index].canonicalTitle
         case .alltime:
-            dataSource.value = alltimeDataSource
+            return alltimeDataSource[index].canonicalTitle
         }
     }
+    
+    //MARK: - trending
+    override func fetchTrendingData() {
+        guard isTrendingLoading.value == false else { return }
+        isTrendingLoading.value = true
+        
+        apiClient.get(.animeTrending) { [weak self] (result: Result<API.Types.Response.TrendingAnimeSearch, API.Types.Error>) in
+            guard let self = self else { return }
+            
+            self.isTrendingLoading.value = false
+            switch result {
+            case .success(let success):
+                self.trendingDataSource = self.mapTrendingData(success)
+                self.trendingCount.value = self.trendingDataSource.count
+            case .failure(let failure):
+                print("Fetch trending manga error:", failure.localizedDescription)
+            }
+        }
+    }
+    
+    private func mapTrendingData(_ results: API.Types.Response.TrendingAnimeSearch) -> [AnimeTitle] {
+        var localResults = [AnimeTitle]()
+        
+        for result in results.data {
+            localResults.append(AnimeTitle(
+                id: result.id,
+                canonicalTitle: result.attributes.canonicalTitle))
+        }
+        
+        return localResults
+    }
+    
+    //MARK: - All-time
+    override func fetchAlltimeData() {
+        guard isAlltimeLoading.value == false else { return }
+        isAlltimeLoading.value = true
+        
+        apiClient.get(.anime(offset: "0")) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
+            guard let self = self else { return }
+            self.isAlltimeLoading.value = false
+            switch result {
+            case .success(let success):
+                self.alltimeDataSource = self.mapAlltimeData(success)
+                self.alltimeCount.value = self.alltimeDataSource.count
+            case .failure(let failure):
+                print("Fetch trending manga error:", failure.localizedDescription)
+            }
+        }
+    }
+    
+    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [AnimeTitle] {
+        var localResults = [AnimeTitle]()
+        
+        for result in results.data {
+            localResults.append(
+                AnimeTitle(
+                    id: result.id,
+                    canonicalTitle: result.attributes.canonicalTitle))
+        }
+        
+        return localResults
+    }
+    
+    
     
     
 }

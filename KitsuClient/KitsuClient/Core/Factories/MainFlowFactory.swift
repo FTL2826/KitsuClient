@@ -15,8 +15,7 @@ class MainFlowFactory {
             apiClient: API.Client.shared)
         
         let vc = AnimeFeedViewController(
-            viewModel: viewModel,
-            coordinator: coordinator)
+            viewModel: viewModel)
         vc.tabBarItem = UITabBarItem(
             title: "Anime",
             image: UIImage(systemName: "desktopcomputer"),

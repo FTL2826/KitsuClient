@@ -15,14 +15,18 @@ class BaseFeedViewController: UIViewController {
     var segment: Segments = .trending
     
     private lazy var segmentedControl = UISegmentedControl(items: [Segments.trending.rawValue, Segments.alltime.rawValue])
-    private var trendingTable = BaseTableView(refreshText: "Fetching trending manga titles")
-    private var alltimeTable = BaseTableView(refreshText: "Fetching all-time manga titles")
+    private var trendingTable: BaseTableView
+    private var alltimeTable: BaseTableView
+    
     
     init(
-        viewModel: BaseFeedViewModelProtocol
+        viewModel: BaseFeedViewModelProtocol,
+        trendingTableRefresherText: String,
+        alltimeTableRefresherText: String
     ) {
         self.baseViewModel = viewModel
-        
+        trendingTable = BaseTableView(refreshText: trendingTableRefresherText)
+        alltimeTable = BaseTableView(refreshText: alltimeTableRefresherText)
         super.init(nibName: nil, bundle: nil)
     }
     

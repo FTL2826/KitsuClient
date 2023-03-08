@@ -11,10 +11,15 @@ class MangaFeedViewController: BaseFeedViewController {
     
     var viewModel: MangaFeedViewModelProtocol?
     
+    let trendingTableRefresherText = "Fetching trending manga titles"
+    let alltimeTableRefresherText = "Fetching all-time manga titles"
+    
     init(
         viewModel: MangaFeedViewModelProtocol
     ) {
-        super.init(viewModel: viewModel)
+        super.init(viewModel: viewModel,
+                   trendingTableRefresherText: trendingTableRefresherText,
+                   alltimeTableRefresherText: alltimeTableRefresherText)
         self.viewModel = viewModel
     }
     
