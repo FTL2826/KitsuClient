@@ -32,6 +32,23 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     }
     
     func start() {
+        let tabBarAppearance = UITabBarAppearance()
+        let tabBarItemAppearance = UITabBarItemAppearance()
+
+        tabBarItemAppearance.normal.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            .font: UIFont.systemFont(ofSize: 16)]
+        tabBarItemAppearance.selected.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            .font: UIFont.systemFont(ofSize: 16)]
+
+        tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance
+
+        tabBarController.tabBar.standardAppearance = tabBarAppearance
+        if #available(iOS 15.0, *) {
+            tabBarController.tabBar.scrollEdgeAppearance = tabBarAppearance
+        }
+        
         tabBarController.tabBar.isHidden = true
         tabBarController.addChild(navigationController)
         
@@ -54,7 +71,7 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     
     func showAnimeFeed(user: User) {
         tabBarController
-            .setViewControllers([factory.createAnimeFeedModule(),
+            .setViewControllers([factory.createAnimeFeedModule(coordinator: self),
                                  factory.createMangaFeedModule(),
                                  factory.createProfileModule(coordinator: self, user: user)], animated: false)
         tabBarController.selectedIndex = 2

@@ -1,21 +1,21 @@
 //
-//  AnimeFeedViewController.swift
+//  MangaFeedViewController.swift
 //  KitsuClient
 //
-//  Created by Александр Харин on /43/23.
+//  Created by Александр Харин on /53/23.
 //
 
 import UIKit
 
-class AnimeFeedViewController: BaseFeedViewController {
+class MangaFeedViewController: BaseFeedViewController {
     
-    var viewModel: AnimeFeedViewModelProtocol?
+    var viewModel: MangaFeedViewModelProtocol?
     
-    let trendingTableRefresherText = "Fetching trending anime titles"
-    let alltimeTableRefresherText = "Fetching all-time anime titles"
+    let trendingTableRefresherText = "Fetching trending manga titles"
+    let alltimeTableRefresherText = "Fetching all-time manga titles"
     
     init(
-        viewModel: AnimeFeedViewModelProtocol
+        viewModel: MangaFeedViewModelProtocol
     ) {
         super.init(viewModel: viewModel,
                    trendingTableRefresherText: trendingTableRefresherText,
@@ -50,7 +50,7 @@ class AnimeFeedViewController: BaseFeedViewController {
         cell.backgroundColor = .systemBackground
         
         
-        cell.textLabel?.text = viewModel?.getAnimeTitle(index: indexPath.row, segment: segment)
+        cell.textLabel?.text = viewModel?.getMangaTitle(index: indexPath.row, segment: segment)
         
         return cell
     }

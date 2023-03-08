@@ -10,8 +10,12 @@ import UIKit
 
 class MainFlowFactory {
     
-    func createAnimeFeedModule() -> AnimeFeedViewController {
-        let vc = AnimeFeedViewController()
+    func createAnimeFeedModule(coordinator: AppFlowCoordinatorProtocol) -> AnimeFeedViewController {
+        let viewModel = AnimeFeedViewModel(
+            apiClient: API.Client.shared)
+        
+        let vc = AnimeFeedViewController(
+            viewModel: viewModel)
         vc.tabBarItem = UITabBarItem(
             title: "Anime",
             image: UIImage(systemName: "desktopcomputer"),
@@ -20,7 +24,10 @@ class MainFlowFactory {
     }
     
     func createMangaFeedModule() -> MangaFeedViewController {
-        let vc = MangaFeedViewController()
+        let viewModel = MangaFeedViewModel(
+            apiClient: API.Client.shared)
+        
+        let vc = MangaFeedViewController(viewModel: viewModel)
         vc.tabBarItem = UITabBarItem(
             title: "Manga",
             image: UIImage(systemName: "123.rectangle"),
