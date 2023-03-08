@@ -14,13 +14,23 @@ extension API {
         enum Response {
            
             struct AnimeSearch: Decodable {
-                let data: [AnimeSearchData]
+                let data: [AnimeData]
                 let meta: Meta
                 let links: Links
             }
             
             struct TrendingAnimeSearch: Decodable {
-                let data: [TrendingAnimeSearchData]
+                let data: [AnimeData]
+            }
+            
+            struct MangaSearch: Decodable {
+                let data: [MangaData]
+                let meta: Meta
+                let links: Links
+            }
+            
+            struct TrendingMangaSearch: Decodable {
+                let data: [MangaData]
             }
             
         }
@@ -48,6 +58,7 @@ extension API {
             case anime(offset: String)
             case manga(offset: String)
             case animeTrending
+            case mangaTrending
             
             var url: URL {
                 var components = URLComponents()
@@ -57,17 +68,19 @@ extension API {
                 case .anime(let offset):
                     components.path = "/api/edge/anime"
                     components.queryItems = [
-                        URLQueryItem(name: "page[limit]", value: "10"),
+                        URLQueryItem(name: "page[limit]", value: "20"),
                         URLQueryItem(name: "page[offset]", value: offset),
                     ]
                 case .manga(let offset):
                     components.path = "/api/edge/manga"
                     components.queryItems = [
-                        URLQueryItem(name: "page[limit]", value: "10"),
+                        URLQueryItem(name: "page[limit]", value: "20"),
                         URLQueryItem(name: "page[offset]", value: offset),
                     ]
                 case .animeTrending:
                     components.path = "/api/edge/trending/anime"
+                case .mangaTrending:
+                    components.path = "/api/edge/trending/manga"
                 }
 //                print("URL:", components.url!)
                 return components.url!

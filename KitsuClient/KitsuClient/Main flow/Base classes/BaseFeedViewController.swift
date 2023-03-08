@@ -10,14 +10,26 @@ import UIKit
 
 class BaseFeedViewController: UIViewController {
     
-    var viewModel = FeedViewModel()
+    var baseViewModel: BaseFeedViewModelProtocol?
     
     var segment: Segments = .trending
     
     private lazy var segmentedControl = UISegmentedControl(items: [Segments.trending.rawValue, Segments.alltime.rawValue])
     private var trendingTable = BaseTableView(refreshText: "Fetching trending manga titles")
     private var alltimeTable = BaseTableView(refreshText: "Fetching all-time manga titles")
-
+    
+    init(
+        viewModel: BaseFeedViewModelProtocol
+    ) {
+        self.baseViewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,9 +42,10 @@ class BaseFeedViewController: UIViewController {
         print("Manga view controller was destroyed")
     }
     
-    private func bindViewModel() {
+    func bindViewModel() {
+        guard let baseViewModel = baseViewModel else { return }
        
-        viewModel.isTrendingLoading.bind { [weak self] loading in
+        baseViewModel.isTrendingLoading.bind { [weak self] loading in
             DispatchQueue.main.async {
                 if loading {
                     self?.trendingTable.beginRefreshing()
@@ -41,7 +54,7 @@ class BaseFeedViewController: UIViewController {
                 }
             }
         }
-        viewModel.isAlltimeLoading.bind { [weak self] loading in
+        baseViewModel.isAlltimeLoading.bind { [weak self] loading in
             DispatchQueue.main.async {
                 if loading {
                     self?.alltimeTable.beginRefreshing()
@@ -53,6 +66,14 @@ class BaseFeedViewController: UIViewController {
         
     }
     
+    // thread safe
+    func reloadTrendingTable() {
+        trendingTable.reloadData()
+    }
+    func reloadAlltimeTable() {
+        alltimeTable.reloadData()
+    }
+    
     private func addTargets() {
         segmentedControl.addTarget(self, action: #selector(didChangeSegment), for: .valueChanged)
         
@@ -62,7 +83,10 @@ class BaseFeedViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
+        
         segmentedControl.selectedSegmentIndex = 0
+        trendingTable.isHidden = false
+        alltimeTable.isHidden = true
         
         trendingTable.tableView.dataSource = self
         trendingTable.tableView.delegate = self
@@ -107,12 +131,12 @@ class BaseFeedViewController: UIViewController {
             segment = .trending
             trendingTable.isHidden = false
             alltimeTable.isHidden = true
-            trendingTable.reloadData()
+            reloadTrendingTable()
         case 1:
             segment = .alltime
             trendingTable.isHidden = true
             alltimeTable.isHidden = false
-            alltimeTable.reloadData()
+            reloadAlltimeTable()
             
         default:
             break
@@ -120,11 +144,11 @@ class BaseFeedViewController: UIViewController {
     }
     
     @objc private func pullToFetchTrending() {
-        viewModel.fetchTrendingData()
+        baseViewModel?.fetchTrendingData()
     }
     
     @objc private func pullToFetchAlltime() {
-        viewModel.fetchAlltimeData()
+        baseViewModel?.fetchAlltimeData()
     }
 
 }
@@ -132,11 +156,11 @@ class BaseFeedViewController: UIViewController {
 extension BaseFeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.numbersOfSections(segment: segment)
+        baseViewModel?.numbersOfSections(segment: segment) ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numbersOfRowsInSection(section: section, segment: segment)
+        baseViewModel?.numbersOfRowsInSection(section: section, segment: segment) ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

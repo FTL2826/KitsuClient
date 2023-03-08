@@ -25,7 +25,10 @@ class MainFlowFactory {
     }
     
     func createMangaFeedModule() -> MangaFeedViewController {
-        let vc = MangaFeedViewController()
+        let viewModel = MangaFeedViewModel(
+            apiClient: API.Client.shared)
+        
+        let vc = MangaFeedViewController(viewModel: viewModel)
         vc.tabBarItem = UITabBarItem(
             title: "Manga",
             image: UIImage(systemName: "123.rectangle"),

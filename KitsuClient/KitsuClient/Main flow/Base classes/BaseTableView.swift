@@ -37,7 +37,9 @@ class BaseTableView: UIView {
     }
     
     func reloadData() {
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
     func endRefreshing() {
