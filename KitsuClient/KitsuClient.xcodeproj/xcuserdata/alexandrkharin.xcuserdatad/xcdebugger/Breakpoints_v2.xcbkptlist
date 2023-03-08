@@ -100,5 +100,85 @@
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2104BE56-CA5F-4825-AC8F-7C04F3FED9D0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KitsuClient/Registration flow/Sign in page/ViewModel/SignInViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "didSignInPressed(email:password:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A8C1289-B672-45A9-88AB-5E1D56BE1823"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KitsuClient/Services/Password service/PasswordVerification.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "init()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5A8C1289-B672-45A9-88AB-5E1D56BE1823 - 3d0a89c229f1289a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KitsuClient.PasswordVerification.init() -&gt; KitsuClient.PasswordVerification"
+                  moduleName = "KitsuClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexandrkharin/Swift/Apps/AnimeJourneyFeedMVVM/KitsuClient/KitsuClient/Services/Password%20service/PasswordVerification.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "138">
+               </Location>
+               <Location
+                  uuid = "5A8C1289-B672-45A9-88AB-5E1D56BE1823 - 3d0a89c229f1289a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KitsuClient.PasswordVerification.init() -&gt; KitsuClient.PasswordVerification"
+                  moduleName = "KitsuClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexandrkharin/Swift/Apps/AnimeJourneyFeedMVVM/KitsuClient/KitsuClient/Services/Password%20service/PasswordVerification.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "357">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0D37ECC2-2ED5-4601-ABA3-1028B895C2EC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KitsuClient/Core/Coordinators/AppFlowCoordinator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "start()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
