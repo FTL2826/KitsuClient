@@ -9,6 +9,8 @@ import Foundation
 
 class BaseTableViewCellViewModel {
     
+    var pictureLoader: PictureLoaderProtocol
+    
     var id: String
     var title: String
     var dateString: String?
@@ -16,7 +18,12 @@ class BaseTableViewCellViewModel {
     var rating: String?
     var imageURL: String
     
-    init(titleInfo: TitleInfo) {
+    init(
+        titleInfo: TitleInfo,
+        pictureLoader: PictureLoaderProtocol
+    ) {
+        self.pictureLoader = pictureLoader
+        
         self.id = titleInfo.id
         self.title = titleInfo.canonicalTitle
         self.dateString = titleInfo.startDate
@@ -50,6 +57,10 @@ class BaseTableViewCellViewModel {
         } else {
             return "no rating yet"
         }
+    }
+    
+    func getPosterURL() -> URL? {
+        URL(string: imageURL)
     }
     
 }

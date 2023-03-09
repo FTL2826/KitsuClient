@@ -39,11 +39,13 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         }
     }
     
-    func getAnimeTitle(index: Int, segment: Segments) -> TitleInfo {
+    func getAnimeTitle(index: Int, segment: Segments) -> TitleInfo? {
         switch segment {
         case .trending:
+            guard index < trendingDataSource.count else { return nil}
             return trendingDataSource[index]
         case .alltime:
+            guard index < alltimeDataSource.count else { return nil}
             return alltimeDataSource[index]
         }
     }

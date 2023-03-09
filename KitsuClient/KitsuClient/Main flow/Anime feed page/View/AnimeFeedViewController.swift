@@ -50,10 +50,11 @@ class AnimeFeedViewController: BaseFeedViewController {
                 }
         
         guard let titleInfo = viewModel?.getAnimeTitle(index: indexPath.row, segment: segment) else {
-            assertionFailure("No info about title for cell")
             return cell
         }
-        cell.configureCell(viewModel: BaseTableViewCellViewModel(titleInfo: titleInfo))
+        cell.configureCell(viewModel: BaseTableViewCellViewModel(
+            titleInfo: titleInfo,
+            pictureLoader: PictureLoader.shared))
         
         return cell
     }

@@ -9,12 +9,15 @@ import UIKit
 
 class BaseTableViewCell: UITableViewCell {
 
+    var dataTask: URLSessionDataTask?
+    
     static let identifier = "FeedCell"
 
     lazy var posterImage: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .center
         iv.layer.cornerRadius = 15
+        iv.clipsToBounds = true
         iv.backgroundColor = .gray
         return iv
     }()
@@ -71,11 +74,31 @@ class BaseTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        posterImage.image = nil
+        dataTask?.cancel()
+    }
+    
     func configureCell(viewModel: BaseTableViewCellViewModel) {
         titleLabel.text = viewModel.title
         likeCountLabel.text = viewModel.likes
         dateLabel.text = viewModel.getDate(viewModel.dateString)
         ratingLabel.text = viewModel.getRating(viewModel.rating)
+        
+        if let url = viewModel.getPosterURL() {
+            dataTask = viewModel.pictureLoader.loadPicture(url) { [weak self] (result: Result<Data, API.Types.Error>) in
+                switch result {
+                case .success(let success):
+                    DispatchQueue.main.async {
+                        self?.posterImage.image = UIImage(data: success)
+                    }
+                case .failure(let failure):
+                    print("Loading poster image error:", failure.localizedDescription)
+                }
+            }
+        }
+        
+        
     }
     
     //MARK: - setupUI
