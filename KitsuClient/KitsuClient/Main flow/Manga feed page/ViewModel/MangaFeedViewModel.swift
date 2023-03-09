@@ -11,8 +11,8 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
     
     var apiClient: APIClientProtocol
     
-    var trendingDataSource = [MangaTitle]()
-    var alltimeDataSource = [MangaTitle]()
+    var trendingDataSource = [TitleInfo]()
+    var alltimeDataSource = [TitleInfo]()
     
     var trendingCount = Dynamic(0)
     var alltimeCount = Dynamic(0)
@@ -37,12 +37,12 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
     }
     
-    func getMangaTitle(index: Int, segment: Segments) -> String {
+    func getMangaTitle(index: Int, segment: Segments) -> TitleInfo {
         switch segment {
         case .trending:
-            return trendingDataSource[index].canonicalTitle
+            return trendingDataSource[index]
         case .alltime:
-            return alltimeDataSource[index].canonicalTitle
+            return alltimeDataSource[index]
         }
     }
     
@@ -65,13 +65,18 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
     }
     
-    private func mapTrendingData(_ results: API.Types.Response.TrendingMangaSearch) -> [MangaTitle] {
-        var localResults = [MangaTitle]()
+    private func mapTrendingData(_ results: API.Types.Response.TrendingMangaSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
         
         for result in results.data {
-            localResults.append(MangaTitle(
+            localResults.append(TitleInfo(
                 id: result.id,
-                canonicalTitle: result.attributes.canonicalTitle))
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageOriginalURL: result.attributes.posterImage.original))
         }
         
         return localResults
@@ -95,14 +100,18 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
     }
     
-    private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [MangaTitle] {
-        var localResults = [MangaTitle]()
+    private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
         
         for result in results.data {
-            localResults.append(
-                MangaTitle(
-                    id: result.id,
-                    canonicalTitle: result.attributes.canonicalTitle))
+            localResults.append(TitleInfo(
+                id: result.id,
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageOriginalURL: result.attributes.posterImage.original))
         }
         
         return localResults

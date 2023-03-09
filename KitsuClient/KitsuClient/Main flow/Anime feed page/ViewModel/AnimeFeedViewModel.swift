@@ -13,8 +13,8 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
     
     var apiClient: APIClientProtocol
     
-    var trendingDataSource = [AnimeTitle]()
-    var alltimeDataSource = [AnimeTitle]()
+    var trendingDataSource = [TitleInfo]()
+    var alltimeDataSource = [TitleInfo]()
     
     var trendingCount = Dynamic(0)
     var alltimeCount = Dynamic(0)
@@ -39,12 +39,12 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         }
     }
     
-    func getAnimeTitle(index: Int, segment: Segments) -> String {
+    func getAnimeTitle(index: Int, segment: Segments) -> TitleInfo {
         switch segment {
         case .trending:
-            return trendingDataSource[index].canonicalTitle
+            return trendingDataSource[index]
         case .alltime:
-            return alltimeDataSource[index].canonicalTitle
+            return alltimeDataSource[index]
         }
     }
     
@@ -67,13 +67,18 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         }
     }
     
-    private func mapTrendingData(_ results: API.Types.Response.TrendingAnimeSearch) -> [AnimeTitle] {
-        var localResults = [AnimeTitle]()
+    private func mapTrendingData(_ results: API.Types.Response.TrendingAnimeSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
         
         for result in results.data {
-            localResults.append(AnimeTitle(
+            localResults.append(TitleInfo(
                 id: result.id,
-                canonicalTitle: result.attributes.canonicalTitle))
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageOriginalURL: result.attributes.posterImage.original))
         }
         
         return localResults
@@ -97,14 +102,18 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         }
     }
     
-    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [AnimeTitle] {
-        var localResults = [AnimeTitle]()
+    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
         
         for result in results.data {
-            localResults.append(
-                AnimeTitle(
-                    id: result.id,
-                    canonicalTitle: result.attributes.canonicalTitle))
+            localResults.append(TitleInfo(
+                id: result.id,
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageOriginalURL: result.attributes.posterImage.original))
         }
         
         return localResults

@@ -45,12 +45,15 @@ class MangaFeedViewController: BaseFeedViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BaseTableViewCell.identifier, for: indexPath) as? BaseTableViewCell else {
+                    fatalError("Could not dequeue feed table cell")
+                }
         
-        let cell = UITableViewCell()
-        cell.backgroundColor = .systemBackground
-        
-        
-        cell.textLabel?.text = viewModel?.getMangaTitle(index: indexPath.row, segment: segment)
+        guard let titleInfo = viewModel?.getMangaTitle(index: indexPath.row, segment: segment) else {
+            assertionFailure("No info about title for cell")
+            return cell
+        }
+        cell.configureCell(viewModel: BaseTableViewCellViewModel(titleInfo: titleInfo))
         
         return cell
     }

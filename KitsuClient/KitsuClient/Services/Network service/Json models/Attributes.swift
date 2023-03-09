@@ -9,4 +9,8 @@ import Foundation
 
 struct Attributes: Decodable {
     let canonicalTitle: String
+    let startDate: String
+    let averageRating: String
+    let favoritesCount: Int
+    let posterImage: PosterImage
 }
