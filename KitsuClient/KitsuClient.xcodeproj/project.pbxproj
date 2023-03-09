@@ -50,6 +50,10 @@
 		5092069D29B8ABDF00D16A33 /* MangaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092069C29B8ABDF00D16A33 /* MangaData.swift */; };
 		5092069F29B8AC2600D16A33 /* MangaAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5092069E29B8AC2500D16A33 /* MangaAttributes.swift */; };
 		509206A529B8B48A00D16A33 /* MangaTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206A429B8B48A00D16A33 /* MangaTitle.swift */; };
+		509206A729B9A65900D16A33 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206A629B9A65900D16A33 /* BaseTableViewCell.swift */; };
+		509206A929B9C14500D16A33 /* BaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206A829B9C14500D16A33 /* BaseTableViewCellViewModel.swift */; };
+		509206AB29B9C23300D16A33 /* TitleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AA29B9C23300D16A33 /* TitleInfo.swift */; };
+		509206AD29B9C75E00D16A33 /* PosterImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AC29B9C75E00D16A33 /* PosterImage.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -110,6 +114,10 @@
 		5092069C29B8ABDF00D16A33 /* MangaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaData.swift; sourceTree = "<group>"; };
 		5092069E29B8AC2500D16A33 /* MangaAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaAttributes.swift; sourceTree = "<group>"; };
 		509206A429B8B48A00D16A33 /* MangaTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaTitle.swift; sourceTree = "<group>"; };
+		509206A629B9A65900D16A33 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		509206A829B9C14500D16A33 /* BaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		509206AA29B9C23300D16A33 /* TitleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleInfo.swift; sourceTree = "<group>"; };
+		509206AC29B9C75E00D16A33 /* PosterImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterImage.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -366,6 +374,7 @@
 		504A07C029B39649003C600F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				509206AA29B9C23300D16A33 /* TitleInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -406,6 +415,7 @@
 				5092068229B74E3200D16A33 /* Meta.swift */,
 				5092068429B74E6C00D16A33 /* AnimeData.swift */,
 				5092068929B770EC00D16A33 /* Attributes.swift */,
+				509206AC29B9C75E00D16A33 /* PosterImage.swift */,
 			);
 			path = "Json models";
 			sourceTree = "<group>";
@@ -424,6 +434,8 @@
 				5092068F29B7B53400D16A33 /* BaseTableView.swift */,
 				5092069529B86F7B00D16A33 /* BaseFeedViewController.swift */,
 				5092069729B8711C00D16A33 /* BaseFeedViewModel.swift */,
+				509206A629B9A65900D16A33 /* BaseTableViewCell.swift */,
+				509206A829B9C14500D16A33 /* BaseTableViewCellViewModel.swift */,
 			);
 			path = "Base classes";
 			sourceTree = "<group>";
@@ -584,9 +596,11 @@
 				50048C9F29B1209700779196 /* CoordinatorsFactory.swift in Sources */,
 				50048CBA29B3186700779196 /* PasswordVerificationProtocol.swift in Sources */,
 				5092069F29B8AC2600D16A33 /* MangaAttributes.swift in Sources */,
+				509206A729B9A65900D16A33 /* BaseTableViewCell.swift in Sources */,
 				5038354629ADD4B1004A6E10 /* SignInViewController.swift in Sources */,
 				509206A529B8B48A00D16A33 /* MangaTitle.swift in Sources */,
 				50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */,
+				509206AB29B9C23300D16A33 /* TitleInfo.swift in Sources */,
 				5092069629B86F7B00D16A33 /* BaseFeedViewController.swift in Sources */,
 				5092068129B74D4A00D16A33 /* Links.swift in Sources */,
 				5092069029B7B53500D16A33 /* BaseTableView.swift in Sources */,
@@ -622,10 +636,12 @@
 				50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */,
 				5092068D29B7A42500D16A33 /* TrendingAnimeSearchData.swift in Sources */,
 				5092069D29B8ABDF00D16A33 /* MangaData.swift in Sources */,
+				509206A929B9C14500D16A33 /* BaseTableViewCellViewModel.swift in Sources */,
 				50ECCAE029B118840075BAE3 /* SignInViewModelProtocol.swift in Sources */,
 				5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */,
 				50048CBC29B31A0300779196 /* ServicesFactory.swift in Sources */,
 				504A07CE29B4CF78003C600F /* MangaFeedViewController.swift in Sources */,
+				509206AD29B9C75E00D16A33 /* PosterImage.swift in Sources */,
 				5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */,
 				50ECCADE29B108DF0075BAE3 /* RegistrationFactory.swift in Sources */,
 				504A07D029B4CFA1003C600F /* ProfileViewController.swift in Sources */,
