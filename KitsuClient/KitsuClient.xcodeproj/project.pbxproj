@@ -54,6 +54,7 @@
 		509206A929B9C14500D16A33 /* BaseTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206A829B9C14500D16A33 /* BaseTableViewCellViewModel.swift */; };
 		509206AB29B9C23300D16A33 /* TitleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AA29B9C23300D16A33 /* TitleInfo.swift */; };
 		509206AD29B9C75E00D16A33 /* PosterImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AC29B9C75E00D16A33 /* PosterImage.swift */; };
+		509206AF29BA4EDB00D16A33 /* PictureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AE29BA4EDB00D16A33 /* PictureLoader.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -118,6 +119,7 @@
 		509206A829B9C14500D16A33 /* BaseTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		509206AA29B9C23300D16A33 /* TitleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleInfo.swift; sourceTree = "<group>"; };
 		509206AC29B9C75E00D16A33 /* PosterImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterImage.swift; sourceTree = "<group>"; };
+		509206AE29BA4EDB00D16A33 /* PictureLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureLoader.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				5038355829AE1661004A6E10 /* APITypes.swift */,
 				5038355A29AE1C1D004A6E10 /* APIClient.swift */,
 				5038355C29AE5088004A6E10 /* APIClientProtocol.swift */,
+				509206AE29BA4EDB00D16A33 /* PictureLoader.swift */,
 			);
 			path = "Network service";
 			sourceTree = "<group>";
@@ -613,6 +616,7 @@
 				50048CAA29B1CAA400779196 /* WebViewerViewController.swift in Sources */,
 				50048CB829B3127700779196 /* UserDefaultsKeys.swift in Sources */,
 				504A07C829B3B70C003C600F /* Coordinator.swift in Sources */,
+				509206AF29BA4EDB00D16A33 /* PictureLoader.swift in Sources */,
 				5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */,
 				50048CA129B1245400779196 /* SignUpViewModelProtocol.swift in Sources */,
 				504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */,
