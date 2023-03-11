@@ -73,12 +73,22 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         for result in results.data {
             localResults.append(TitleInfo(
                 id: result.id,
+                type: result.type,
                 canonicalTitle: result.attributes.canonicalTitle,
                 startDate: result.attributes.startDate,
+                endDate: result.attributes.endDate,
                 favouritesCount: result.attributes.favoritesCount,
                 averageRating: result.attributes.averageRating,
+                ageRatingGuide: result.attributes.ageRatingGuide,
+                status: result.attributes.status,
+                synopsis: result.attributes.synopsis,
                 posterImageTinyURL: result.attributes.posterImage.tiny,
-                posterImageOriginalURL: result.attributes.posterImage.original))
+                posterImageSmallURL: result.attributes.posterImage.small,
+                posterImageOriginalURL: result.attributes.posterImage.original,
+                chapterCount: result.attributes.chapterCount,
+                volumeCount: result.attributes.volumeCount,
+                episodesCount: nil,
+                episodeLenght: nil))
         }
         
         return localResults
@@ -108,12 +118,23 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         for result in results.data {
             localResults.append(TitleInfo(
                 id: result.id,
+                type: result.type,
                 canonicalTitle: result.attributes.canonicalTitle,
                 startDate: result.attributes.startDate,
+                endDate: result.attributes.endDate,
                 favouritesCount: result.attributes.favoritesCount,
                 averageRating: result.attributes.averageRating,
+                ageRatingGuide: result.attributes.ageRatingGuide,
+                status: result.attributes.status,
+                synopsis: result.attributes.synopsis,
                 posterImageTinyURL: result.attributes.posterImage.tiny,
-                posterImageOriginalURL: result.attributes.posterImage.original))
+                posterImageSmallURL: result.attributes.posterImage.small,
+                posterImageOriginalURL: result.attributes.posterImage.original,
+                
+                chapterCount: result.attributes.chapterCount,
+                volumeCount: result.attributes.volumeCount,
+                episodesCount: nil,
+                episodeLenght: nil))
         }
         
         return localResults

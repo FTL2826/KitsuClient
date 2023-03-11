@@ -10,17 +10,20 @@ import UIKit
 class AnimeFeedViewController: BaseFeedViewController {
     
     var viewModel: AnimeFeedViewModelProtocol?
+    weak var coordinator: AppFlowCoordinatorProtocol?
     
     let trendingTableRefresherText = "Fetching trending anime titles"
     let alltimeTableRefresherText = "Fetching all-time anime titles"
     
     init(
-        viewModel: AnimeFeedViewModelProtocol
+        viewModel: AnimeFeedViewModelProtocol,
+        coordinator: AppFlowCoordinatorProtocol
     ) {
         super.init(viewModel: viewModel,
                    trendingTableRefresherText: trendingTableRefresherText,
                    alltimeTableRefresherText: alltimeTableRefresherText)
         self.viewModel = viewModel
+        self.coordinator = coordinator
     }
     
     required init?(coder: NSCoder) {
@@ -57,6 +60,12 @@ class AnimeFeedViewController: BaseFeedViewController {
             pictureLoader: PictureLoader.shared))
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let titleInfo = viewModel?.getAnimeTitle(index: indexPath.row, segment: segment) {
+            coordinator?.showDetailInfoPage(titleInfo: titleInfo)
+        }
     }
     
 }

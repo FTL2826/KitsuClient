@@ -72,7 +72,7 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     func showAnimeFeed(user: User) {
         tabBarController
             .setViewControllers([factory.createAnimeFeedModule(coordinator: self),
-                                 factory.createMangaFeedModule(),
+                                 factory.createMangaFeedModule(coordinator: self),
                                  factory.createProfileModule(coordinator: self, user: user)], animated: false)
         tabBarController.selectedIndex = 2
         tabBarController.tabBar.isHidden = false
@@ -89,6 +89,12 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
         tabBarController.selectedIndex = 0
         
         showRegistration()
+    }
+    
+    func showDetailInfoPage(titleInfo: TitleInfo) {
+        let vc = factory.createBaseDetailModule(titleInfo: titleInfo)
+//        vc.modalPresentationStyle = .fullScreen
+        tabBarController.present(vc, animated: true)
     }
     
     

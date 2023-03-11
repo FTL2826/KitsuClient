@@ -79,7 +79,7 @@ class BaseTableViewCell: UITableViewCell {
         dataTask?.cancel()
     }
     
-    func configureCell(viewModel: BaseTableViewCellViewModel) {
+    func configureCell(viewModel: BaseTableViewCellViewModelProtocol) {
         titleLabel.text = viewModel.title
         likeCountLabel.text = viewModel.likes
         dateLabel.text = viewModel.getDate(viewModel.dateString)
@@ -104,6 +104,7 @@ class BaseTableViewCell: UITableViewCell {
     //MARK: - setupUI
     private func setupUI(_ views: [UIView]) {
         self.backgroundColor = .clear
+        selectionStyle = .none
         
         views.forEach {
             addSubview($0)

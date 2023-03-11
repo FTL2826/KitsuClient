@@ -7,17 +7,6 @@
 
 import Foundation
 
-protocol BaseFeedViewModelProtocol: AnyObject {
-    var isTrendingLoading: Dynamic<Bool> { get }
-    var isAlltimeLoading: Dynamic<Bool> { get }
-    
-    func numbersOfSections(segment: Segments) -> Int
-    func numbersOfRowsInSection(section: Int, segment: Segments) -> Int
-    func fetchTrendingData()
-    func fetchAlltimeData()
-    
-}
-
 class BaseFeedViewModel {
     var isTrendingLoading = Dynamic(false)
     var isAlltimeLoading = Dynamic(false)

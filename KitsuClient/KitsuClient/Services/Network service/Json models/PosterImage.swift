@@ -7,5 +7,6 @@
 
 struct PosterImage: Decodable {
     let tiny: String?
+    let small: String?
     let original: String
 }
