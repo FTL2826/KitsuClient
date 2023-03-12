@@ -17,6 +17,8 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
     var trendingCount = Dynamic(0)
     var alltimeCount = Dynamic(0)
     
+    private var nextPageLink: String?
+    
     init(
         apiClient: APIClientProtocol
     ) {
@@ -107,13 +109,14 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
                 self.alltimeDataSource = self.mapAlltimeData(success)
                 self.alltimeCount.value = self.alltimeDataSource.count
             case .failure(let failure):
-                print("Fetch trending manga error:", failure.localizedDescription)
+                print("Fetch all-time manga error:", failure.localizedDescription)
             }
         }
     }
     
     private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [TitleInfo] {
         var localResults = [TitleInfo]()
+        nextPageLink = results.links.next
         
         for result in results.data {
             localResults.append(TitleInfo(
@@ -138,6 +141,24 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
         
         return localResults
+    }
+    
+    func fetchNextPage() {
+        guard let nextPageLink = nextPageLink,isAlltimeLoading.value == false else { return }
+        isAlltimeLoading.value = true
+        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.MangaSearch, API.Types.Error>) in
+            guard let self = self else { return }
+            self.isAlltimeLoading.value = false
+            
+            switch result {
+            case .success(let success):
+                print("next page success count:", success.data.count)
+                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
+                self.alltimeCount.value = self.alltimeDataSource.count
+            case .failure(let failure):
+                print("Fetch all-time next page manga error:", failure.localizedDescription)
+            }
+        }
     }
     
     

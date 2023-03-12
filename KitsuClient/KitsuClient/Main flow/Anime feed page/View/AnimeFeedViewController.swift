@@ -68,4 +68,10 @@ class AnimeFeedViewController: BaseFeedViewController {
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (indexPath.row + 3) == tableView.numberOfRows(inSection: 0) {
+            viewModel?.fetchNextPage()
+        }
+    }
+    
 }

@@ -35,6 +35,7 @@ class MangaFeedViewController: BaseFeedViewController {
         
     }
     
+    //MARK: - bind view model
     override func bindViewModel() {
         super.bindViewModel()
         
@@ -65,6 +66,12 @@ class MangaFeedViewController: BaseFeedViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let titleInfo = viewModel?.getMangaTitle(index: indexPath.row, segment: segment) {
             coordinator?.showDetailInfoPage(titleInfo: titleInfo)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (indexPath.row + 3) == tableView.numberOfRows(inSection: 0) {
+            viewModel?.fetchNextPage()
         }
     }
     

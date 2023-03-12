@@ -18,6 +18,8 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
     
     var trendingCount = Dynamic(0)
     var alltimeCount = Dynamic(0)
+   
+    private var nextPageLink: String?
     
     init(
         apiClient: APIClientProtocol
@@ -116,6 +118,7 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
     
     private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [TitleInfo] {
         var localResults = [TitleInfo]()
+        nextPageLink = results.links.next
         
         for result in results.data {
             localResults.append(TitleInfo(
@@ -142,6 +145,23 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         return localResults
     }
     
+    func fetchNextPage() {
+        guard let nextPageLink = nextPageLink,isAlltimeLoading.value == false else { return }
+        isAlltimeLoading.value = true
+        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
+            guard let self = self else { return }
+            self.isAlltimeLoading.value = false
+            
+            switch result {
+            case .success(let success):
+                print("next page success count:", success.data.count)
+                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
+                self.alltimeCount.value = self.alltimeDataSource.count
+            case .failure(let failure):
+                print("Fetch all-time next page anime error:", failure.localizedDescription)
+            }
+        }
+    }
     
     
     

@@ -24,5 +24,5 @@ protocol DetailViewModelProtocol {
     
     func loadPosterImage() -> URLSessionDataTask?
     
-    func getRating(_ str: String?) -> String 
+    func getRating(_ str: String?) -> String
 }

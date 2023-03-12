@@ -7,6 +7,21 @@
 
 import Foundation
 
+fileprivate enum ReverseDate {
+    static func getDate(_ str: String?) -> String? {
+        guard let str = str else { return nil }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: str)
+        if let date = date {
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            return dateFormatter.string(from: date)
+        } else {
+            return nil
+        }
+    }
+}
+
 class DetailViewModel: DetailViewModelProtocol {
     
     var pictureLoader: PictureLoaderProtocol
@@ -37,8 +52,8 @@ class DetailViewModel: DetailViewModelProtocol {
         self.titleLabel = titleInfo.canonicalTitle
         self.posterImageURL = titleInfo.posterImageSmallURL ?? titleInfo.posterImageOriginalURL
         self.averageRatingLabel = titleInfo.averageRating
-        self.startDateLabel = titleInfo.startDate ?? "Not started yet"
-        self.endDateLabel = titleInfo.endDate ?? "Not finished"
+        self.startDateLabel = ReverseDate.getDate(titleInfo.startDate) ?? "Not started yet"
+        self.endDateLabel = ReverseDate.getDate(titleInfo.endDate) ?? "Not finished"
         self.statusLabel = titleInfo.status
         self.ageRatingGuideLabel = titleInfo.ageRatingGuide ?? "No info"
         self.synopsisLabel = "Synopsis: " + titleInfo.synopsis
