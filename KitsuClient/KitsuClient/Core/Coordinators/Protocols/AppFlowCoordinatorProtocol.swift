@@ -15,5 +15,6 @@ protocol AppFlowCoordinatorProtocol: AnyObject {
     func start()
     func showAnimeFeed(user: User)
     func logout()
+    func showDetailInfoPage(titleInfo: TitleInfo)
     
 }

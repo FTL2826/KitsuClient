@@ -20,4 +20,5 @@ protocol AnimeFeedViewModelProtocol: BaseFeedViewModelProtocol {
     var alltimeCount: Dynamic<Int> { get }
     
     func getAnimeTitle(index: Int, segment: Segments) -> TitleInfo?
+    func fetchNextPage()
 }

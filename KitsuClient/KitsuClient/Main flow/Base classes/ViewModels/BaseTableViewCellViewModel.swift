@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BaseTableViewCellViewModel {
+class BaseTableViewCellViewModel: BaseTableViewCellViewModelProtocol {
     
     var pictureLoader: PictureLoaderProtocol
     

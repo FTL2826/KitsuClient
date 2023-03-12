@@ -15,4 +15,6 @@ protocol MangaFeedViewModelProtocol: BaseFeedViewModelProtocol {
     var alltimeCount: Dynamic<Int> { get }
     
     func getMangaTitle(index: Int, segment: Segments) -> TitleInfo?
+    
+    func fetchNextPage()
 }

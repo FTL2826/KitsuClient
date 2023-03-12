@@ -7,5 +7,6 @@
 
 struct AnimeData: Decodable {
     let id: String
+    let type: String
     let attributes: Attributes
 }

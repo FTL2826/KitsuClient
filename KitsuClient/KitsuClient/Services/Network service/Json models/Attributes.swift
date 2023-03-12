@@ -9,8 +9,14 @@ import Foundation
 
 struct Attributes: Decodable {
     let canonicalTitle: String
-    let startDate: String
+    let startDate: String?
+    let endDate: String?
     let averageRating: String
     let favoritesCount: Int
     let posterImage: PosterImage
+    let status: String
+    let synopsis: String
+    let ageRatingGuide: String?
+    let episodeCount: Int?
+    let episodeLength: Int?
 }

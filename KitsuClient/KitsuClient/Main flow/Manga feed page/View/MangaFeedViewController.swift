@@ -10,17 +10,20 @@ import UIKit
 class MangaFeedViewController: BaseFeedViewController {
     
     var viewModel: MangaFeedViewModelProtocol?
+    weak var coordinator: AppFlowCoordinatorProtocol?
     
     let trendingTableRefresherText = "Fetching trending manga titles"
     let alltimeTableRefresherText = "Fetching all-time manga titles"
     
     init(
-        viewModel: MangaFeedViewModelProtocol
+        viewModel: MangaFeedViewModelProtocol,
+        coordinator: AppFlowCoordinatorProtocol
     ) {
         super.init(viewModel: viewModel,
                    trendingTableRefresherText: trendingTableRefresherText,
                    alltimeTableRefresherText: alltimeTableRefresherText)
         self.viewModel = viewModel
+        self.coordinator = coordinator
     }
     
     required init?(coder: NSCoder) {
@@ -32,6 +35,7 @@ class MangaFeedViewController: BaseFeedViewController {
         
     }
     
+    //MARK: - bind view model
     override func bindViewModel() {
         super.bindViewModel()
         
@@ -52,11 +56,23 @@ class MangaFeedViewController: BaseFeedViewController {
         guard let titleInfo = viewModel?.getMangaTitle(index: indexPath.row, segment: segment) else {
             return cell
         }
-        cell.configureCell(viewModel: BaseTableViewCellViewModel(
-            titleInfo: titleInfo,
-            pictureLoader: PictureLoader.shared))
+        cell.configureCell(viewModel:
+                            BaseTableViewCellViewModel(titleInfo: titleInfo,
+                                                       pictureLoader: PictureLoader.shared))
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let titleInfo = viewModel?.getMangaTitle(index: indexPath.row, segment: segment) {
+            coordinator?.showDetailInfoPage(titleInfo: titleInfo)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (indexPath.row + 3) == tableView.numberOfRows(inSection: 0) {
+            viewModel?.fetchNextPage()
+        }
     }
     
 }
