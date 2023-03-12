@@ -9,5 +9,6 @@ import Foundation
 
 struct MangaData: Decodable {
     let id: String
+    let type: String
     let attributes: MangaAttributes
 }

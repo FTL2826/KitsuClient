@@ -59,6 +59,7 @@ extension API {
             case manga(offset: String)
             case animeTrending
             case mangaTrending
+            case nextPage(link: String)
             
             var url: URL {
                 var components = URLComponents()
@@ -81,6 +82,12 @@ extension API {
                     components.path = "/api/edge/trending/anime"
                 case .mangaTrending:
                     components.path = "/api/edge/trending/manga"
+                case .nextPage(let link):
+                    if let url = URL(string: link) {
+                        return url
+                    } else {
+                        assertionFailure("Something bad happend in api client with api previous callback <<next>> link response ")
+                    }
                 }
 //                print("URL:", components.url!)
                 return components.url!

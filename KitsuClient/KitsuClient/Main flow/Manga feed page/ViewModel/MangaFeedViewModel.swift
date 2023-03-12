@@ -11,11 +11,13 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
     
     var apiClient: APIClientProtocol
     
-    var trendingDataSource = [MangaTitle]()
-    var alltimeDataSource = [MangaTitle]()
+    var trendingDataSource = [TitleInfo]()
+    var alltimeDataSource = [TitleInfo]()
     
     var trendingCount = Dynamic(0)
     var alltimeCount = Dynamic(0)
+    
+    private var nextPageLink: String?
     
     init(
         apiClient: APIClientProtocol
@@ -37,12 +39,14 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
     }
     
-    func getMangaTitle(index: Int, segment: Segments) -> String {
+    func getMangaTitle(index: Int, segment: Segments) -> TitleInfo? {
         switch segment {
         case .trending:
-            return trendingDataSource[index].canonicalTitle
+            guard index < trendingDataSource.count else { return nil}
+            return trendingDataSource[index]
         case .alltime:
-            return alltimeDataSource[index].canonicalTitle
+            guard index < alltimeDataSource.count else { return nil}
+            return alltimeDataSource[index]
         }
     }
     
@@ -65,13 +69,28 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
         }
     }
     
-    private func mapTrendingData(_ results: API.Types.Response.TrendingMangaSearch) -> [MangaTitle] {
-        var localResults = [MangaTitle]()
+    private func mapTrendingData(_ results: API.Types.Response.TrendingMangaSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
         
         for result in results.data {
-            localResults.append(MangaTitle(
+            localResults.append(TitleInfo(
                 id: result.id,
-                canonicalTitle: result.attributes.canonicalTitle))
+                type: result.type,
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                endDate: result.attributes.endDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                ageRatingGuide: result.attributes.ageRatingGuide,
+                status: result.attributes.status,
+                synopsis: result.attributes.synopsis,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageSmallURL: result.attributes.posterImage.small,
+                posterImageOriginalURL: result.attributes.posterImage.original,
+                chapterCount: result.attributes.chapterCount,
+                volumeCount: result.attributes.volumeCount,
+                episodesCount: nil,
+                episodeLenght: nil))
         }
         
         return localResults
@@ -90,22 +109,56 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
                 self.alltimeDataSource = self.mapAlltimeData(success)
                 self.alltimeCount.value = self.alltimeDataSource.count
             case .failure(let failure):
-                print("Fetch trending manga error:", failure.localizedDescription)
+                print("Fetch all-time manga error:", failure.localizedDescription)
             }
         }
     }
     
-    private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [MangaTitle] {
-        var localResults = [MangaTitle]()
+    private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [TitleInfo] {
+        var localResults = [TitleInfo]()
+        nextPageLink = results.links.next
         
         for result in results.data {
-            localResults.append(
-                MangaTitle(
-                    id: result.id,
-                    canonicalTitle: result.attributes.canonicalTitle))
+            localResults.append(TitleInfo(
+                id: result.id,
+                type: result.type,
+                canonicalTitle: result.attributes.canonicalTitle,
+                startDate: result.attributes.startDate,
+                endDate: result.attributes.endDate,
+                favouritesCount: result.attributes.favoritesCount,
+                averageRating: result.attributes.averageRating,
+                ageRatingGuide: result.attributes.ageRatingGuide,
+                status: result.attributes.status,
+                synopsis: result.attributes.synopsis,
+                posterImageTinyURL: result.attributes.posterImage.tiny,
+                posterImageSmallURL: result.attributes.posterImage.small,
+                posterImageOriginalURL: result.attributes.posterImage.original,
+                
+                chapterCount: result.attributes.chapterCount,
+                volumeCount: result.attributes.volumeCount,
+                episodesCount: nil,
+                episodeLenght: nil))
         }
         
         return localResults
+    }
+    
+    func fetchNextPage() {
+        guard let nextPageLink = nextPageLink,isAlltimeLoading.value == false else { return }
+        isAlltimeLoading.value = true
+        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.MangaSearch, API.Types.Error>) in
+            guard let self = self else { return }
+            self.isAlltimeLoading.value = false
+            
+            switch result {
+            case .success(let success):
+                print("next page success count:", success.data.count)
+                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
+                self.alltimeCount.value = self.alltimeDataSource.count
+            case .failure(let failure):
+                print("Fetch all-time next page manga error:", failure.localizedDescription)
+            }
+        }
     }
     
     

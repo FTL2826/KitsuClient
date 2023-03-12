@@ -15,7 +15,8 @@ class MainFlowFactory {
             apiClient: API.Client.shared)
         
         let vc = AnimeFeedViewController(
-            viewModel: viewModel)
+            viewModel: viewModel,
+            coordinator: coordinator)
         vc.tabBarItem = UITabBarItem(
             title: "Anime",
             image: UIImage(systemName: "desktopcomputer"),
@@ -23,11 +24,13 @@ class MainFlowFactory {
         return vc
     }
     
-    func createMangaFeedModule() -> MangaFeedViewController {
+    func createMangaFeedModule(coordinator: AppFlowCoordinatorProtocol) -> MangaFeedViewController {
         let viewModel = MangaFeedViewModel(
             apiClient: API.Client.shared)
         
-        let vc = MangaFeedViewController(viewModel: viewModel)
+        let vc = MangaFeedViewController(
+            viewModel: viewModel,
+            coordinator: coordinator)
         vc.tabBarItem = UITabBarItem(
             title: "Manga",
             image: UIImage(systemName: "123.rectangle"),
@@ -42,6 +45,13 @@ class MainFlowFactory {
             title: "Profile",
             image: UIImage(systemName: "person.crop.circle"),
             selectedImage: UIImage(systemName: "person.crop.circle.fill"))
+        return vc
+    }
+    
+    func createBaseDetailModule(titleInfo: TitleInfo) -> DetailViewController {
+        let viewModel = DetailViewModel(pictureLoader: PictureLoader.shared, titleInfo: titleInfo)
+        
+        let vc = DetailViewController(viewModel: viewModel)
         return vc
     }
 }

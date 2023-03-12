@@ -15,6 +15,8 @@ class BaseTableView: UIView {
         let table = UITableView()
         table.separatorColor = .black
         table.isHidden = false
+        table.register(BaseTableViewCell.self, forCellReuseIdentifier: BaseTableViewCell.identifier)
+        table.rowHeight = 168// 156+6+6
         
         refreshControl.tintColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
         let attributedString = NSMutableAttributedString(string: refreshText)
