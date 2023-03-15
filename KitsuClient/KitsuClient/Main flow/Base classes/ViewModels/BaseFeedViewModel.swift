@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BaseFeedViewModel {
+class BaseFeedViewModel: BaseFeedViewModelProtocol {
     var isTrendingLoading = Dynamic(false)
     var isAlltimeLoading = Dynamic(false)
     

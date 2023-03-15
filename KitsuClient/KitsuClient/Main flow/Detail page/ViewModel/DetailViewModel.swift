@@ -16,9 +16,8 @@ fileprivate enum ReverseDate {
         if let date = date {
             dateFormatter.dateFormat = "dd-MM-yyyy"
             return dateFormatter.string(from: date)
-        } else {
-            return nil
         }
+        return nil
     }
 }
 
@@ -99,9 +98,8 @@ class DetailViewModel: DetailViewModelProtocol {
     func getRating(_ str: String?) -> String {
         if let str = str {
             return str + " / 100"
-        } else {
-            return "No rating 🫣"
         }
+        return "No rating 🫣"
     }
     
     func loadPosterImage() -> URLSessionDataTask? {
