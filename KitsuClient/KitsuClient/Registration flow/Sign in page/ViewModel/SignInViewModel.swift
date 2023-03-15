@@ -37,16 +37,18 @@ class SignInViewModel: SignInViewModelProtocol {
     }
     
     func validateTextFields(email: String?, password: String?) {
-        guard let email = email, let password = password else {
-            signInButtonValidation.value = false
-            return
-        }
-        
-        if !email.isEmpty && !password.isEmpty {
-            signInButtonValidation.value = true
-        } else {
-            signInButtonValidation.value = false
-        }
+        signInButtonValidation.value = validateCredentialsText(email: email, password: password)
     }
+    
+    func validateCredentialsText(email: String?, password: String?) -> Bool {
+        guard let email = email,
+              let password = password,
+              !email.isEmpty,
+              !password.isEmpty else {
+            return false
+        }
+        return true
+    }
+    
     
 }
