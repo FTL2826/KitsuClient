@@ -46,17 +46,15 @@ class BaseTableViewCellViewModel: BaseTableViewCellViewModelProtocol {
         if let date = date {
             dateFormatter.dateFormat = "dd-MM-yyyy"
             return dateFormatter.string(from: date)
-        } else {
-            return dateString
         }
+        return dateString
     }
     
     func getRating(_ str: String?) -> String {
         if let str = str {
             return str + " / 100"
-        } else {
-            return "no rating yet"
         }
+        return "no rating yet"
     }
     
     func getPosterURL() -> URL? {

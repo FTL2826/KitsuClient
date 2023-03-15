@@ -16,7 +16,7 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
     
     var isAuth: Bool {
         get {
-            return true
+            return false
         }
     }
     
