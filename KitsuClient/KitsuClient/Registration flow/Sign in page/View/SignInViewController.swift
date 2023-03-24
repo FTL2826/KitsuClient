@@ -6,13 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 class SignInViewController: UIViewController {
     
-    var viewModel: SignInViewModelProtocol?
+    var viewModel: SignInViewModelProtocol
     weak var coordinator: RegistrationFlowCoordinatorProtocol?
-    
-    private var views: [UIView] = []
+
     private var loginHeaderView: LoginHeaderView!
     private var emailTextField: InputTextField!
     private var passwordTextField: InputTextField!
@@ -20,15 +20,18 @@ class SignInViewController: UIViewController {
     private var newUserButton: LoginButtons!
     private var forgotPasswordButton: LoginButtons!
     
+    private var subscriptions = Set<AnyCancellable>()
+    
     var completionHandler: (() -> ())?
     
     private lazy var loginStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.text = "loginStatusLabel"
+        label.text = "Invalid username or password. Try again"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
         label.isHidden = true
+        label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
         return label
     }()
     
@@ -36,10 +39,10 @@ class SignInViewController: UIViewController {
         viewModel: SignInViewModelProtocol,
         coordinator: RegistrationFlowCoordinatorProtocol)
     {
-        super.init(nibName: nil, bundle: nil)
-        
         self.coordinator = coordinator
         self.viewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -64,50 +67,35 @@ class SignInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel?.passwordVerification?.loadUsers()
+        viewModel.passwordVerification.loadUsers()
     }
     
     private func bindViewModel() {
-        guard let viewModel = viewModel else { return }
+        viewModel.loginStatusLabelHidden
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] hidden in
+                self.loginStatusLabel.isHidden = hidden
+            }.store(in: &subscriptions)
         
-        viewModel.loginStatusLabelHidden.bind {[weak self] hidden in
-            DispatchQueue.main.async {
-                self?.loginStatusLabel.isHidden = hidden
-            }
-        }
-        
-        viewModel.loginStatus.bind {[weak self] statusText in
-            DispatchQueue.main.async {
-                self?.loginStatusLabel.text = statusText
-            }
-        }
-        
-        viewModel.textColor.bind {[weak self] color in
-            DispatchQueue.main.async {
-                switch color {
-                case .red:
-                    self?.loginStatusLabel.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-                case .green:
-                    self?.loginStatusLabel.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 0.927573804)
-                }
-            }
-        }
-        
-        viewModel.signInButtonValidation.bind {[weak self] inUse in
-            DispatchQueue.main.async {
-                self?.signInButton.isEnabled = inUse
+        viewModel.signInButtonValidation
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] inUse in
+                self.signInButton.isEnabled = inUse
                 if !inUse {
-                    self?.signInButton.backgroundColor = .systemGray
+                    self.signInButton.backgroundColor = .systemGray
                 } else {
-                    self?.signInButton.backgroundColor = .systemBlue
+                    self.signInButton.backgroundColor = .systemBlue
                 }
-            }
-        }
+            }.store(in: &subscriptions)
+        
+        viewModel.userData
+            .sink {[weak self] user in
+                self?.coordinator?.endFlow(user: user)
+            }.store(in: &subscriptions)
     }
     
     
     private func addTargets() {
-        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         newUserButton.addTarget(self, action: #selector(didTapCreateNewUser), for: .touchUpInside)
         forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
     }
@@ -124,17 +112,20 @@ class SignInViewController: UIViewController {
         passwordTextField.tag = 102
         
         signInButton = LoginButtons(title: "Sign In", background: .systemGray, titleColor: .white, fontSize: .big)
+        signInButton.addAction(
+            UIAction(title: "didTapSignIn", handler: {[unowned self] _ in
+                guard let emailString = self.emailTextField.text,
+                      let passwordString = self.passwordTextField.text else { return }
+                
+                viewModel.didPressedSignInButton(emailString: emailString, passwordString: passwordString)
+                
+                self.loginStatusLabel.shake()
+            }),
+            for: .touchUpInside)
+        
         signInButton.isEnabled = false
         newUserButton = LoginButtons(title: "New here? Create account.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
         forgotPasswordButton = LoginButtons(title: "Forgot password?", background: .clear, titleColor: .systemBlue, fontSize: .small)
-        
-        views = [loginHeaderView,
-                 emailTextField,
-                 passwordTextField,
-                 signInButton,
-                 newUserButton,
-                 forgotPasswordButton,
-                 loginStatusLabel]
     }
     
     private func initializeHideKeyboard() {
@@ -149,7 +140,7 @@ class SignInViewController: UIViewController {
         initializeHideKeyboard()
         addTargets()
         
-        views.forEach {
+        [loginHeaderView, emailTextField, passwordTextField, signInButton, newUserButton, forgotPasswordButton, loginStatusLabel].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -193,15 +184,15 @@ class SignInViewController: UIViewController {
     }
     
     //MARK: - selectors
-    @objc private func didTapSignIn() {
-        guard let email = emailTextField.text,
-              let password = passwordTextField.text else { return }
-        viewModel?.completionHandler = {[weak self] user in
-            self?.coordinator?.endFlow(user: user)
-        }
-        viewModel?.didSignInPressed(email: email, password: password)
-        loginStatusLabel.shake()
-    }
+//    @objc private func didTapSignIn() {
+//        guard let email = emailTextField.text,
+//              let password = passwordTextField.text else { return }
+//        viewModel.completionHandler = {[weak self] user in
+//            self?.coordinator?.endFlow(user: user)
+//        }
+//        viewModel.didSignInPressed(email: email, password: password)
+//        loginStatusLabel.shake()
+//    }
     
     @objc private func didTapCreateNewUser() {
         coordinator?.showCreateNewUser()
@@ -231,7 +222,7 @@ extension SignInViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.validateTextFields(email: emailTextField.text, password: passwordTextField.text)
+        viewModel.validateTextFields(email: emailTextField.text, password: passwordTextField.text)
     }
     
 }

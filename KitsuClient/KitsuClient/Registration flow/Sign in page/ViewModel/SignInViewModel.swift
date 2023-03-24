@@ -6,14 +6,14 @@
 //
 
 import Foundation
+import Combine
 
 class SignInViewModel: SignInViewModelProtocol {
     
-    var passwordVerification: PasswordVerificationProtocol?
-    var loginStatus = Dynamic("")
-    var loginStatusLabelHidden = Dynamic(true)
-    var textColor = Dynamic(TextColor.red)
-    var signInButtonValidation = Dynamic(false)
+    var passwordVerification: PasswordVerificationProtocol
+    var loginStatusLabelHidden = CurrentValueSubject<Bool, Never>(true)
+    var signInButtonValidation = CurrentValueSubject<Bool, Never>(false)
+    var userData = PassthroughSubject<User, Never>()
     var completionHandler: ((User) -> ())?
     
     init(passwordVerification: PasswordVerificationProtocol)
@@ -21,23 +21,35 @@ class SignInViewModel: SignInViewModelProtocol {
         self.passwordVerification = passwordVerification
     }
     
-    func didSignInPressed(email: String, password: String) {
-        guard let passwordVerification = passwordVerification,
-              passwordVerification.users.contains(where: {$0.email == email && $0.password == password})
-        else {
-            loginStatus.value = "Invalid username or password. Try again"
-            textColor.value = .red
-            loginStatusLabelHidden.value = false
-            return }
+    func didPressedSignInButton(emailString: String, passwordString: String) {
+        guard let email = Email(emailString) else {
+            loginStatusLabelHidden.send(false)
+            return
+        }
 
-        loginStatusLabelHidden.value = true
-        
-        let userIndex = passwordVerification.users.firstIndex(where: {$0.email == email})!
-        completionHandler?(passwordVerification.users[userIndex])
+        let password = Password.parse(passwordString)
+        switch password {
+        case .success(let password):
+            let credentials = Credentials(email: email, password: password)
+            authorizeUser(with: credentials)
+        case .failure(let error):
+            loginStatusLabelHidden.send(false)
+            print("Password validation error: \(error)")
+        }
     }
     
     func validateTextFields(email: String?, password: String?) {
-        signInButtonValidation.value = validateCredentialsText(email: email, password: password)
+        signInButtonValidation.send(validateCredentialsText(email: email, password: password))
+    }
+    
+    private func authorizeUser(with credentials: Credentials) {
+        //check creedentials
+        if credentials.password.string != "12345" {
+            loginStatusLabelHidden.send(false)
+        } else {
+            loginStatusLabelHidden.send(true)
+        }
+        userData.send(User(login: "admin", email: "admin@mail.com", password: "12345", llogin: nil, credentials: credentials))
     }
     
     func validateCredentialsText(email: String?, password: String?) -> Bool {

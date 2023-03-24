@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 fileprivate enum TextViewURLs: String {
     case terms = "https://policies.google.com/terms?hl=en-US"
@@ -14,16 +15,19 @@ fileprivate enum TextViewURLs: String {
 
 class SignUpViewController: UIViewController {
     
-    var viewModel: SignUpViewModelProtocol?
+    var viewModel: SignUpViewModelProtocol
     weak var coordinator: RegistrationFlowCoordinatorProtocol?
     
-    private var views: [UIView] = []
     private var headerView: LoginHeaderView!
     private var loginTextField: InputTextField!
     private var emailTextField: InputTextField!
     private var passwordTextField: InputTextField!
     private var signUpButton: LoginButtons!
     private var signInButton: LoginButtons!
+    
+    private var loginText = PassthroughSubject<String, Never>()
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     private lazy var termsTextView: UITextView = {
         let attributedString = NSMutableAttributedString(string: "By creating an account you agree to our Terms & Conditions and you aknowledge that you have read our Privacy Policy.")
@@ -59,10 +63,10 @@ class SignUpViewController: UIViewController {
     init(viewModel: SignUpViewModelProtocol,
          coordinator: RegistrationFlowCoordinatorProtocol)
     {
-        super.init(nibName: nil, bundle: nil)
-        
         self.coordinator = coordinator
         self.viewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -84,7 +88,22 @@ class SignUpViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        guard let viewModel = viewModel else { return }
+        
+        loginTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.loginTextFieldValue.send(text)
+            }.store(in: &subscriptions)
+        
+        emailTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.emailTextFieldValue.send(text)
+            }.store(in: &subscriptions)
+        
+        passwordTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.passwordTextFieldValue.send(text)
+            }.store(in: &subscriptions)
+        
         
         viewModel.signUpButtonValidation.bind {[weak self] inUse in
             DispatchQueue.main.async {
@@ -127,16 +146,6 @@ class SignUpViewController: UIViewController {
         signInButton = LoginButtons(title: "Already have an account? Sign in.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
         
         termsTextView.delegate = self
-        
-        views = [headerView,
-                 loginTextField,
-                 emailTextField,
-                 passwordTextField,
-                 signUpButton,
-                 signInButton,
-                 termsTextView,
-                 uniqEmailStatusLabel,
-        ]
     }
     
     private func initializeHideKeyboard() {
@@ -154,10 +163,11 @@ class SignUpViewController: UIViewController {
         initializeHideKeyboard()
         addTargets()
         
-        views.forEach{
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+        [headerView, loginTextField, emailTextField, passwordTextField, signUpButton, signInButton, termsTextView, uniqEmailStatusLabel, ]
+            .forEach{
+                view.addSubview($0)
+                $0.translatesAutoresizingMaskIntoConstraints = false
+            }
         
         NSLayoutConstraint.activate([
             
@@ -213,7 +223,7 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func didTapSignUpButton() {
-        viewModel?.didPressedSignUpButton(
+        viewModel.didPressedSignUpButton(
             login: loginTextField.text,
             email: emailTextField.text,
             password: passwordTextField.text)
@@ -236,7 +246,7 @@ extension SignUpViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.validateTextFields(login: loginTextField.text, email: emailTextField.text, password: passwordTextField.text)
+        viewModel.validateTextFields(login: loginTextField.text, email: emailTextField.text, password: passwordTextField.text)
     }
     
 }

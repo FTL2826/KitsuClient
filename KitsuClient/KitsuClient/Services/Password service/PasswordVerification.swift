@@ -18,6 +18,10 @@ class PasswordVerification: PasswordVerificationProtocol {
         }
     }
     
+    enum UserVerificationError: Error {
+        case alreadyRegistered
+    }
+    
     init() {
         if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.users) {
             do {
@@ -49,6 +53,10 @@ class PasswordVerification: PasswordVerificationProtocol {
         } catch {
             print("Encode error:", " unable to encode [User]. \n\(error)")
         }
+    }
+    
+    func addUser(_ user: User) throws {
+        
     }
     
     
