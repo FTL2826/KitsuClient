@@ -29,6 +29,11 @@
 		5038356329AE6CCF004A6E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356229AE6CCF004A6E10 /* User.swift */; };
 		5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356429AE6D5E004A6E10 /* SignInViewModel.swift */; };
 		5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356729AE6DB2004A6E10 /* Dynamic.swift */; };
+		503FAD8329CDB61C005EC15F /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8229CDB61C005EC15F /* Password.swift */; };
+		503FAD8529CDB7A2005EC15F /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8429CDB7A2005EC15F /* Email.swift */; };
+		503FAD8729CDB851005EC15F /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8629CDB851005EC15F /* Credentials.swift */; };
+		503FAD8929CDD2DE005EC15F /* UITextField+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8829CDD2DE005EC15F /* UITextField+Publisher.swift */; };
+		503FAD8B29CE29C2005EC15F /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8A29CE29C2005EC15F /* Login.swift */; };
 		504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C129B3966C003C600F /* AnimeFeedViewController.swift */; };
 		504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */; };
 		504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C529B3982A003C600F /* AppFlowCoordinator.swift */; };
@@ -127,6 +132,11 @@
 		5038356229AE6CCF004A6E10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5038356429AE6D5E004A6E10 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
 		5038356729AE6DB2004A6E10 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		503FAD8229CDB61C005EC15F /* Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
+		503FAD8429CDB7A2005EC15F /* Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
+		503FAD8629CDB851005EC15F /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
+		503FAD8829CDD2DE005EC15F /* UITextField+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Publisher.swift"; sourceTree = "<group>"; };
+		503FAD8A29CE29C2005EC15F /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		504A07C129B3966C003C600F /* AnimeFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeFeedViewController.swift; sourceTree = "<group>"; };
 		504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		504A07C529B3982A003C600F /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -392,6 +402,10 @@
 			isa = PBXGroup;
 			children = (
 				5038356229AE6CCF004A6E10 /* User.swift */,
+				503FAD8229CDB61C005EC15F /* Password.swift */,
+				503FAD8429CDB7A2005EC15F /* Email.swift */,
+				503FAD8629CDB851005EC15F /* Credentials.swift */,
+				503FAD8A29CE29C2005EC15F /* Login.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -568,6 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				50ECCACE29B075730075BAE3 /* UILabel+Shake.swift */,
+				503FAD8829CDD2DE005EC15F /* UITextField+Publisher.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -760,6 +775,8 @@
 				Base,
 			);
 			mainGroup = 5038353529ADD4B1004A6E10;
+			packageReferences = (
+			);
 			productRefGroup = 5038353F29ADD4B1004A6E10 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -804,11 +821,14 @@
 			files = (
 				5092068329B74E3200D16A33 /* Meta.swift in Sources */,
 				50048C9F29B1209700779196 /* CoordinatorsFactory.swift in Sources */,
+				503FAD8329CDB61C005EC15F /* Password.swift in Sources */,
 				50048CBA29B3186700779196 /* PasswordVerificationProtocol.swift in Sources */,
 				5092069F29B8AC2600D16A33 /* MangaAttributes.swift in Sources */,
 				509206A729B9A65900D16A33 /* BaseTableViewCell.swift in Sources */,
 				5038354629ADD4B1004A6E10 /* SignInViewController.swift in Sources */,
 				50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */,
+				503FAD8929CDD2DE005EC15F /* UITextField+Publisher.swift in Sources */,
+				503FAD8B29CE29C2005EC15F /* Login.swift in Sources */,
 				509206AB29B9C23300D16A33 /* TitleInfo.swift in Sources */,
 				5053ED3629BBA4E1005EE276 /* BaseFeedViewModelProtocol.swift in Sources */,
 				5092069629B86F7B00D16A33 /* BaseFeedViewController.swift in Sources */,
@@ -827,6 +847,7 @@
 				509206AF29BA4EDB00D16A33 /* PictureLoader.swift in Sources */,
 				5038354229ADD4B1004A6E10 /* AppDelegate.swift in Sources */,
 				50048CA129B1245400779196 /* SignUpViewModelProtocol.swift in Sources */,
+				503FAD8729CDB851005EC15F /* Credentials.swift in Sources */,
 				5053ED3429BBA4AE005EE276 /* DetailViewModel.swift in Sources */,
 				504A07C229B3966C003C600F /* AnimeFeedViewController.swift in Sources */,
 				504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */,
@@ -851,6 +872,7 @@
 				5092068D29B7A42500D16A33 /* TrendingAnimeSearchData.swift in Sources */,
 				5092069D29B8ABDF00D16A33 /* MangaData.swift in Sources */,
 				509206A929B9C14500D16A33 /* BaseTableViewCellViewModel.swift in Sources */,
+				503FAD8529CDB7A2005EC15F /* Email.swift in Sources */,
 				50ECCAE029B118840075BAE3 /* SignInViewModelProtocol.swift in Sources */,
 				5038355B29AE1C1D004A6E10 /* APIClient.swift in Sources */,
 				50048CBC29B31A0300779196 /* ServicesFactory.swift in Sources */,

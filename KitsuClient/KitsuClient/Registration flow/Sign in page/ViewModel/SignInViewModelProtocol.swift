@@ -5,6 +5,8 @@
 //  Created by Александр Харин on /23/23.
 //
 
+import Combine
+
 
 enum TextColor {
     case red, green
@@ -13,13 +15,16 @@ enum TextColor {
 
 protocol SignInViewModelProtocol: AnyObject {
     
-    var passwordVerification: PasswordVerificationProtocol? { get set }
-    var loginStatus: Dynamic<String> { get set }
-    var loginStatusLabelHidden: Dynamic<Bool> { get set }
-    var textColor: Dynamic<TextColor> { get set }
-    var signInButtonValidation: Dynamic<Bool> { get set }
-    var completionHandler: ((User) -> ())? { get set }
+    var passwordVerification: PasswordVerificationProtocol { get }
     
-    func didSignInPressed(email: String, password: String)
-    func validateTextFields(email: String?, password: String?)
+    var emailTextFieldValue: PassthroughSubject<String, Never> { get }
+    var passwordTextFieldValue: PassthroughSubject<String, Never> { get }
+    var signInButtonEnable: CurrentValueSubject<Bool, Never> { get }
+    var loginStatusValue: PassthroughSubject<String, Never> { get }
+    var loginStatusLabelHidden: CurrentValueSubject<Bool, Never> { get }
+    
+    var signInButtonValidation: CurrentValueSubject<Bool, Never> { get }
+    var userData: PassthroughSubject<User, Never> { get }
+    
+    func didPressedSignInButton()
 }

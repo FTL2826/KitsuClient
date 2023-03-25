@@ -6,15 +6,18 @@
 //
 
 import Foundation
+import Combine
 
 
 protocol ForgotViewModelProtocol: AnyObject {
     
-    var passwordVerification: PasswordVerificationProtocol? { get set }
-    var loginStatus: Dynamic<String> { get set }
-    var textColor: Dynamic<TextColor> { get set }
-    var forgotPasswordButtonValidation: Dynamic<Bool> { get set }
+    var passwordVerification: PasswordVerificationProtocol { get }
     
-    func didPressedResetPasswordButton(email: String?)
-    func validateTextFields(email: String?)
+    var emailTextFieldValue: PassthroughSubject<String, Never> { get }
+    var resetPasswordButtonEnable: CurrentValueSubject<Bool, Never> { get }
+    var resetPasswordStatusLabelHidden: PassthroughSubject<Bool, Never> { get }
+    var resetPasswordStatusLabelValue: PassthroughSubject<String, Never> { get }
+    var makeStatusLabelGreen: PassthroughSubject<Bool, Never> { get }
+    
+    func didPressedResetPasswordButton()
 }

@@ -39,8 +39,9 @@ class MainFlowFactory {
     }
     
     func createProfileModule(coordinator: AppFlowCoordinatorProtocol, user: User) -> ProfileViewController {
-        let vc = ProfileViewController(coordinator: coordinator)
-        vc.user = user
+        let vc = ProfileViewController(
+            coordinator: coordinator,
+            user: user)
         vc.tabBarItem = UITabBarItem(
             title: "Profile",
             image: UIImage(systemName: "person.crop.circle"),

@@ -6,15 +6,17 @@
 //
 
 import UIKit
+import Combine
 
 class ForgotViewController: UIViewController {
     
-    var viewModel: ForgotViewModelProtocol?
+    var viewModel: ForgotViewModelProtocol
     
-    private var views: [UIView] = []
     private var headerView: LoginHeaderView!
     private var emailTextField: InputTextField!
     private var resetPasswordButton: LoginButtons!
+    
+    var subscriptions = Set<AnyCancellable>()
     
     private lazy var resetPasswordStatusLabel: UILabel = {
         let label = UILabel()
@@ -24,13 +26,14 @@ class ForgotViewController: UIViewController {
         label.textAlignment = .center
         label.isHidden = true
         label.numberOfLines = 0
+        label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
         return label
     }()
     
     init(viewModel: ForgotViewModelProtocol) {
-        super.init(nibName: nil, bundle: nil)
-        
         self.viewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -47,40 +50,46 @@ class ForgotViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        
         bindViewModel()
     }
     
     private func bindViewModel() {
-        guard let viewModel = viewModel else { return }
         
-        viewModel.forgotPasswordButtonValidation.bind {[weak self] inUse in
-            DispatchQueue.main.async {
-                self?.resetPasswordButton.isEnabled = inUse
-                if !inUse {
-                    self?.resetPasswordButton.backgroundColor = .systemGray
+        emailTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.emailTextFieldValue.send(text)
+            }.store(in: &subscriptions)
+        
+        viewModel.resetPasswordButtonEnable
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] enable in
+                self.resetPasswordButton.isEnabled = enable
+                if enable {
+                    self.resetPasswordButton.backgroundColor = .systemBlue
                 } else {
-                    self?.resetPasswordButton.backgroundColor = .systemBlue
+                    self.resetPasswordButton.backgroundColor = .systemGray
                 }
-            }
-        }
+            }.store(in: &subscriptions)
         
-        viewModel.loginStatus.bind {[weak self] statusText in
-            DispatchQueue.main.async {
-                self?.resetPasswordStatusLabel.text = statusText
-            }
-        }
-        
-        viewModel.textColor.bind {[weak self] color in
-            DispatchQueue.main.async {
-                switch color {
-                case .red:
-                    self?.resetPasswordStatusLabel.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-                case .green:
-                    self?.resetPasswordStatusLabel.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 0.927573804)
+        Publishers.CombineLatest(viewModel.resetPasswordStatusLabelValue, viewModel.resetPasswordStatusLabelHidden)
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] (labelText, hidden) in
+                self.resetPasswordStatusLabel.isHidden = hidden
+                self.resetPasswordStatusLabel.text = labelText
+                if !hidden {
+                    self.resetPasswordStatusLabel.shake()
                 }
-            }
-        }
+            }.store(in: &subscriptions)
+        
+        viewModel.makeStatusLabelGreen
+            .receive(on: DispatchQueue.main)
+            .sink { green in
+                if green {
+                    self.resetPasswordStatusLabel.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 0.927573804)
+                } else {
+                    self.resetPasswordStatusLabel.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+                }
+            }.store(in: &subscriptions)
         
     }
     
@@ -92,12 +101,12 @@ class ForgotViewController: UIViewController {
         emailTextField.delegate = self
         
         resetPasswordButton = LoginButtons(title: "Reset password", background: .systemGray, titleColor: .white, fontSize: .big)
-        
-        views = [headerView,
-                 emailTextField,
-                 resetPasswordButton,
-                 resetPasswordStatusLabel,
-        ]
+        resetPasswordButton.addAction(
+            UIAction(title: "didPressedResetPasswordButton", handler: {[unowned self] _ in
+                self.viewModel.didPressedResetPasswordButton()
+                self.resetPasswordStatusLabel.isHidden = false
+            }),
+            for: .touchUpInside)
     }
     
     private func initializeHideKeyboard() {
@@ -105,17 +114,12 @@ class ForgotViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    private func addTargets() {
-        resetPasswordButton.addTarget(self, action: #selector(didPressedResetPasswordButton), for: .touchUpInside)
-    }
-    
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
         initializeHideKeyboard()
-        addTargets()
         
-        views.forEach{
+        [headerView, emailTextField, resetPasswordButton, resetPasswordStatusLabel,].forEach{
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -150,11 +154,6 @@ class ForgotViewController: UIViewController {
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
-    @objc private func didPressedResetPasswordButton() {
-        viewModel?.didPressedResetPasswordButton(email: emailTextField.text)
-        resetPasswordStatusLabel.isHidden = false
-    }
 
 }
 
@@ -169,10 +168,6 @@ extension ForgotViewController: UITextFieldDelegate {
         }
         
         return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.validateTextFields(email: emailTextField.text)
     }
     
 }

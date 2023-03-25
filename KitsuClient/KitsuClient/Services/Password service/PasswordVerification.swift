@@ -18,6 +18,13 @@ class PasswordVerification: PasswordVerificationProtocol {
         }
     }
     
+    enum UserVerificationError: Error {
+        case alreadyRegistered
+        case userIsNotExist
+        case accountForThisEmailDoesNotExist
+        case failedToRecreateUser
+    }
+    
     init() {
         if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.users) {
             do {
@@ -48,6 +55,47 @@ class PasswordVerification: PasswordVerificationProtocol {
             UserDefaults.standard.set(data, forKey: UserDefaultsKeys.users)
         } catch {
             print("Encode error:", " unable to encode [User]. \n\(error)")
+        }
+    }
+    
+    func addUser(_ user: User) throws {
+        if users.contains(where: { $0.credentials == user.credentials }) {
+            throw UserVerificationError.alreadyRegistered
+        } else {
+            users.append(user)
+        }
+    }
+    
+    func checkCredentials(_ credentials: Credentials) throws -> User {
+        let user = users.first(where: {$0.credentials == credentials})
+        if user == nil {
+            throw UserVerificationError.userIsNotExist
+        } else {
+            return user!
+        }
+    }
+    
+    func dropPasswordToDefault(_ email: Email) throws {
+        let index = users.firstIndex { $0.credentials.email == email }
+        if index != nil {
+            let user = users.remove(at: index!)
+            
+            let password = Password.parse("12345")
+            switch password {
+            case .success(let password):
+                let credentials = Credentials(email: email, password: password)
+                let newUser = User(login: user.login, credentials: credentials)
+                do {
+                    try addUser(user)
+                } catch {
+                    users.append(user)
+                    throw UserVerificationError.failedToRecreateUser
+                }
+            case .failure(_):
+                assert(true, "Wrong drop-default password")
+            }
+        } else {
+            throw UserVerificationError.accountForThisEmailDoesNotExist
         }
     }
     

@@ -53,7 +53,7 @@ class AppFlowCoordinator: AppFlowCoordinatorProtocol {
         tabBarController.addChild(navigationController)
         
         if isAuth {
-            showAnimeFeed(user: User(login: "test", email: "test", password: "test"))
+//            showAnimeFeed(user: User(login: "test", email: "test", password: "test"))
         } else {
             showRegistration()
         }
