@@ -6,49 +6,66 @@
 //
 
 import Foundation
+import Combine
 
 class SignInViewModel: SignInViewModelProtocol {
     
-    var passwordVerification: PasswordVerificationProtocol?
-    var loginStatus = Dynamic("")
-    var loginStatusLabelHidden = Dynamic(true)
-    var textColor = Dynamic(TextColor.red)
-    var signInButtonValidation = Dynamic(false)
-    var completionHandler: ((User) -> ())?
+    var passwordVerification: PasswordVerificationProtocol
+    
+    var emailTextFieldValue = PassthroughSubject<String, Never>()
+    var passwordTextFieldValue = PassthroughSubject<String, Never>()
+    var signInButtonEnable = CurrentValueSubject<Bool, Never>(false)
+    var loginStatusValue = PassthroughSubject<String, Never>()
+    var loginStatusLabelHidden = CurrentValueSubject<Bool, Never>(true)
+    
+    var signInButtonValidation = CurrentValueSubject<Bool, Never>(false)
+    var userData = PassthroughSubject<User, Never>()
+    
+    var credentials: Credentials?
+    var subscriptions = Set<AnyCancellable>()
     
     init(passwordVerification: PasswordVerificationProtocol)
     {
         self.passwordVerification = passwordVerification
-    }
-    
-    func didSignInPressed(email: String, password: String) {
-        guard let passwordVerification = passwordVerification,
-              passwordVerification.users.contains(where: {$0.email == email && $0.password == password})
-        else {
-            loginStatus.value = "Invalid username or password. Try again"
-            textColor.value = .red
-            loginStatusLabelHidden.value = false
-            return }
-
-        loginStatusLabelHidden.value = true
         
-        let userIndex = passwordVerification.users.firstIndex(where: {$0.email == email})!
-        completionHandler?(passwordVerification.users[userIndex])
+        Publishers.CombineLatest(emailTextFieldValue, passwordTextFieldValue)
+            .receive(on: DispatchQueue.global())
+            .sink { (emailString, passwordString) in
+                self.signInButtonEnable.send(false)
+                self.validateInput(emailString, passwordString)
+            }.store(in: &subscriptions)
     }
     
-    func validateTextFields(email: String?, password: String?) {
-        signInButtonValidation.value = validateCredentialsText(email: email, password: password)
-    }
-    
-    func validateCredentialsText(email: String?, password: String?) -> Bool {
-        guard let email = email,
-              let password = password,
-              !email.isEmpty,
-              !password.isEmpty else {
-            return false
+    private func validateInput(_ emailString: String, _ passwordString: String) {
+        guard let email = Email(emailString)
+        else {
+            loginStatusValue.send("Incorrect form of email, try enter it again")
+            loginStatusLabelHidden.send(false)
+            return
         }
-        return true
+        let password = Password.parse(passwordString)
+        switch password {
+        case .success(let password):
+            loginStatusLabelHidden.send(true)
+            credentials = Credentials(email: email, password: password)
+            signInButtonEnable.send(true)
+        case .failure(_):
+            loginStatusValue.send("Incorrect form of password, try enter it again")
+            loginStatusLabelHidden.send(false)
+        }
     }
+    
+    func didPressedSignInButton() {
+        guard let credentials = credentials else { return }
+        do {
+            let user = try passwordVerification.checkCredentials(credentials)
+            userData.send(user)
+        } catch {
+            loginStatusValue.send("Wrong email or password, please try again")
+            loginStatusLabelHidden.send(false)
+        }
+    }
+    
     
     
 }

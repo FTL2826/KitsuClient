@@ -6,40 +6,60 @@
 //
 
 import Foundation
+import Combine
 
 class ForgotViewModel: ForgotViewModelProtocol {
     
     
-    var passwordVerification: PasswordVerificationProtocol?
-    var loginStatus = Dynamic("")
-    var textColor = Dynamic(TextColor.red)
-    var forgotPasswordButtonValidation = Dynamic(false)
+    var passwordVerification: PasswordVerificationProtocol
+    
+    var emailTextFieldValue = PassthroughSubject<String, Never>()
+    var resetPasswordButtonEnable = CurrentValueSubject<Bool, Never>(false)
+    var resetPasswordStatusLabelHidden = PassthroughSubject<Bool, Never> ()
+    var resetPasswordStatusLabelValue = PassthroughSubject<String, Never>()
+    var makeStatusLabelGreen = PassthroughSubject<Bool, Never>()
+    
+    var subscriptions = Set<AnyCancellable>()
+    var email: Email?
     
     init(passwordVerification: PasswordVerificationProtocol)
     {
         self.passwordVerification = passwordVerification
+        
+        emailTextFieldValue
+            .receive(on: DispatchQueue.global())
+            .sink {[unowned self] emailString in
+                self.resetPasswordButtonEnable.send(false)
+                self.makeStatusLabelGreen.send(false)
+                self.validateEmail(emailString)
+            }.store(in: &subscriptions)
     }
     
-    func didPressedResetPasswordButton(email: String?) {
-        guard let email = email,
-              let userIndex = passwordVerification?.users.firstIndex(where: {$0.email == email})
+    private func validateEmail(_ emailString: String) {
+        guard let email = Email(emailString)
         else {
-            loginStatus.value = "There are no accounts with this email. Please try again."
-            textColor.value = .red
+            resetPasswordStatusLabelHidden.send(false)
+            resetPasswordStatusLabelValue.send("Incorrect form of email, please try enter it again.")
             return
         }
-        passwordVerification?.users[userIndex].password = "123"
-        loginStatus.value = "We succesfully reset your password. You should recieve a new password on email"
-        // notification with new pass
-        textColor.value = .green
+        self.email = email
+        resetPasswordStatusLabelHidden.send(true)
+        resetPasswordButtonEnable.send(true)
     }
     
-    func validateTextFields(email: String?) {
-        guard let email = email, !email.isEmpty else {
-            forgotPasswordButtonValidation.value = false
-            return }
-        forgotPasswordButtonValidation.value = true
+    func didPressedResetPasswordButton() {
+        guard let email = email else { return }
+        do {
+            try passwordVerification.dropPasswordToDefault(email)
+            resetPasswordStatusLabelValue.send("We successfully reset your password and send new one on your email.")
+            makeStatusLabelGreen.send(true)
+            resetPasswordStatusLabelHidden.send(false)
+            resetPasswordButtonEnable.send(false)
+        } catch {
+            resetPasswordStatusLabelValue.send("Error occure while we trying to reset your password. Check your email spelling or contact with tech support team.")
+            resetPasswordStatusLabelHidden.send(false)
+            makeStatusLabelGreen.send(false)
+        }
     }
-    
     
 }
