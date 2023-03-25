@@ -10,16 +10,18 @@ import Combine
 
 protocol SignUpViewModelProtocol: AnyObject {
     
-    var passwordVerification: PasswordVerificationProtocol? { get set }
-    var signUpButtonValidation: Dynamic<Bool> { get set }
-    var uniqEmail: Dynamic<Bool> { get set }
+    var passwordVerification: PasswordVerificationProtocol { get }
     
-    var loginTextFieldValue: PassthroughSubject<String, Never> { get set }
-    var emailTextFieldValue: PassthroughSubject<String, Never> { get set }
-    var passwordTextFieldValue: PassthroughSubject<String, Never> { get set }
+    var uniqEmailStatus: PassthroughSubject<String, Never> { get }
+    var uniqEmailStatusHidden: PassthroughSubject<Bool, Never> { get }
+    var signUpButtonEnable: CurrentValueSubject<Bool, Never> { get }
+    var goToSignInScreen: PassthroughSubject<Bool, Never> { get }
     
-    func validateTextFields(login: String?, email: String?, password: String?)
-    func didPressedSignUpButton(login: String?, email: String?, password: String?)
+    var loginTextFieldValue: PassthroughSubject<String, Never> { get }
+    var emailTextFieldValue: PassthroughSubject<String, Never> { get }
+    var passwordTextFieldValue: PassthroughSubject<String, Never> { get }
     
+    func didPressedSignUpButton()
+    func didPressedSignInButton()
     
 }

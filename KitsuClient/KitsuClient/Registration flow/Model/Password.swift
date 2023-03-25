@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Password: Codable {
+struct Password: Codable, Equatable {
     let string: String
     
     private init(string: String) {

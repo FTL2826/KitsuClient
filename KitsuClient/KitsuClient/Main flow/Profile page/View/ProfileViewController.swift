@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    var user: User?
+    var user: User
     weak var coordinator: AppFlowCoordinatorProtocol?
     
     let identifier = "Identifier"
@@ -51,11 +51,13 @@ class ProfileViewController: UIViewController {
     }()
     
     init(
-        coordinator: AppFlowCoordinatorProtocol
+        coordinator: AppFlowCoordinatorProtocol,
+        user: User
     ) {
-        super.init(nibName: nil, bundle: nil)
-        
         self.coordinator = coordinator
+        self.user = user
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -82,18 +84,12 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureLabels() {
-        nicknameLabel.text = user?.login
-        emailLabel.text = user?.email
+        nicknameLabel.text = user.login.string
+        emailLabel.text = user.credentials.email.string
     }
-    
-//    private func addTargets() {
-//        logoutButton.addTarget(self, action: #selector(didPressedLogoutButton), for: .touchUpInside)
-//    }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        
-//        addTargets()
         
         [titleLabel, profilePic, nicknameLabel, emailLabel, table].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -122,16 +118,6 @@ class ProfileViewController: UIViewController {
         ])
         
     }
-
-    
-    
-    //MARK: - selectors
-    @objc private func didPressedLogoutButton() {
-        print("Logout")
-        coordinator?.logout()
-    }
-    
-    
     
 }
 

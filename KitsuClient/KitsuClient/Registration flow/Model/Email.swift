@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Email: Codable {
+struct Email: Codable, Equatable {
     let string: String
     
     init?(_ rawString: String) {

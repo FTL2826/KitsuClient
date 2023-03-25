@@ -104,28 +104,31 @@ class SignUpViewController: UIViewController {
                 self.viewModel.passwordTextFieldValue.send(text)
             }.store(in: &subscriptions)
         
+        viewModel.uniqEmailStatus
+            .zip(viewModel.uniqEmailStatusHidden)
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] (labelText, hidden) in
+                self.uniqEmailStatusLabel.text = labelText
+                self.uniqEmailStatusLabel.isHidden = hidden
+                self.uniqEmailStatusLabel.shake()
+            }.store(in: &subscriptions)
         
-        viewModel.signUpButtonValidation.bind {[weak self] inUse in
-            DispatchQueue.main.async {
-                self?.signUpButton.isEnabled = inUse
-                if !inUse {
-                    self?.signUpButton.backgroundColor = .systemGray
+        viewModel.signUpButtonEnable
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] hidden in
+                self.signUpButton.isEnabled = hidden
+                if hidden {
+                    self.signUpButton.backgroundColor = .systemBlue
                 } else {
-                    self?.signUpButton.backgroundColor = .systemBlue
+                    self.signUpButton.backgroundColor = .systemGray
                 }
-            }
-        }
+            }.store(in: &subscriptions)
         
-        viewModel.uniqEmail.bind {[weak self] uniqEmail in
-            DispatchQueue.main.async {
-                if !uniqEmail {
-                    self?.uniqEmailStatusLabel.isHidden = false
-                    self?.uniqEmailStatusLabel.shake()
-                } else {
-                    self?.uniqEmailStatusLabel.isHidden = true
-                }
-            }
-        }
+        viewModel.goToSignInScreen
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] goTo in
+                self.coordinator?.showSignIn()
+            }.store(in: &subscriptions)
         
     }
     
@@ -143,7 +146,19 @@ class SignUpViewController: UIViewController {
         passwordTextField.tag = 103
         
         signUpButton = LoginButtons(title: "Sign Up", background: .systemGray, titleColor: .white, fontSize: .big)
+        signUpButton.addAction(
+            UIAction(title: "didPressedSignUpButton", handler: {[unowned self] _ in
+                self.viewModel.didPressedSignUpButton()
+                self.coordinator?.showSignIn()
+            }),
+            for: .touchUpInside)
+        
         signInButton = LoginButtons(title: "Already have an account? Sign in.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
+        signInButton.addAction(
+            UIAction(title: "didPressedSignInButton", handler: {[unowned self] _ in
+                self.viewModel.didPressedSignInButton()
+            }),
+            for: .touchUpInside)
         
         termsTextView.delegate = self
     }
@@ -153,15 +168,10 @@ class SignUpViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    private func addTargets() {
-        signInButton.addTarget(self, action: #selector(didTapSignInButton), for: .touchUpInside)
-        signUpButton.addTarget(self, action: #selector(didTapSignUpButton), for: .touchUpInside)
-    }
-    
     private func setupUI() {
         view.backgroundColor = .systemBackground
         initializeHideKeyboard()
-        addTargets()
+        
         
         [headerView, loginTextField, emailTextField, passwordTextField, signUpButton, signInButton, termsTextView, uniqEmailStatusLabel, ]
             .forEach{
@@ -217,18 +227,6 @@ class SignUpViewController: UIViewController {
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
-    @objc private func didTapSignInButton() {
-        coordinator?.showSignIn()
-    }
-    
-    @objc private func didTapSignUpButton() {
-        viewModel.didPressedSignUpButton(
-            login: loginTextField.text,
-            email: emailTextField.text,
-            password: passwordTextField.text)
-        coordinator?.showSignIn()
-    }
 
 }
 
@@ -243,10 +241,6 @@ extension SignUpViewController: UITextFieldDelegate {
         }
         
         return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel.validateTextFields(login: loginTextField.text, email: emailTextField.text, password: passwordTextField.text)
     }
     
 }

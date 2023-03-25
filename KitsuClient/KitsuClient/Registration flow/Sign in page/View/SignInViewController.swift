@@ -22,8 +22,6 @@ class SignInViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
     
-    var completionHandler: (() -> ())?
-    
     private lazy var loginStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
@@ -32,6 +30,7 @@ class SignInViewController: UIViewController {
         label.textAlignment = .center
         label.isHidden = true
         label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -59,7 +58,6 @@ class SignInViewController: UIViewController {
         super.viewDidLoad()
         
         bindViewModel()
-        
         setupUI()
         
     }
@@ -71,35 +69,42 @@ class SignInViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.loginStatusLabelHidden
-            .receive(on: DispatchQueue.main)
-            .sink { [unowned self] hidden in
-                self.loginStatusLabel.isHidden = hidden
+        
+        emailTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.emailTextFieldValue.send(text)
             }.store(in: &subscriptions)
         
-        viewModel.signInButtonValidation
+        passwordTextField.textPublisher
+            .sink {[unowned self] text in
+                self.viewModel.passwordTextFieldValue.send(text)
+            }.store(in: &subscriptions)
+        
+        Publishers.CombineLatest(viewModel.loginStatusValue, viewModel.loginStatusLabelHidden)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] inUse in
-                self.signInButton.isEnabled = inUse
-                if !inUse {
-                    self.signInButton.backgroundColor = .systemGray
+            .sink {[unowned self] (labelText, hidden) in
+                self.loginStatusLabel.text = labelText
+                self.loginStatusLabel.isHidden = hidden
+                self.loginStatusLabel.shake()
+            }.store(in: &subscriptions)
+        
+        viewModel.signInButtonEnable
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] enable in
+                self.signInButton.isEnabled = enable
+                if enable {
+                    signInButton.backgroundColor = .systemBlue
                 } else {
-                    self.signInButton.backgroundColor = .systemBlue
+                    signInButton.backgroundColor = .systemGray
                 }
             }.store(in: &subscriptions)
-        
+
         viewModel.userData
             .sink {[weak self] user in
                 self?.coordinator?.endFlow(user: user)
             }.store(in: &subscriptions)
+        
     }
-    
-    
-    private func addTargets() {
-        newUserButton.addTarget(self, action: #selector(didTapCreateNewUser), for: .touchUpInside)
-        forgotPasswordButton.addTarget(self, action: #selector(didTapForgotPassword), for: .touchUpInside)
-    }
-    
     
     private func createSubViews() {
         loginHeaderView = LoginHeaderView(title: "Sign In", subtitle: "Sign in to your account")
@@ -114,18 +119,24 @@ class SignInViewController: UIViewController {
         signInButton = LoginButtons(title: "Sign In", background: .systemGray, titleColor: .white, fontSize: .big)
         signInButton.addAction(
             UIAction(title: "didTapSignIn", handler: {[unowned self] _ in
-                guard let emailString = self.emailTextField.text,
-                      let passwordString = self.passwordTextField.text else { return }
-                
-                viewModel.didPressedSignInButton(emailString: emailString, passwordString: passwordString)
-                
-                self.loginStatusLabel.shake()
+                self.viewModel.didPressedSignInButton()
+            }),
+            for: .touchUpInside)
+        signInButton.isEnabled = false
+        
+        newUserButton = LoginButtons(title: "New here? Create account.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
+        newUserButton.addAction(
+            UIAction(title: "didPressedNewUserButton", handler: {[unowned self] _ in
+                self.coordinator?.showCreateNewUser()
             }),
             for: .touchUpInside)
         
-        signInButton.isEnabled = false
-        newUserButton = LoginButtons(title: "New here? Create account.", background: .clear, titleColor: .systemBlue, fontSize: .medium)
         forgotPasswordButton = LoginButtons(title: "Forgot password?", background: .clear, titleColor: .systemBlue, fontSize: .small)
+        forgotPasswordButton.addAction(
+            UIAction(title: "didPressedForgotPasswordButton", handler: {[unowned self] _ in
+                self.coordinator?.showForgotPassword()
+            }),
+            for: .touchUpInside)
     }
     
     private func initializeHideKeyboard() {
@@ -138,7 +149,6 @@ class SignInViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         initializeHideKeyboard()
-        addTargets()
         
         [loginHeaderView, emailTextField, passwordTextField, signInButton, newUserButton, forgotPasswordButton, loginStatusLabel].forEach {
             view.addSubview($0)
@@ -179,29 +189,10 @@ class SignInViewController: UIViewController {
             loginStatusLabel.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 6),
             loginStatusLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             loginStatusLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.85),
-            loginStatusLabel.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
     
     //MARK: - selectors
-//    @objc private func didTapSignIn() {
-//        guard let email = emailTextField.text,
-//              let password = passwordTextField.text else { return }
-//        viewModel.completionHandler = {[weak self] user in
-//            self?.coordinator?.endFlow(user: user)
-//        }
-//        viewModel.didSignInPressed(email: email, password: password)
-//        loginStatusLabel.shake()
-//    }
-    
-    @objc private func didTapCreateNewUser() {
-        coordinator?.showCreateNewUser()
-    }
-    
-    @objc private func didTapForgotPassword() {
-        coordinator?.showForgotPassword()
-    }
-    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -219,10 +210,6 @@ extension SignInViewController: UITextFieldDelegate {
         }
         
         return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel.validateTextFields(email: emailTextField.text, password: passwordTextField.text)
     }
     
 }

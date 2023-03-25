@@ -17,10 +17,14 @@ protocol SignInViewModelProtocol: AnyObject {
     
     var passwordVerification: PasswordVerificationProtocol { get }
     
+    var emailTextFieldValue: PassthroughSubject<String, Never> { get }
+    var passwordTextFieldValue: PassthroughSubject<String, Never> { get }
+    var signInButtonEnable: CurrentValueSubject<Bool, Never> { get }
+    var loginStatusValue: PassthroughSubject<String, Never> { get }
     var loginStatusLabelHidden: CurrentValueSubject<Bool, Never> { get }
+    
     var signInButtonValidation: CurrentValueSubject<Bool, Never> { get }
     var userData: PassthroughSubject<User, Never> { get }
     
-    func didPressedSignInButton(emailString: String, passwordString: String)
-    func validateTextFields(email: String?, password: String?)
+    func didPressedSignInButton()
 }

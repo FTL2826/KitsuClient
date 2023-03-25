@@ -11,56 +11,61 @@ import Combine
 class SignInViewModel: SignInViewModelProtocol {
     
     var passwordVerification: PasswordVerificationProtocol
+    
+    var emailTextFieldValue = PassthroughSubject<String, Never>()
+    var passwordTextFieldValue = PassthroughSubject<String, Never>()
+    var signInButtonEnable = CurrentValueSubject<Bool, Never>(false)
+    var loginStatusValue = PassthroughSubject<String, Never>()
     var loginStatusLabelHidden = CurrentValueSubject<Bool, Never>(true)
+    
     var signInButtonValidation = CurrentValueSubject<Bool, Never>(false)
     var userData = PassthroughSubject<User, Never>()
-    var completionHandler: ((User) -> ())?
+    
+    var credentials: Credentials?
+    var subscriptions = Set<AnyCancellable>()
     
     init(passwordVerification: PasswordVerificationProtocol)
     {
         self.passwordVerification = passwordVerification
+        
+        Publishers.CombineLatest(emailTextFieldValue, passwordTextFieldValue)
+            .receive(on: DispatchQueue.global())
+            .sink { (emailString, passwordString) in
+                self.signInButtonEnable.send(false)
+                self.validateInput(emailString, passwordString)
+            }.store(in: &subscriptions)
     }
     
-    func didPressedSignInButton(emailString: String, passwordString: String) {
-        guard let email = Email(emailString) else {
+    private func validateInput(_ emailString: String, _ passwordString: String) {
+        guard let email = Email(emailString)
+        else {
+            loginStatusValue.send("Incorrect form of email, try enter it again")
             loginStatusLabelHidden.send(false)
             return
         }
-
         let password = Password.parse(passwordString)
         switch password {
         case .success(let password):
-            let credentials = Credentials(email: email, password: password)
-            authorizeUser(with: credentials)
-        case .failure(let error):
-            loginStatusLabelHidden.send(false)
-            print("Password validation error: \(error)")
-        }
-    }
-    
-    func validateTextFields(email: String?, password: String?) {
-        signInButtonValidation.send(validateCredentialsText(email: email, password: password))
-    }
-    
-    private func authorizeUser(with credentials: Credentials) {
-        //check creedentials
-        if credentials.password.string != "12345" {
-            loginStatusLabelHidden.send(false)
-        } else {
             loginStatusLabelHidden.send(true)
+            credentials = Credentials(email: email, password: password)
+            signInButtonEnable.send(true)
+        case .failure(_):
+            loginStatusValue.send("Incorrect form of password, try enter it again")
+            loginStatusLabelHidden.send(false)
         }
-        userData.send(User(login: "admin", email: "admin@mail.com", password: "12345", llogin: nil, credentials: credentials))
     }
     
-    func validateCredentialsText(email: String?, password: String?) -> Bool {
-        guard let email = email,
-              let password = password,
-              !email.isEmpty,
-              !password.isEmpty else {
-            return false
+    func didPressedSignInButton() {
+        guard let credentials = credentials else { return }
+        do {
+            let user = try passwordVerification.checkCredentials(credentials)
+            userData.send(user)
+        } catch {
+            loginStatusValue.send("Wrong email or password, please try again")
+            loginStatusLabelHidden.send(false)
         }
-        return true
     }
+    
     
     
 }

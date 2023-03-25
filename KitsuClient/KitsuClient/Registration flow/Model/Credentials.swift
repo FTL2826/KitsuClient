@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Credentials: Codable {
+struct Credentials: Codable, Equatable {
+    
     let email: Email
     let password: Password
 }
