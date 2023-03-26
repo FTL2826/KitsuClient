@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 class BaseTableViewCell: UITableViewCell {
-
-    var dataTask: URLSessionDataTask?
+    
+    var subscriptions = Set<AnyCancellable>()
     
     static let identifier = "FeedCell"
 
@@ -76,7 +77,7 @@ class BaseTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         posterImage.image = nil
-        dataTask?.cancel()
+        subscriptions.removeAll()
     }
     
     func configureCell(viewModel: BaseTableViewCellViewModelProtocol) {
@@ -86,16 +87,19 @@ class BaseTableViewCell: UITableViewCell {
         ratingLabel.text = viewModel.getRating(viewModel.rating)
         
         if let url = viewModel.getPosterURL() {
-            dataTask = viewModel.pictureLoader.loadPicture(url) { [weak self] (result: Result<Data, API.Types.Error>) in
-                switch result {
-                case .success(let success):
-                    DispatchQueue.main.async {
-                        self?.posterImage.image = UIImage(data: success)
+            viewModel.pictureLoader.loadPicture(url)
+                .receive(on: DispatchQueue.main)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("Could not load poster image,error in future publisher: \(error)")
                     }
-                case .failure(let failure):
-                    print("Loading poster image error:", failure.localizedDescription)
-                }
-            }
+                } receiveValue: {[unowned self] data in
+                    self.posterImage.image = UIImage(data: data)
+                }.store(in: &subscriptions)
+
         }
         
         
