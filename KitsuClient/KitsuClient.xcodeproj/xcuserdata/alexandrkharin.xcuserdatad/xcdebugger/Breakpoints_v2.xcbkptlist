@@ -126,8 +126,8 @@
             filePath = "KitsuClient/Main flow/Manga feed page/ViewModel/MangaFeedViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "fetchAlltimeData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -145,6 +145,22 @@
             startingLineNumber = "109"
             endingLineNumber = "109"
             landmarkName = "testFetchTrendingData()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CEB44B5C-CD33-49E0-BA81-9E78F9A838E1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KitsuClient/Main flow/Manga page/ViewModel/MangaPageViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "mapAlltimeData(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

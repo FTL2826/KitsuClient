@@ -76,6 +76,7 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         
         for result in results.data {
             localResults.append(TitleInfo(
+                internalID: UUID().uuidString,
                 id: result.id,
                 type: result.type,
                 canonicalTitle: result.attributes.canonicalTitle,
@@ -122,6 +123,7 @@ class AnimeFeedViewModel: BaseFeedViewModel, AnimeFeedViewModelProtocol {
         
         for result in results.data {
             localResults.append(TitleInfo(
+                internalID: UUID().uuidString,
                 id: result.id,
                 type: result.type,
                 canonicalTitle: result.attributes.canonicalTitle,

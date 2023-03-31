@@ -1,75 +1,51 @@
 //
-//  MangaFeedViewModel.swift
+//  AnimePageViewModel.swift
 //  KitsuClient
 //
-//  Created by Александр Харин on /83/23.
+//  Created by Александр Харин on /313/23.
 //
 
 import Foundation
+import Combine
 
-class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
+class AnimePageViewModel: AnimePageViewModelProtocol {
     
     var apiClient: APIClientProtocol
     
-    var trendingDataSource = [TitleInfo]()
-    var alltimeDataSource = [TitleInfo]()
+    var isTrendingLoading = CurrentValueSubject<Bool, Never>(false)
+    var isAlltimeLoading = CurrentValueSubject<Bool, Never>(false)
+    var trendingDataSource = PassthroughSubject<[TitleInfo], Never>()
+    var alltimeDataSource = PassthroughSubject<[TitleInfo], Never>()
     
-    var trendingCount = Dynamic(0)
-    var alltimeCount = Dynamic(0)
     
     private var nextPageLink: String?
     
-    init(
-        apiClient: APIClientProtocol
-    ) {
+    init(apiClient: APIClientProtocol) {
         self.apiClient = apiClient
     }
     
-    //MARK: - table view delegates
-    override func numbersOfRowsInSection(section: Int, segment: Segments) -> Int {
-        if section == 0 {
-            switch segment {
-            case .trending:
-                return trendingCount.value
-            case .alltime:
-                return alltimeCount.value
-            }
-        } else {
-            return 0
-        }
-    }
-    
-    func getMangaTitle(index: Int, segment: Segments) -> TitleInfo? {
-        switch segment {
-        case .trending:
-            guard index < trendingDataSource.count else { return nil}
-            return trendingDataSource[index]
-        case .alltime:
-            guard index < alltimeDataSource.count else { return nil}
-            return alltimeDataSource[index]
-        }
-    }
     
     //MARK: - trending
-    override func fetchTrendingData() {
+    func fetchTrendingData() {
         guard isTrendingLoading.value == false else { return }
-        isTrendingLoading.value = true
+        isTrendingLoading.send(true)
         
-        apiClient.get(.mangaTrending) { [weak self] (result: Result<API.Types.Response.TrendingMangaSearch, API.Types.Error>) in
+        apiClient.get(.animeTrending) { [weak self] (result: Result<API.Types.Response.TrendingAnimeSearch, API.Types.Error>) in
             guard let self = self else { return }
             
-            self.isTrendingLoading.value = false
+            self.isTrendingLoading.send(false)
             switch result {
             case .success(let success):
-                self.trendingDataSource = self.mapTrendingData(success)
-                self.trendingCount.value = self.trendingDataSource.count
+                self.trendingDataSource.send(self.mapTrendingData(success))
+//                self.trendingDataSource = self.mapTrendingData(success)
+//                self.trendingCount.value = self.trendingDataSource.count
             case .failure(let failure):
                 print("Fetch trending manga error:", failure.localizedDescription)
             }
         }
     }
     
-    private func mapTrendingData(_ results: API.Types.Response.TrendingMangaSearch) -> [TitleInfo] {
+    private func mapTrendingData(_ results: API.Types.Response.TrendingAnimeSearch) -> [TitleInfo] {
         var localResults = [TitleInfo]()
         
         for result in results.data {
@@ -88,34 +64,35 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
                 posterImageTinyURL: result.attributes.posterImage.tiny,
                 posterImageSmallURL: result.attributes.posterImage.small,
                 posterImageOriginalURL: result.attributes.posterImage.original,
-                chapterCount: result.attributes.chapterCount,
-                volumeCount: result.attributes.volumeCount,
-                episodesCount: nil,
-                episodeLenght: nil))
+                chapterCount: nil,
+                volumeCount: nil,
+                episodesCount: result.attributes.episodeCount,
+                episodeLenght: result.attributes.episodeLength))
         }
         
         return localResults
     }
     
     //MARK: - All-time
-    override func fetchAlltimeData() {
+    func fetchAlltimeData() {
         guard isAlltimeLoading.value == false else { return }
-        isAlltimeLoading.value = true
+        isAlltimeLoading.send(true)
         
-        apiClient.get(.manga(offset: "0")) { [weak self] (result: Result<API.Types.Response.MangaSearch, API.Types.Error>) in
+        apiClient.get(.anime(offset: "0")) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
             guard let self = self else { return }
-            self.isAlltimeLoading.value = false
+            self.isAlltimeLoading.send(false)
             switch result {
             case .success(let success):
-                self.alltimeDataSource = self.mapAlltimeData(success)
-                self.alltimeCount.value = self.alltimeDataSource.count
+                self.alltimeDataSource.send(self.mapAlltimeData(success))
+//                self.alltimeDataSource = self.mapAlltimeData(success)
+//                self.alltimeCount.value = self.alltimeDataSource.count
             case .failure(let failure):
                 print("Fetch all-time manga error:", failure.localizedDescription)
             }
         }
     }
     
-    private func mapAlltimeData(_ results: API.Types.Response.MangaSearch) -> [TitleInfo] {
+    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [TitleInfo] {
         var localResults = [TitleInfo]()
         nextPageLink = results.links.next
         
@@ -136,10 +113,10 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
                 posterImageSmallURL: result.attributes.posterImage.small,
                 posterImageOriginalURL: result.attributes.posterImage.original,
                 
-                chapterCount: result.attributes.chapterCount,
-                volumeCount: result.attributes.volumeCount,
-                episodesCount: nil,
-                episodeLenght: nil))
+                chapterCount: nil,
+                volumeCount: nil,
+                episodesCount: result.attributes.episodeCount,
+                episodeLenght: result.attributes.episodeLength))
         }
         
         return localResults
@@ -147,23 +124,21 @@ class MangaFeedViewModel: BaseFeedViewModel, MangaFeedViewModelProtocol {
     
     func fetchNextPage() {
         guard let nextPageLink = nextPageLink,isAlltimeLoading.value == false else { return }
-        isAlltimeLoading.value = true
-        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.MangaSearch, API.Types.Error>) in
+        isAlltimeLoading.send(true)
+        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
             guard let self = self else { return }
-            self.isAlltimeLoading.value = false
+            self.isAlltimeLoading.send(false)
             
             switch result {
             case .success(let success):
                 print("next page success count:", success.data.count)
-                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
-                self.alltimeCount.value = self.alltimeDataSource.count
+                self.alltimeDataSource.send(self.mapAlltimeData(success))
+//                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
+//                self.alltimeCount.value = self.alltimeDataSource.count
             case .failure(let failure):
                 print("Fetch all-time next page manga error:", failure.localizedDescription)
             }
         }
     }
-    
-    
-    
     
 }

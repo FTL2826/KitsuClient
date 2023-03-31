@@ -88,6 +88,7 @@ class BaseTableViewCell: UITableViewCell {
         
         if let url = viewModel.getPosterURL() {
             viewModel.pictureLoader.loadPicture(url)
+                .map({ UIImage(data: $0) })
                 .receive(on: DispatchQueue.main)
                 .sink { completion in
                     switch completion {
@@ -96,13 +97,11 @@ class BaseTableViewCell: UITableViewCell {
                     case .failure(let error):
                         print("Could not load poster image,error in future publisher: \(error)")
                     }
-                } receiveValue: {[unowned self] data in
-                    self.posterImage.image = UIImage(data: data)
+                } receiveValue: {[unowned self] image in
+                    self.posterImage.image = image
                 }.store(in: &subscriptions)
 
         }
-        
-        
     }
     
     //MARK: - setupUI
