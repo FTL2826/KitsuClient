@@ -17,7 +17,9 @@ class MangaPageViewController: UIViewController {
     var viewModel: MangaPageViewModelProtocol
     private lazy var dataSource = MangaDataSource(tableView: tableView)
     
-    var subscriptions = Set<AnyCancellable>()
+    private var input: PassthroughSubject<MangaPageViewModel.Input, Never> = .init()
+    private var subscriptions = Set<AnyCancellable>()
+    private var nextPageLink: String?
     var trendingMangas: [TitleInfo] = []
     var alltimeMangas: [TitleInfo] = []
     var nextpage: [TitleInfo] = []
@@ -51,62 +53,54 @@ class MangaPageViewController: UIViewController {
         
         setupUI()
         bindViewModel()
+        input.send(.viewDidLoad)
         
-        firstLoadView()
     }
     
     private func bindViewModel() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        viewModel.isTrendingLoading
-            .combineLatest(viewModel.isAlltimeLoading)
+        output
             .receive(on: RunLoop.main)
-            .sink {[unowned self] (isLoadingTrending, isLoadingAlltime) in
-                if isLoadingTrending || isLoadingAlltime {
-                    
-                } else {
-                    
-                }
-            }.store(in: &subscriptions)
-        
-        viewModel.alltimeDataSource
-            .zip(viewModel.trendingDataSource)
-            .receive(on: RunLoop.main)
-            .sink {[unowned self] (alltimeData, trendingData) in
-                self.trendingMangas = trendingData
-                self.alltimeMangas = alltimeData
-                self.applySnapshot()
-            }.store(in: &subscriptions)
-        
-        viewModel.nextPageDataSource
-            .receive(on: RunLoop.main)
-            .sink {[unowned self] nextPage in
-                var appendix = nextPage
-                appendix.removeAll { title in
-                    self.trendingMangas.contains(title)
-                }
-                self.nextpage.append(contentsOf: appendix)
-                self.nextPageSnapshot()
-            }.store(in: &subscriptions)
+            .sink { [unowned self] event in
+            switch event {
+            case .loadTrending(let isLoading):
+                print("isTrendingLoading: ", isLoading)
+            case .fetchTrendigDidSucceed(let info):
+                
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendSections([.trending, .alltime])
+                snapshot.appendItems(info, toSection: .trending)
+                self.dataSource.apply(snapshot)
+                
+                input.send(.paginationRequest(nextPageLink: API.Types.Endpoint.manga(offset: "0").url.absoluteString))
+                
+            case .fetchNextPageDidSucceed(let info, let nextPageLink):
+                self.nextPageLink = nextPageLink
+                
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendItems(info, toSection: .alltime)
+                self.dataSource.apply(snapshot)
+                
+            default:
+                print("default")
+            }
+        }.store(in: &subscriptions)
     }
     
-    private func firstLoadView() {
-        viewModel.fetchTrendingData()
-        viewModel.fetchAlltimeData()
-    }
-    
-    private func applySnapshot() {
-        var snapshot = dataSource.snapshot()
-        snapshot.appendSections([.trending, .alltime])
-        snapshot.appendItems(trendingMangas, toSection: .trending)
-        snapshot.appendItems(alltimeMangas, toSection: .alltime)
-        dataSource.apply(snapshot)
-    }
-    
-    private func nextPageSnapshot() {
-        var snapshot = dataSource.snapshot()
-        snapshot.appendItems(nextpage, toSection: .alltime)
-        dataSource.apply(snapshot)
-    }
+//    private func applySnapshot() {
+//        var snapshot = dataSource.snapshot()
+//        snapshot.appendSections([.trending, .alltime])
+//        snapshot.appendItems(trendingMangas, toSection: .trending)
+//        snapshot.appendItems(alltimeMangas, toSection: .alltime)
+//        dataSource.apply(snapshot)
+//    }
+//
+//    private func nextPageSnapshot() {
+//        var snapshot = dataSource.snapshot()
+//        snapshot.appendItems(nextpage, toSection: .alltime)
+//        dataSource.apply(snapshot)
+//    }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
@@ -136,7 +130,8 @@ extension MangaPageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (indexPath.row + 3) == tableView.numberOfRows(inSection: 1) {
-            viewModel.fetchNextPage()
+            guard let nextPageLink = nextPageLink else { return }
+            input.send(.paginationRequest(nextPageLink: nextPageLink))
         }
     }
     

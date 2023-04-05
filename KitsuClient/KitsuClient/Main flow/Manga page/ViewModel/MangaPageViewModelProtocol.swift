@@ -9,14 +9,5 @@ import Foundation
 import Combine
 
 protocol MangaPageViewModelProtocol {
-    var isTrendingLoading: CurrentValueSubject<Bool, Never> { get }
-    var isAlltimeLoading: CurrentValueSubject<Bool, Never> { get }
-    var trendingDataSource: PassthroughSubject<[TitleInfo], Never> { get }
-    var alltimeDataSource: PassthroughSubject<[TitleInfo], Never> { get }
-    var nextPageDataSource: PassthroughSubject<[TitleInfo], Never> { get }
-    
-    
-    func fetchTrendingData()
-    func fetchAlltimeData()
-    func fetchNextPage()
+    func transform(input: AnyPublisher<MangaPageViewModel.Input, Never>) -> AnyPublisher<MangaPageViewModel.Output, Never>
 }
