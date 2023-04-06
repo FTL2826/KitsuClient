@@ -29,9 +29,6 @@ class MangaPageViewModel: MangaPageViewModelProtocol {
         case fetchDidFail(error: API.Types.Error)
     }
     
-    
-//    private var nextPageLink: String?
-    
     init(apiClient: APIClientProtocol) {
         self.apiClient = apiClient
     }
@@ -56,14 +53,14 @@ class MangaPageViewModel: MangaPageViewModelProtocol {
         output.send(.loadTrending(isLoading: true))
         
         apiClient.getCombine(.mangaTrending)
-            .sink(receiveCompletion: {
-                print("Completion for fetchTrendingData method in MangaPageViewModel: ", $0)
-            }, receiveValue: { [unowned self] (value: API.Types.Response.TrendingMangaSearch) in
-                output.send(.loadTrending(isLoading: false))
-                
+            .sink(receiveCompletion: { [unowned self] in
+                if case .failure(let fail) = $0 {
+                    self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
+                }
+            }, receiveValue: { (value: API.Types.Response.TrendingMangaSearch) in
+                self.output.send(.loadTrending(isLoading: false))
                 let mappedData = self.mapTrendingData(value)
                 self.output.send(.fetchTrendigDidSucceed(info: mappedData))
-                
             })
             .store(in: &subscriptions)
     }
@@ -102,7 +99,9 @@ class MangaPageViewModel: MangaPageViewModelProtocol {
         
         apiClient.getCombine(.nextPage(link: link))
             .sink {
-                print("Completion for fetchNextPage method in MangaPageViewModel: ", $0)
+                if case .failure(let fail) = $0 {
+                    self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
+                }
             } receiveValue: { [unowned self] (value: API.Types.Response.MangaSearch) in
                 output.send(.loadNextPage(isLoading: false))
                 let mappedResponse = self.mapAlltimeData(value)
