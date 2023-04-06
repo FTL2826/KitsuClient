@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 fileprivate enum ReverseDate {
     static func getDate(_ str: String?) -> String? {
@@ -25,8 +26,10 @@ class DetailViewModel: DetailViewModelProtocol {
     
     var pictureLoader: PictureLoaderProtocol
     
+    var pictureData = PassthroughSubject<Data, Never>()
+    var subscriptions = Set<AnyCancellable>()
+    
     var type: String
-    var pictureData = Dynamic(Data())
     var titleLabel: String
     var averageRatingLabel: String?
     var startDateLabel: String
@@ -89,6 +92,19 @@ class DetailViewModel: DetailViewModelProtocol {
             self.partsLenght = ""
             self.partsLenghtLabel = ""
         }
+        
+        pictureLoader.loadPicture(getPosterURL())
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    print(error)
+                case .finished:
+                    break
+                }
+            } receiveValue: {[unowned self] data in
+                self.pictureData.send(data)
+            }.store(in: &subscriptions)
+
     }
     
     private func getPosterURL() -> URL? {
@@ -102,15 +118,4 @@ class DetailViewModel: DetailViewModelProtocol {
         return "No rating 🫣"
     }
     
-    func loadPosterImage() -> URLSessionDataTask? {
-        guard let url = getPosterURL() else { return nil }
-        return pictureLoader.loadPicture(url) { [weak self] (result: Result<Data, API.Types.Error>) in
-            switch result {
-            case .success(let success):
-                self?.pictureData.value = success
-            case .failure(let failure):
-                print("Poster image loading error (for detail view):", failure.localizedDescription)
-            }
-        }
-    }
 }

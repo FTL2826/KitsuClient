@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol APIClientProtocol: AnyObject {
     
@@ -18,4 +19,10 @@ protocol APIClientProtocol: AnyObject {
     func get<Response>(_ endpoint: API.Types.Endpoint,
                        then callback: ((Result<Response, API.Types.Error>) -> ())?)
     where Response: Decodable
+    
+    func fetchCombine<Request: Encodable, Response: Decodable>(_ endpoint: API.Types.Endpoint,
+                                                               method: API.Types.Method,
+                                                               body: Request?) -> AnyPublisher<Response, API.Types.Error>
+    
+    func getCombine<Response: Decodable>(_ endpoint: API.Types.Endpoint) -> AnyPublisher<Response, API.Types.Error>
 }

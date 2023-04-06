@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import Combine
 
 protocol DetailViewModelProtocol {
     
-    var pictureData: Dynamic<Data> { get }
+    var pictureData: PassthroughSubject<Data, Never> { get }
     var titleLabel: String { get }
     var averageRatingLabel: String? { get }
     var startDateLabel: String { get }
@@ -21,8 +22,6 @@ protocol DetailViewModelProtocol {
     var partsLabel: String { get }
     var partsLenght: String { get }
     var partsLenghtLabel: String { get }
-    
-    func loadPosterImage() -> URLSessionDataTask?
     
     func getRating(_ str: String?) -> String
 }

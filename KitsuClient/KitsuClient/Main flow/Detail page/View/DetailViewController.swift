@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 class DetailViewController: UIViewController {
     
     var viewModel: DetailViewModelProtocol
     var dataTask: URLSessionDataTask?
+    
+    var subscriptions = Set<AnyCancellable>()
     
     let scroll = UIScrollView()
     let contentView = UIView()
@@ -246,11 +249,11 @@ class DetailViewController: UIViewController {
     
     //MARK: - view bind & configure
     private func bindViewModel() {
-        viewModel.pictureData.bind(listener: { [weak self] pictureData in
-            DispatchQueue.main.async {
-                self?.posterImage.image = UIImage(data: pictureData)
-            }
-        })
+        viewModel.pictureData
+            .receive(on: DispatchQueue.main)
+            .sink {[unowned self] data in
+                self.posterImage.image = UIImage(data: data)
+            }.store(in: &subscriptions)
     }
     
     private func configureViews() {
@@ -266,8 +269,6 @@ class DetailViewController: UIViewController {
         partsLabelValue.text = viewModel.partsLabel
         partsLenghtLabel.text = viewModel.partsLenght
         partsLenghtLabelValue.text = viewModel.partsLenghtLabel
-        
-        dataTask = viewModel.loadPosterImage()
     }
     
     private func setupUI() {
