@@ -5,7 +5,8 @@
 //  Created by Александр Харин on /93/23.
 //
 
-struct TitleInfo {
+struct TitleInfo: Hashable {
+    let internalID: String //unique internal ID for UITableViewDiffableDataSource
     let id: String
     let type: String
     
