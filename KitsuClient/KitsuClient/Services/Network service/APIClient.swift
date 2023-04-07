@@ -16,7 +16,7 @@ extension API {
         private let encoder = JSONEncoder()
         private let decoder = JSONDecoder()
         
-        func fetchCombine<Request: Encodable, Response: Decodable>(_ endpoint: Types.Endpoint,
+        func fetch<Request: Encodable, Response: Decodable>(_ endpoint: Types.Endpoint,
                                                                    method: Types.Method = .get,
                                                                    body: Request? = nil) -> AnyPublisher<Response, Types.Error> {
             var urlRequest = URLRequest(url: endpoint.url)
@@ -46,9 +46,9 @@ extension API {
                 
         }
         
-        func getCombine<Response: Decodable>(_ endpoint: Types.Endpoint) -> AnyPublisher<Response, Types.Error> {
+        func get<Response: Decodable>(_ endpoint: Types.Endpoint) -> AnyPublisher<Response, Types.Error> {
             let body: Types.Request.Empty? = nil
-            return fetchCombine(endpoint, method: .get, body: body)
+            return fetch(endpoint, method: .get, body: body)
         }
         
     }

@@ -51,7 +51,7 @@ class AnimePageViewModel: AnimePageViewModelProtocol {
     func fetchTrendingData() {
         output.send(.loadTrending(isLoading: true))
         
-        apiClient.getCombine(.animeTrending)
+        apiClient.get(.animeTrending)
             .sink(receiveCompletion: { [unowned self] in
                 if case .failure(let fail) = $0 {
                     self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
@@ -96,7 +96,7 @@ class AnimePageViewModel: AnimePageViewModelProtocol {
     func fetchNextPage(_ link: String) {
         output.send(.loadNextPage(isLoading: true))
         
-        apiClient.getCombine(.nextPage(link: link))
+        apiClient.get(.nextPage(link: link))
             .sink {
                 if case .failure(let fail) = $0 {
                     self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
