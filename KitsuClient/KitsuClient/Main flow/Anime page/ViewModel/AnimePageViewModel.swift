@@ -9,40 +9,59 @@ import Foundation
 import Combine
 
 class AnimePageViewModel: AnimePageViewModelProtocol {
-    
     var apiClient: APIClientProtocol
     
-    var isTrendingLoading = CurrentValueSubject<Bool, Never>(false)
-    var isAlltimeLoading = CurrentValueSubject<Bool, Never>(false)
-    var trendingDataSource = PassthroughSubject<[TitleInfo], Never>()
-    var alltimeDataSource = PassthroughSubject<[TitleInfo], Never>()
+    private var output: PassthroughSubject<Output, Never> = .init()
+    private var subscriptions = Set<AnyCancellable>()
     
+    enum Input {
+        case viewDidLoad
+        case paginationRequest(nextPageLink: String)
+    }
     
-    private var nextPageLink: String?
+    enum Output {
+        case loadTrending(isLoading: Bool)
+        case fetchTrendigDidSucceed(info: [TitleInfo])
+        
+        case loadNextPage(isLoading: Bool)
+        case fetchNextPageDidSucceed(info: [TitleInfo], nextPageLink: String)
+        
+        case fetchDidFail(error: API.Types.Error)
+    }
     
     init(apiClient: APIClientProtocol) {
         self.apiClient = apiClient
     }
     
+    //MARK: - transform
+    func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        input.sink { [unowned self] event in
+            switch event {
+            case .viewDidLoad:
+                self.fetchTrendingData()
+            case .paginationRequest(let nextPageLink):
+                fetchNextPage(nextPageLink)
+            }
+        }.store(in: &subscriptions)
+        
+        return output.eraseToAnyPublisher()
+    }
     
     //MARK: - trending
     func fetchTrendingData() {
-        guard isTrendingLoading.value == false else { return }
-        isTrendingLoading.send(true)
+        output.send(.loadTrending(isLoading: true))
         
-        apiClient.get(.animeTrending) { [weak self] (result: Result<API.Types.Response.TrendingAnimeSearch, API.Types.Error>) in
-            guard let self = self else { return }
-            
-            self.isTrendingLoading.send(false)
-            switch result {
-            case .success(let success):
-                self.trendingDataSource.send(self.mapTrendingData(success))
-//                self.trendingDataSource = self.mapTrendingData(success)
-//                self.trendingCount.value = self.trendingDataSource.count
-            case .failure(let failure):
-                print("Fetch trending manga error:", failure.localizedDescription)
-            }
-        }
+        apiClient.get(.animeTrending)
+            .sink(receiveCompletion: { [unowned self] in
+                if case .failure(let fail) = $0 {
+                    self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
+                }
+            }, receiveValue: { (value: API.Types.Response.TrendingAnimeSearch) in
+                self.output.send(.loadTrending(isLoading: false))
+                let mappedData = self.mapTrendingData(value)
+                self.output.send(.fetchTrendigDidSucceed(info: mappedData))
+            })
+            .store(in: &subscriptions)
     }
     
     private func mapTrendingData(_ results: API.Types.Response.TrendingAnimeSearch) -> [TitleInfo] {
@@ -74,27 +93,23 @@ class AnimePageViewModel: AnimePageViewModelProtocol {
     }
     
     //MARK: - All-time
-    func fetchAlltimeData() {
-        guard isAlltimeLoading.value == false else { return }
-        isAlltimeLoading.send(true)
+    func fetchNextPage(_ link: String) {
+        output.send(.loadNextPage(isLoading: true))
         
-        apiClient.get(.anime(offset: "0")) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
-            guard let self = self else { return }
-            self.isAlltimeLoading.send(false)
-            switch result {
-            case .success(let success):
-                self.alltimeDataSource.send(self.mapAlltimeData(success))
-//                self.alltimeDataSource = self.mapAlltimeData(success)
-//                self.alltimeCount.value = self.alltimeDataSource.count
-            case .failure(let failure):
-                print("Fetch all-time manga error:", failure.localizedDescription)
-            }
-        }
+        apiClient.get(.nextPage(link: link))
+            .sink {
+                if case .failure(let fail) = $0 {
+                    self.output.send(.fetchDidFail(error: .generic(reason: fail.localizedDescription)))
+                }
+            } receiveValue: { [unowned self] (value: API.Types.Response.AnimeSearch) in
+                output.send(.loadNextPage(isLoading: false))
+                let mappedResponse = self.mapAlltimeData(value)
+                self.output.send(.fetchNextPageDidSucceed(info: mappedResponse.data, nextPageLink: mappedResponse.nextLink))
+            }.store(in: &subscriptions)
     }
     
-    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> [TitleInfo] {
+    private func mapAlltimeData(_ results: API.Types.Response.AnimeSearch) -> (data: [TitleInfo], nextLink: String) {
         var localResults = [TitleInfo]()
-        nextPageLink = results.links.next
         
         for result in results.data {
             localResults.append(TitleInfo(
@@ -119,26 +134,7 @@ class AnimePageViewModel: AnimePageViewModelProtocol {
                 episodeLenght: result.attributes.episodeLength))
         }
         
-        return localResults
-    }
-    
-    func fetchNextPage() {
-        guard let nextPageLink = nextPageLink,isAlltimeLoading.value == false else { return }
-        isAlltimeLoading.send(true)
-        apiClient.get(.nextPage(link: nextPageLink)) { [weak self] (result: Result<API.Types.Response.AnimeSearch, API.Types.Error>) in
-            guard let self = self else { return }
-            self.isAlltimeLoading.send(false)
-            
-            switch result {
-            case .success(let success):
-                print("next page success count:", success.data.count)
-                self.alltimeDataSource.send(self.mapAlltimeData(success))
-//                self.alltimeDataSource.append(contentsOf: self.mapAlltimeData(success))
-//                self.alltimeCount.value = self.alltimeDataSource.count
-            case .failure(let failure):
-                print("Fetch all-time next page manga error:", failure.localizedDescription)
-            }
-        }
+        return (data: localResults, nextLink: results.links.next)
     }
     
 }

@@ -17,31 +17,27 @@ class AnimePageViewController: UIViewController {
     var viewModel: AnimePageViewModelProtocol
     private lazy var dataSource = AnimeDataSource(tableView: tableView)
     
-    var subscriptions = Set<AnyCancellable>()
-    var trendingMangas: [TitleInfo] = []
-    var alltimeMangas: [TitleInfo] = []
+    private var input: PassthroughSubject<AnimePageViewModel.Input, Never> = .init()
+    private var subscriptions = Set<AnyCancellable>()
+    private var nextPageLink: String?
     
     enum Section: CaseIterable {
         case trending
         case alltime
     }
     
-    private let refreshText = "Fetching new anime titles"
-    private var refreshControl = UIRefreshControl()
     private lazy var tableView: UITableView = {
         let table = UITableView()
         table.separatorColor = .black
         table.register(BaseTableViewCell.self, forCellReuseIdentifier: BaseTableViewCell.identifier)
         table.rowHeight = 168// 156+6+6
-        
-        refreshControl.tintColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
-        let attributedString = NSMutableAttributedString(string: refreshText)
-        attributedString.addAttributes([.foregroundColor : #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)], range: (attributedString.string as NSString).range(of: refreshText))
-        refreshControl.attributedTitle = attributedString
-        table.refreshControl = refreshControl
-        
-        
+        table.isPagingEnabled = true
         return table
+    }()
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.color = .black
+        return view
     }()
     
     init(coordinator: AppFlowCoordinatorProtocol, viewModel: AnimePageViewModelProtocol) {
@@ -60,58 +56,45 @@ class AnimePageViewController: UIViewController {
         
         setupUI()
         bindViewModel()
+        input.send(.viewDidLoad)
         
-        firstLoadView()
+    }
+    
+    deinit {
+        print("AnimePageViewController was destroyed")
     }
     
     private func bindViewModel() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
-        viewModel.isTrendingLoading
-            .combineLatest(viewModel.isAlltimeLoading)
+        output
             .receive(on: RunLoop.main)
-            .sink {[unowned self] (isLoadingTrending, isLoadingAlltime) in
-                if isLoadingTrending || isLoadingAlltime {
-                    self.tableView.refreshControl?.beginRefreshing()
+            .sink { [unowned self] event in
+            switch event {
+            case .loadTrending(let isLoading):
+                if isLoading {
+                    activityIndicator.startAnimating()
                 } else {
-                    self.tableView.refreshControl?.endRefreshing()
+                    activityIndicator.stopAnimating()
                 }
-            }.store(in: &subscriptions)
+            case .fetchDidFail(let error):
+                print("Completion error for fetchData method in MangaPageViewModel: ", error.localizedDescription)
+            case .fetchTrendigDidSucceed(let info):
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendSections([.trending, .alltime])
+                snapshot.appendItems(info, toSection: .trending)
+                self.dataSource.apply(snapshot)
+                input.send(.paginationRequest(nextPageLink: API.Types.Endpoint.anime(offset: "0").url.absoluteString))
+            case .fetchNextPageDidSucceed(let info, let nextPageLink):
+                self.nextPageLink = nextPageLink
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendItems(info, toSection: .alltime)
+                self.dataSource.apply(snapshot)
+            case .loadNextPage(let isLoading):
+                print("loading next page...: ", isLoading)
+            }
+        }.store(in: &subscriptions)
         
-        viewModel.trendingDataSource
-            .receive(on: RunLoop.main)
-            .sink {[unowned self] data in
-                self.trendingMangas = data
-                self.applySnapshot()
-            }.store(in: &subscriptions)
-        
-        viewModel.alltimeDataSource
-            .receive(on: RunLoop.main)
-            .sink {[unowned self] data in
-                self.alltimeMangas.append(contentsOf: data)
-                self.alltimeMangas.removeAll { titleInfo in
-                    return self.trendingMangas.contains(titleInfo)
-                }
-                self.applySnapshot()
-            }.store(in: &subscriptions)
-    }
-    
-    private func firstLoadView() {
-        tableView.refreshControl?.addAction(
-            UIAction(title: "RefteshTable", handler: {[unowned self] _ in
-                self.viewModel.fetchTrendingData()
-                self.viewModel.fetchAlltimeData()
-            }),
-            for: .valueChanged)
-//        viewModel.fetchTrendingData()
-//        viewModel.fetchAlltimeData()
-    }
-    
-    private func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TitleInfo>()
-        snapshot.appendSections([.trending, .alltime])
-        snapshot.appendItems(trendingMangas, toSection: .trending)
-        snapshot.appendItems(alltimeMangas, toSection: .alltime)
-        dataSource.apply(snapshot)
     }
     
     private func setupUI() {
@@ -119,13 +102,19 @@ class AnimePageViewController: UIViewController {
         tableView.delegate = self
         
         view.addSubview(tableView)
+        view.addSubview(activityIndicator)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
   
@@ -142,20 +131,13 @@ extension AnimePageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if (indexPath.row + 3) == tableView.numberOfRows(inSection: 1) {
-            viewModel.fetchNextPage()
+            guard let nextPageLink = nextPageLink else { return }
+            input.send(.paginationRequest(nextPageLink: nextPageLink))
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let titleInfo: TitleInfo
-        switch indexPath.section {
-        case 0:
-            titleInfo = trendingMangas[indexPath.item]
-        case 1:
-            titleInfo = alltimeMangas[indexPath.item]
-        default:
-            fatalError("Unpossible section in table")
-        }
+        guard let titleInfo = dataSource.itemIdentifier(for: indexPath) else { return }
         coordinator?.showDetailInfoPage(titleInfo: titleInfo)
     }
 }

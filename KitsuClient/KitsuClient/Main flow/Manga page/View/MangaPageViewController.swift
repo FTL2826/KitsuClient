@@ -60,6 +60,10 @@ class MangaPageViewController: UIViewController {
         
     }
     
+    deinit {
+        print("MangaPageViewController was destroyed")
+    }
+    
     private func bindViewModel() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
