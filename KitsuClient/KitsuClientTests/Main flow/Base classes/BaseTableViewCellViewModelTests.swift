@@ -13,6 +13,7 @@ final class BaseTableViewCellViewModelTests: XCTestCase {
     var sut: BaseTableViewCellViewModelProtocol!
     
     var testTitleInfo = TitleInfo(
+        internalID: UUID().uuidString,
         id: "1",
         type: "manga",
         canonicalTitle: "title",

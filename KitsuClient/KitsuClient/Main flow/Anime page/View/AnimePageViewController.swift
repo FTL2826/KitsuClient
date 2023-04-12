@@ -37,6 +37,12 @@ class AnimePageViewController: UIViewController {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
         view.color = .black
+        view.hidesWhenStopped = true
+        return view
+    }()
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+        view.backgroundColor = .systemBackground
         return view
     }()
     
@@ -70,54 +76,61 @@ class AnimePageViewController: UIViewController {
         output
             .receive(on: RunLoop.main)
             .sink { [unowned self] event in
-            switch event {
-            case .loadTrending(let isLoading):
-                if isLoading {
-                    activityIndicator.startAnimating()
-                } else {
-                    activityIndicator.stopAnimating()
+                switch event {
+                case .loadTrending(let isLoading):
+                    if isLoading {
+                        activityIndicator.startAnimating()
+                    } else {
+                        activityIndicator.stopAnimating()
+                    }
+                case .fetchDidFail(let error):
+                    print("Completion error for fetchData method in MangaPageViewModel: ", error.localizedDescription)
+                case .fetchTrendigDidSucceed(let info):
+                    var snapshot = self.dataSource.snapshot()
+                    snapshot.appendSections([.trending, .alltime])
+                    snapshot.appendItems(info, toSection: .trending)
+                    self.dataSource.apply(snapshot)
+                    input.send(.paginationRequest(nextPageLink: API.Types.Endpoint.anime(offset: "0").url.absoluteString))
+                case .fetchNextPageDidSucceed(let info, let nextPageLink):
+                    self.nextPageLink = nextPageLink
+                    var snapshot = self.dataSource.snapshot()
+                    snapshot.appendItems(info, toSection: .alltime)
+                    self.dataSource.apply(snapshot)
+                case .loadNextPage(let isLoading):
+//                    print("loading next page...: ", isLoading)
+                    if isLoading {
+                        activityIndicator.startAnimating()
+                    } else {
+                        activityIndicator.stopAnimating()
+                    }
                 }
-            case .fetchDidFail(let error):
-                print("Completion error for fetchData method in MangaPageViewModel: ", error.localizedDescription)
-            case .fetchTrendigDidSucceed(let info):
-                var snapshot = self.dataSource.snapshot()
-                snapshot.appendSections([.trending, .alltime])
-                snapshot.appendItems(info, toSection: .trending)
-                self.dataSource.apply(snapshot)
-                input.send(.paginationRequest(nextPageLink: API.Types.Endpoint.anime(offset: "0").url.absoluteString))
-            case .fetchNextPageDidSucceed(let info, let nextPageLink):
-                self.nextPageLink = nextPageLink
-                var snapshot = self.dataSource.snapshot()
-                snapshot.appendItems(info, toSection: .alltime)
-                self.dataSource.apply(snapshot)
-            case .loadNextPage(let isLoading):
-                print("loading next page...: ", isLoading)
-            }
-        }.store(in: &subscriptions)
-        
+            }.store(in: &subscriptions)
     }
-    
-    private func setupUI() {
-        view.backgroundColor = .systemBackground
-        tableView.delegate = self
         
-        view.addSubview(tableView)
-        view.addSubview(activityIndicator)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        private func setupUI() {
+            view.backgroundColor = .systemBackground
+            tableView.delegate = self
+            
+            view.addSubview(tableView)
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+            
+            tableView.tableFooterView = footerView
+            
+            footerView.addSubview(activityIndicator)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                
+                activityIndicator.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
+                activityIndicator.heightAnchor.constraint(equalToConstant: 88),
+            ])
+        }
         
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            activityIndicator.heightAnchor.constraint(equalToConstant: 200),
-        ])
-    }
-  
 }
 
 extension AnimePageViewController: UITableViewDelegate {

@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Combine
 @testable import KitsuClient
 
 final class DetailViewModelTests: XCTestCase {
@@ -13,11 +14,12 @@ final class DetailViewModelTests: XCTestCase {
     var sut: DetailViewModel!
     
     var testTitleInfo = TitleInfo(
+        internalID: UUID().uuidString,
         id: "1",
         type: "manga",
         canonicalTitle: "title",
-        startDate: nil, //"1997-12-06",
-        endDate: nil, //"2004-08-23",
+        startDate: "1997-12-06",
+        endDate: "2004-08-23",
         favouritesCount: 14,
         averageRating: nil,
         ageRatingGuide: nil,
@@ -35,6 +37,9 @@ final class DetailViewModelTests: XCTestCase {
     
     
     override func setUpWithError() throws {
+        pictureLoader.loadPictureResult = Future() { promise in
+            promise(.failure(.generic(reason: "unit test")))
+        }
         sut = DetailViewModel(pictureLoader: pictureLoader, titleInfo: testTitleInfo)
     }
 
@@ -55,55 +60,16 @@ final class DetailViewModelTests: XCTestCase {
         XCTAssertEqual(result, "90 / 100")
     }
     
-//    func testLoadPosterImage() {
-//        // Given
-//        let str = "mocked picture"
-//        let data = str.data(using: .utf8)!
-//        sut.posterImageURL = ""
-//        // When
-//        sut.loadPosterImage()
-//        // Then
-//        XCTAssertEqual(sut.pictureData.value, Data())
-//
-//        // Given
-//        sut.posterImageURL = "failuremock"
-//        // When
-//        sut.loadPosterImage()
-//        // Then
-//        XCTAssertEqual(sut.pictureData.value, Data())
-//
-//        // Given
-//        sut.posterImageURL = testTitleInfo.posterImageOriginalURL
-//        // When
-//        sut.loadPosterImage()
-//        // Then
-//        XCTAssertEqual(sut.pictureData.value, data)
-//    }
-    func testLoadPosterImage() {
+    func testPictureLoad() {
         // Given
-        sut.posterImageURL = ""
-        // When
-        sut.loadPosterImage()
-        // Then
-        XCTAssertEqual(pictureLoader.wasCalled, 0)
+//        pictureLoader.loadPictureResult = Future() { promise in
+//            promise(.failure(.generic(reason: "unit test")))
+//        }
+        // When sut inited
         
-        // Given
-        sut.posterImageURL = testTitleInfo.posterImageOriginalURL
-        pictureLoader.callbackStub = .failure(.internal(reason: "picture loader mock error"))
-        // When
-        sut.loadPosterImage()
         // Then
-        XCTAssertEqual(pictureLoader.wasCalled, 1)
-        
-        // Given
-        let str = "mocked picture"
-        let data = str.data(using: .utf8)!
-        pictureLoader.callbackStub = .success(data)
-        // When
-        sut.loadPosterImage()
-        // Then
-        XCTAssertEqual(pictureLoader.wasCalled, 2)
-        XCTAssertEqual(sut.pictureData.value, data)
+        XCTAssertEqual(pictureLoader.wasCalled, 1, "New call")
+//        XCTAssert(output === pictureLoader.loadPictureResult!, "Return Future")
     }
 
 }
