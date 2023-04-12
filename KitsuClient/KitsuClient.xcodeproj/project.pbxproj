@@ -34,6 +34,7 @@
 		503FAD8729CDB851005EC15F /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8629CDB851005EC15F /* Credentials.swift */; };
 		503FAD8929CDD2DE005EC15F /* UITextField+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8829CDD2DE005EC15F /* UITextField+Publisher.swift */; };
 		503FAD8B29CE29C2005EC15F /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8A29CE29C2005EC15F /* Login.swift */; };
+		5041EF1D29E5A1640004495C /* AnimePageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5041EF1C29E5A1640004495C /* AnimePageViewModelTests.swift */; };
 		504A07C429B396C7003C600F /* AppFlowCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */; };
 		504A07C629B3982A003C600F /* AppFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C529B3982A003C600F /* AppFlowCoordinator.swift */; };
 		504A07C829B3B70C003C600F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504A07C729B3B70C003C600F /* Coordinator.swift */; };
@@ -64,6 +65,7 @@
 		509206AB29B9C23300D16A33 /* TitleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AA29B9C23300D16A33 /* TitleInfo.swift */; };
 		509206AD29B9C75E00D16A33 /* PosterImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AC29B9C75E00D16A33 /* PosterImage.swift */; };
 		509206AF29BA4EDB00D16A33 /* PictureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509206AE29BA4EDB00D16A33 /* PictureLoader.swift */; };
+		509BE0BF29E1A58200CFB30B /* MangaPageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509BE0BE29E1A58200CFB30B /* MangaPageViewModelTests.swift */; };
 		50ECCAC829AF65FD0075BAE3 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */; };
 		50ECCACA29AF6F350075BAE3 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCAC929AF6F350075BAE3 /* InputTextField.swift */; };
 		50ECCACC29AFC66A0075BAE3 /* LoginButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */; };
@@ -74,19 +76,13 @@
 		50ECCADB29B0DFC70075BAE3 /* ForgotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADA29B0DFC70075BAE3 /* ForgotViewController.swift */; };
 		50ECCADE29B108DF0075BAE3 /* RegistrationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADD29B108DF0075BAE3 /* RegistrationFactory.swift */; };
 		50ECCAE029B118840075BAE3 /* SignInViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ECCADF29B118840075BAE3 /* SignInViewModelProtocol.swift */; };
-		50F557CC29C0A0C6009AF97D /* SignInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557CB29C0A0C6009AF97D /* SignInViewModelTests.swift */; };
-		50F557CE29C0A708009AF97D /* SignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557CD29C0A708009AF97D /* SignUpViewModelTests.swift */; };
-		50F557D029C0AE8D009AF97D /* ForgotViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557CF29C0AE8D009AF97D /* ForgotViewModelTests.swift */; };
-		50F557D229C0AEFB009AF97D /* PasswordVerificationMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557D129C0AEFB009AF97D /* PasswordVerificationMock.swift */; };
 		50F557D829C0B204009AF97D /* DetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557D729C0B204009AF97D /* DetailViewModelTests.swift */; };
 		50F557DA29C0B2B6009AF97D /* PictureLoaderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557D929C0B2B6009AF97D /* PictureLoaderMock.swift */; };
-		50F557DC29C0DE38009AF97D /* AnimeFeedViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557DB29C0DE38009AF97D /* AnimeFeedViewModelTests.swift */; };
 		50F557DE29C0DE9B009AF97D /* APIClientMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F557DD29C0DE9B009AF97D /* APIClientMock.swift */; };
 		50FEDB5A29BDF1AE004327DE /* KitsuClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEDB5929BDF1AE004327DE /* KitsuClientUITests.swift */; };
 		50FEDB5C29BDF1AE004327DE /* KitsuClientUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEDB5B29BDF1AE004327DE /* KitsuClientUITestsLaunchTests.swift */; };
 		50FEDB6929BE0504004327DE /* KitsuClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEDB6829BE0504004327DE /* KitsuClientTests.swift */; };
 		50FEDB7229BE11D3004327DE /* BaseTableViewCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEDB7129BE11D3004327DE /* BaseTableViewCellViewModelTests.swift */; };
-		50FEDB7429BE3769004327DE /* BaseFeedViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEDB7329BE3769004327DE /* BaseFeedViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +132,7 @@
 		503FAD8629CDB851005EC15F /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
 		503FAD8829CDD2DE005EC15F /* UITextField+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Publisher.swift"; sourceTree = "<group>"; };
 		503FAD8A29CE29C2005EC15F /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		5041EF1C29E5A1640004495C /* AnimePageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimePageViewModelTests.swift; sourceTree = "<group>"; };
 		504A07C329B396C7003C600F /* AppFlowCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		504A07C529B3982A003C600F /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
 		504A07C729B3B70C003C600F /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -166,6 +163,7 @@
 		509206AA29B9C23300D16A33 /* TitleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleInfo.swift; sourceTree = "<group>"; };
 		509206AC29B9C75E00D16A33 /* PosterImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterImage.swift; sourceTree = "<group>"; };
 		509206AE29BA4EDB00D16A33 /* PictureLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureLoader.swift; sourceTree = "<group>"; };
+		509BE0BE29E1A58200CFB30B /* MangaPageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaPageViewModelTests.swift; sourceTree = "<group>"; };
 		50ECCAC729AF65FD0075BAE3 /* LoginHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		50ECCAC929AF6F350075BAE3 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		50ECCACB29AFC66A0075BAE3 /* LoginButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtons.swift; sourceTree = "<group>"; };
@@ -176,13 +174,8 @@
 		50ECCADA29B0DFC70075BAE3 /* ForgotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotViewController.swift; sourceTree = "<group>"; };
 		50ECCADD29B108DF0075BAE3 /* RegistrationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationFactory.swift; sourceTree = "<group>"; };
 		50ECCADF29B118840075BAE3 /* SignInViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModelProtocol.swift; sourceTree = "<group>"; };
-		50F557CB29C0A0C6009AF97D /* SignInViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModelTests.swift; sourceTree = "<group>"; };
-		50F557CD29C0A708009AF97D /* SignUpViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModelTests.swift; sourceTree = "<group>"; };
-		50F557CF29C0AE8D009AF97D /* ForgotViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotViewModelTests.swift; sourceTree = "<group>"; };
-		50F557D129C0AEFB009AF97D /* PasswordVerificationMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordVerificationMock.swift; sourceTree = "<group>"; };
 		50F557D729C0B204009AF97D /* DetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelTests.swift; sourceTree = "<group>"; };
 		50F557D929C0B2B6009AF97D /* PictureLoaderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureLoaderMock.swift; sourceTree = "<group>"; };
-		50F557DB29C0DE38009AF97D /* AnimeFeedViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeFeedViewModelTests.swift; sourceTree = "<group>"; };
 		50F557DD29C0DE9B009AF97D /* APIClientMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientMock.swift; sourceTree = "<group>"; };
 		50FEDB5729BDF1AE004327DE /* KitsuClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KitsuClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FEDB5929BDF1AE004327DE /* KitsuClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KitsuClientUITests.swift; sourceTree = "<group>"; };
@@ -190,7 +183,6 @@
 		50FEDB6629BE0504004327DE /* KitsuClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KitsuClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FEDB6829BE0504004327DE /* KitsuClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KitsuClientTests.swift; sourceTree = "<group>"; };
 		50FEDB7129BE11D3004327DE /* BaseTableViewCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCellViewModelTests.swift; sourceTree = "<group>"; };
-		50FEDB7329BE3769004327DE /* BaseFeedViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFeedViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -633,21 +625,10 @@
 			path = Factories;
 			sourceTree = "<group>";
 		};
-		50F557D329C0AF78009AF97D /* Registration flow */ = {
-			isa = PBXGroup;
-			children = (
-				50F557CB29C0A0C6009AF97D /* SignInViewModelTests.swift */,
-				50F557CD29C0A708009AF97D /* SignUpViewModelTests.swift */,
-				50F557CF29C0AE8D009AF97D /* ForgotViewModelTests.swift */,
-			);
-			path = "Registration flow";
-			sourceTree = "<group>";
-		};
 		50F557D429C0B192009AF97D /* Base classes */ = {
 			isa = PBXGroup;
 			children = (
 				50FEDB7129BE11D3004327DE /* BaseTableViewCellViewModelTests.swift */,
-				50FEDB7329BE3769004327DE /* BaseFeedViewModelTests.swift */,
 			);
 			path = "Base classes";
 			sourceTree = "<group>";
@@ -657,7 +638,8 @@
 			children = (
 				50F557D429C0B192009AF97D /* Base classes */,
 				50F557D729C0B204009AF97D /* DetailViewModelTests.swift */,
-				50F557DB29C0DE38009AF97D /* AnimeFeedViewModelTests.swift */,
+				509BE0BE29E1A58200CFB30B /* MangaPageViewModelTests.swift */,
+				5041EF1C29E5A1640004495C /* AnimePageViewModelTests.swift */,
 			);
 			path = "Main flow";
 			sourceTree = "<group>";
@@ -674,11 +656,9 @@
 		50FEDB6729BE0504004327DE /* KitsuClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				50F557D129C0AEFB009AF97D /* PasswordVerificationMock.swift */,
 				50F557D929C0B2B6009AF97D /* PictureLoaderMock.swift */,
 				50FEDB6829BE0504004327DE /* KitsuClientTests.swift */,
 				50F557D529C0B1D0009AF97D /* Main flow */,
-				50F557D329C0AF78009AF97D /* Registration flow */,
 				50F557DD29C0DE9B009AF97D /* APIClientMock.swift */,
 			);
 			path = KitsuClientTests;
@@ -897,16 +877,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50F557CC29C0A0C6009AF97D /* SignInViewModelTests.swift in Sources */,
-				50F557DC29C0DE38009AF97D /* AnimeFeedViewModelTests.swift in Sources */,
-				50FEDB7429BE3769004327DE /* BaseFeedViewModelTests.swift in Sources */,
 				50FEDB6929BE0504004327DE /* KitsuClientTests.swift in Sources */,
-				50F557D229C0AEFB009AF97D /* PasswordVerificationMock.swift in Sources */,
-				50F557D029C0AE8D009AF97D /* ForgotViewModelTests.swift in Sources */,
-				50F557CE29C0A708009AF97D /* SignUpViewModelTests.swift in Sources */,
 				50FEDB7229BE11D3004327DE /* BaseTableViewCellViewModelTests.swift in Sources */,
 				50F557DA29C0B2B6009AF97D /* PictureLoaderMock.swift in Sources */,
 				50F557D829C0B204009AF97D /* DetailViewModelTests.swift in Sources */,
+				509BE0BF29E1A58200CFB30B /* MangaPageViewModelTests.swift in Sources */,
+				5041EF1D29E5A1640004495C /* AnimePageViewModelTests.swift in Sources */,
 				50F557DE29C0DE9B009AF97D /* APIClientMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
