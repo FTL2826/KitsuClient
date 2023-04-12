@@ -37,6 +37,12 @@ class MangaPageViewController: UIViewController {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
         view.color = .black
+        view.hidesWhenStopped = true
+        return view
+    }()
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+        view.backgroundColor = .systemBackground
         return view
     }()
     
@@ -91,7 +97,12 @@ class MangaPageViewController: UIViewController {
                 snapshot.appendItems(info, toSection: .alltime)
                 self.dataSource.apply(snapshot)
             case .loadNextPage(let isLoading):
-                print("loading next page...: ", isLoading)
+//                print("loading next page...: ", isLoading)
+                if isLoading {
+                    activityIndicator.startAnimating()
+                } else {
+                    activityIndicator.stopAnimating()
+                }
             }
         }.store(in: &subscriptions)
     }
@@ -101,8 +112,11 @@ class MangaPageViewController: UIViewController {
         tableView.delegate = self
         
         view.addSubview(tableView)
-        view.addSubview(activityIndicator)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        tableView.tableFooterView = footerView
+        
+        footerView.addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -111,9 +125,9 @@ class MangaPageViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            activityIndicator.heightAnchor.constraint(equalToConstant: 200),
+            activityIndicator.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 88),
         ])
     }
   
