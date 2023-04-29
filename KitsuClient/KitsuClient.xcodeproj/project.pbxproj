@@ -28,7 +28,6 @@
 		5038355D29AE5088004A6E10 /* APIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038355C29AE5088004A6E10 /* APIClientProtocol.swift */; };
 		5038356329AE6CCF004A6E10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356229AE6CCF004A6E10 /* User.swift */; };
 		5038356529AE6D5E004A6E10 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356429AE6D5E004A6E10 /* SignInViewModel.swift */; };
-		5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038356729AE6DB2004A6E10 /* Dynamic.swift */; };
 		503FAD8329CDB61C005EC15F /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8229CDB61C005EC15F /* Password.swift */; };
 		503FAD8529CDB7A2005EC15F /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8429CDB7A2005EC15F /* Email.swift */; };
 		503FAD8729CDB851005EC15F /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503FAD8629CDB851005EC15F /* Credentials.swift */; };
@@ -126,7 +125,6 @@
 		5038355C29AE5088004A6E10 /* APIClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientProtocol.swift; sourceTree = "<group>"; };
 		5038356229AE6CCF004A6E10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5038356429AE6D5E004A6E10 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
-		5038356729AE6DB2004A6E10 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		503FAD8229CDB61C005EC15F /* Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
 		503FAD8429CDB7A2005EC15F /* Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
 		503FAD8629CDB851005EC15F /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				50ECCACD29B075540075BAE3 /* Extensions */,
-				5038356629AE6DA5004A6E10 /* Bindings */,
 				50ECCAD029B0D3CC0075BAE3 /* Coordinators */,
 				50ECCADC29B108C30075BAE3 /* Factories */,
 			);
@@ -398,14 +395,6 @@
 				503FAD8A29CE29C2005EC15F /* Login.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		5038356629AE6DA5004A6E10 /* Bindings */ = {
-			isa = PBXGroup;
-			children = (
-				5038356729AE6DB2004A6E10 /* Dynamic.swift */,
-			);
-			path = Bindings;
 			sourceTree = "<group>";
 		};
 		504A07BC29B395EA003C600F /* Main flow */ = {
@@ -813,7 +802,6 @@
 				50ECCAD329B0D3ED0075BAE3 /* RegistrationFlowCoordinatorProtocol.swift in Sources */,
 				5092068529B74E6C00D16A33 /* AnimeData.swift in Sources */,
 				5053ED3029BB14C4005EE276 /* DetailViewController.swift in Sources */,
-				5038356829AE6DB2004A6E10 /* Dynamic.swift in Sources */,
 				50ECCAD529B0D4550075BAE3 /* RegistrationFlowCoordinator.swift in Sources */,
 				50ECCAD829B0DBC20075BAE3 /* SignUpViewController.swift in Sources */,
 				50048CAA29B1CAA400779196 /* WebViewerViewController.swift in Sources */,
