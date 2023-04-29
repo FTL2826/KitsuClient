@@ -3,7 +3,7 @@
 > Short video demonstration of app [*link*](https://drive.google.com/file/d/1XK6zix7av208ZBINR87aXlTwXAtEQP8p/view?usp=sharing)
 
 ## Table of content:
-- [General info](general-info) 
+- [General info](#general-info) 
 - [Technologies used](#technologies-used)
 - [Features](#features)
 - [Screen map](#screen-map)
@@ -39,7 +39,7 @@ Simple scroll app with authorizatioт for target iOS 14. I used free API [*kitsu
 5. Input -> Output ModelViews via Combine
 
 ## Screen map
-![screens diagram](/Screenshots/ScreenDiagramm.pdf)
+![screens diagram](/Screenshots/ScreenDiagramm.png)
 
 ## Setup
 Because no external libraries used you need only XCode for launch
