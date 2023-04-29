@@ -30,6 +30,7 @@ Simple scroll app with authorizatioт for target iOS 14. I used free API [*kitsu
 - WKWebView
 - Attributed string
 - Unit, UI tests
+- GitFlow CI/CD
 
 ## Features
 1. No Xibs || Storyboard
